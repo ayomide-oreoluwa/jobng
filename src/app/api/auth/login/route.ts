@@ -11,8 +11,8 @@ export async function POST(req: Request) {
     if (!/^234\d{10}$/.test(number)) {
       return NextResponse.json({ ok: false, error: "Enter a valid Nigerian phone number." }, { status: 400 });
     }
-    if (!/^\d{4,6}$/.test(pin)) {
-      return NextResponse.json({ ok: false, error: "PIN must be 4 to 6 digits." }, { status: 400 });
+    if (!/^\d{4}$/.test(pin)) {
+      return NextResponse.json({ ok: false, error: "PIN must be exactly 4 digits." }, { status: 400 });
     }
 
     const result = await loginUser({ number, pin });

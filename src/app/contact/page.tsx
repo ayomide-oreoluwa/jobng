@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FiMapPin, FiPhone, FiMail, FiClock, FiSend, FiCheckCircle } from "react-icons/fi";
+import { FiMapPin, FiSend, FiCheckCircle } from "react-icons/fi";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -12,13 +12,6 @@ export default function ContactPage() {
     setLoading(true);
     setTimeout(() => { setLoading(false); setSubmitted(true); }, 1200);
   };
-
-  const contactInfo = [
-    { icon: FiMapPin, label: "Address", value: "328 Queensberry Street, North Melbourne VIC 3051, Australia" },
-    { icon: FiPhone, label: "Phone", value: "123 456 7890" },
-    { icon: FiMail, label: "Email", value: "support@justjobng.com" },
-    { icon: FiClock, label: "Hours", value: "Mon – Fri: 9:00 AM – 6:00 PM" },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -34,17 +27,15 @@ export default function ContactPage() {
           {/* Contact Info */}
           <div className="space-y-5">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h2>
-            {contactInfo.map(({ icon: Icon, label, value }) => (
-              <div key={label} className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
-                  <Icon className="text-blue-600" size={18} />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-0.5">{label}</p>
-                  <p className="text-sm text-gray-700 font-medium">{value}</p>
-                </div>
+            <div className="bg-gray-50 border border-dashed border-gray-200 rounded-2xl py-12 px-6 text-center">
+              <div className="w-12 h-12 bg-white rounded-xl border border-gray-100 flex items-center justify-center mx-auto mb-4">
+                <FiMapPin className="text-gray-400" size={20} />
               </div>
-            ))}
+              <h3 className="font-bold text-gray-900 mb-1.5">Coming soon</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Our office address, phone, and support details will be available here shortly. In the meantime, use the form to reach us.
+              </p>
+            </div>
           </div>
 
           {/* Contact Form */}

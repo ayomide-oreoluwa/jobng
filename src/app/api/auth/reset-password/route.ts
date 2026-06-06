@@ -11,8 +11,8 @@ export async function POST(req: Request) {
     if (!/^234\d{10}$/.test(number)) {
       return NextResponse.json({ ok: false, error: "Enter a valid Nigerian phone number." }, { status: 400 });
     }
-    if (!/^\d{4,6}$/.test(pin)) {
-      return NextResponse.json({ ok: false, error: "Enter the code sent to your phone." }, { status: 400 });
+    if (!/^\d{4}$/.test(pin)) {
+      return NextResponse.json({ ok: false, error: "Enter the 4-digit code sent to your phone." }, { status: 400 });
     }
 
     const result = await resetPassword({ phone_number: number, pin });

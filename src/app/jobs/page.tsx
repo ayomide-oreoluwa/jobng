@@ -1,15 +1,16 @@
 "use client";
 import { useState, useEffect, useCallback, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FiSearch, FiGrid, FiX, FiList, FiSquare, FiLogIn } from "react-icons/fi";
 import JobCard from "@/components/shared/JobCard";
+import JobCardSkeleton from "@/components/shared/JobCardSkeleton";
+import PageLoader from "@/components/shared/PageLoader";
 import { authHeaders } from "@/lib/auth-client";
 import type { ApiJob } from "@/lib/justjobApi";
 
 function JobsContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [keyword, setKeyword] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState(searchParams.get("category") ?? "");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
@@ -65,39 +66,41 @@ function JobsContent() {
   ).sort();
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="bg-gradient-to-r from-gray-900 to-blue-950 py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse Jobs</h1>
-          <p className="text-blue-200 text-base">Live listings from the JustJobNG network</p>
+    <div className="jj-jobs-page">
+      <div className="jj-jobs-hero">
+        <div className="container-xl">
+          <h1 className="jj-jobs-hero__title">Browse Jobs</h1>
+          <p className="jj-jobs-hero__sub">
+            {total > 0 ? `${total.toLocaleString()} live roles across Nigeria` : "Live listings from the JustJobNG network"}
+          </p>
         </div>
       </div>
 
-      <div className="bg-white border-b border-gray-100 sticky top-[64px] lg:top-[80px] z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-xl px-3 py-2.5">
-              <FiSearch className="text-blue-500 shrink-0" size={16} />
+      <div className="jj-jobs-toolbar">
+        <div className="container-xl" style={{ padding: "12px 0" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <div className="jj-jobs-search" style={{ flex: "1 1 240px" }}>
+              <FiSearch size={16} style={{ color: "var(--gold-hover)", flexShrink: 0 }} />
               <input
                 type="text"
                 placeholder="Job title, company..."
                 value={keyword}
                 onChange={(e) => { setKeyword(e.target.value); setPage(1); }}
-                className="w-full text-sm outline-none text-gray-700 placeholder-gray-400"
+                style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: "0.875rem", color: "var(--text)" }}
               />
               {keyword && (
-                <button type="button" onClick={() => setKeyword("")}>
-                  <FiX size={14} className="text-gray-400" />
+                <button type="button" onClick={() => setKeyword("")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-faint)" }}>
+                  <FiX size={14} />
                 </button>
               )}
             </div>
             {categories.length > 0 && (
-              <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 min-w-[180px]">
-                <FiGrid className="text-blue-500 shrink-0" size={14} />
+              <div className="jj-jobs-search" style={{ flex: "0 1 200px" }}>
+                <FiGrid size={14} style={{ color: "var(--gold-hover)", flexShrink: 0 }} />
                 <select
                   value={category}
                   onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-                  className="w-full text-sm outline-none text-gray-700 bg-transparent"
+                  style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: "0.875rem", color: "var(--text)", cursor: "pointer" }}
                 >
                   <option value="">All categories</option>
                   {categories.map((c) => (
@@ -110,63 +113,65 @@ function JobsContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container-xl" style={{ padding: "2rem 0 4rem" }}>
         {needsAuth ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-            <FiLogIn className="mx-auto text-blue-500 mb-4" size={40} />
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Sign in to browse jobs</h3>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto">
-              Job listings require an account. Create one in under a minute with your phone number and PIN.
+          <div className="jj-card" style={{ textAlign: "center", padding: "4rem 2rem", maxWidth: 520, margin: "0 auto" }}>
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "var(--gold-muted)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
+              <FiLogIn size={24} color="var(--gold-hover)" />
+            </div>
+            <h3 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 8px", color: "var(--ink)" }}>Sign in to browse jobs</h3>
+            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: "0 0 1.5rem", lineHeight: 1.6 }}>
+              Sign in with your phone and PIN. New here? Dial <strong style={{ color: "var(--ink)" }}>*7098#</strong> to subscribe first.
             </p>
-            <Link
-              href={`/login?callbackUrl=${encodeURIComponent("/jobs")}`}
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700"
-            >
-              <FiLogIn size={16} /> Login / Register
+            <Link href={`/login?callbackUrl=${encodeURIComponent("/jobs")}`} className="jj-btn jj-btn--gold" style={{ padding: "12px 28px" }}>
+              <FiLogIn size={16} /> Login
             </Link>
           </div>
         ) : loading ? (
-          <div className="text-center py-20 text-gray-500">Loading jobs…</div>
+          <div style={{ display: viewMode === "grid" ? "grid" : "flex", gridTemplateColumns: viewMode === "grid" ? "repeat(auto-fill, minmax(300px, 1fr))" : undefined, flexDirection: viewMode === "grid" ? undefined : "column", gap: 16 }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <JobCardSkeleton key={i} variant={viewMode} />
+            ))}
+          </div>
         ) : error ? (
-          <div className="text-center py-20">
-            <p className="text-red-500 mb-4">{error}</p>
-            <button type="button" onClick={fetchJobs} className="bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">
-              Retry
-            </button>
+          <div style={{ textAlign: "center", padding: "4rem 0" }}>
+            <p style={{ color: "#ef4444", marginBottom: 16 }}>{error}</p>
+            <button type="button" onClick={fetchJobs} className="jj-btn jj-btn--gold" style={{ padding: "10px 24px" }}>Retry</button>
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between mb-5">
-              <p className="text-sm text-gray-500">
-                Showing <span className="font-semibold text-gray-900">{jobs.length}</span>
-                {total > 0 && <> of <span className="font-semibold text-gray-900">{total}</span></>}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+              <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: 0 }}>
+                Showing <strong style={{ color: "var(--ink)" }}>{jobs.length}</strong>
+                {total > 0 && <> of <strong style={{ color: "var(--ink)" }}>{total.toLocaleString()}</strong></>}
               </p>
-              <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-1">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("list")}
-                  className={`p-1.5 rounded-md ${viewMode === "list" ? "bg-blue-600 text-white" : "text-gray-400"}`}
-                >
-                  <FiList size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode("grid")}
-                  className={`p-1.5 rounded-md ${viewMode === "grid" ? "bg-blue-600 text-white" : "text-gray-400"}`}
-                >
-                  <FiSquare size={14} />
-                </button>
+              <div style={{ display: "flex", gap: 4, background: "var(--surface-elevated)", border: "1px solid var(--border)", borderRadius: 10, padding: 4 }}>
+                {(["list", "grid"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setViewMode(mode)}
+                    style={{
+                      padding: "6px 10px", borderRadius: 7, border: "none", cursor: "pointer",
+                      background: viewMode === mode ? "var(--ink)" : "transparent",
+                      color: viewMode === mode ? "#fff" : "var(--text-faint)",
+                      display: "flex", alignItems: "center",
+                    }}
+                  >
+                    {mode === "list" ? <FiList size={14} /> : <FiSquare size={14} />}
+                  </button>
+                ))}
               </div>
             </div>
 
             {jobs.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">No jobs found</h3>
-                <p className="text-gray-500">Try a different search term or category.</p>
+              <div style={{ textAlign: "center", padding: "4rem 0" }}>
+                <p style={{ fontSize: "2.5rem", marginBottom: 12 }}>🔍</p>
+                <h3 style={{ fontSize: "1.125rem", fontWeight: 800, margin: "0 0 6px" }}>No jobs found</h3>
+                <p style={{ color: "var(--text-muted)", margin: 0 }}>Try a different search term or category.</p>
               </div>
             ) : (
-              <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-4"}>
+              <div style={{ display: viewMode === "grid" ? "grid" : "flex", gridTemplateColumns: viewMode === "grid" ? "repeat(auto-fill, minmax(300px, 1fr))" : undefined, flexDirection: viewMode === "grid" ? undefined : "column", gap: 16 }}>
                 {jobs.map((job) => (
                   <JobCard key={job.job_id} job={job} variant={viewMode} />
                 ))}
@@ -174,22 +179,12 @@ function JobsContent() {
             )}
 
             {total > jobs.length && (
-              <div className="flex justify-center gap-3 mt-8">
-                <button
-                  type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="px-4 py-2 rounded-lg border text-sm disabled:opacity-40"
-                >
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginTop: 32 }}>
+                <button type="button" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="jj-btn jj-btn--ghost" style={{ padding: "8px 18px", opacity: page <= 1 ? 0.4 : 1 }}>
                   Previous
                 </button>
-                <span className="px-4 py-2 text-sm text-gray-600">Page {page}</span>
-                <button
-                  type="button"
-                  disabled={jobs.length < 20}
-                  onClick={() => setPage((p) => p + 1)}
-                  className="px-4 py-2 rounded-lg border text-sm disabled:opacity-40"
-                >
+                <span style={{ fontSize: "0.875rem", color: "var(--text-muted)", fontWeight: 600 }}>Page {page}</span>
+                <button type="button" disabled={jobs.length < 20} onClick={() => setPage((p) => p + 1)} className="jj-btn jj-btn--ghost" style={{ padding: "8px 18px", opacity: jobs.length < 20 ? 0.4 : 1 }}>
                   Next
                 </button>
               </div>
@@ -203,7 +198,7 @@ function JobsContent() {
 
 export default function JobsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center text-gray-500">Loading…</div>}>
+    <Suspense fallback={<PageLoader label="Loading jobs" />}>
       <JobsContent />
     </Suspense>
   );

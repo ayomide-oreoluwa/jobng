@@ -158,8 +158,9 @@ export default function ForgotPasswordPage() {
                     type="password"
                     inputMode="numeric"
                     value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    placeholder="Code from SMS"
+                    onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    placeholder="4-digit code"
+                    maxLength={4}
                     required
                     style={{ flex: 1, border: "none", outline: "none", padding: "12px 14px", fontSize: 18, letterSpacing: "0.2em", color: "#111827", background: "transparent" }}
                   />

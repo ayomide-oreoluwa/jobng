@@ -54,19 +54,6 @@ async function parseJson(res: Response): Promise<Record<string, unknown>> {
   }
 }
 
-export async function createUser(body: {
-  number: string;
-  pin: string;
-  confirm_pin: string;
-}): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/create/user/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return { ok: res.ok, status: res.status, data: await parseJson(res) };
-}
-
 export async function loginUser(body: {
   number: string;
   pin: string;

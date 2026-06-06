@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
-import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiPhone, FiMapPin, FiBriefcase, FiMail } from "react-icons/fi";
+import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from "react-icons/fi";
+import Logo from "@/components/brand/Logo";
 
 const footerLinks = {
   explore: [
     { label: "Browse Jobs", href: "/jobs" },
-    { label: "Login / Register", href: "/login" },
+    { label: "Login", href: "/login" },
     { label: "Forgot PIN", href: "/forgot-password" },
   ],
   company: [
@@ -16,91 +17,43 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: FiFacebook,  href: "#", label: "Facebook" },
-  { icon: FiTwitter,   href: "#", label: "Twitter" },
+  { icon: FiFacebook, href: "#", label: "Facebook" },
+  { icon: FiTwitter, href: "#", label: "Twitter" },
   { icon: FiInstagram, href: "#", label: "Instagram" },
-  { icon: FiLinkedin,  href: "#", label: "LinkedIn" },
+  { icon: FiLinkedin, href: "#", label: "LinkedIn" },
 ];
-
-const linkStyle: React.CSSProperties = {
-  display: "block", fontSize: 14, color: "#9ca3af",
-  textDecoration: "none", padding: "4px 0",
-  transition: "color 0.15s",
-};
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#111827", color: "#9ca3af" }}>
-      {/* Main */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "64px 1.5rem 48px" }}>
-        <div className="footer-grid" style={{ display: "grid", gap: 40 }}>
-          {/* Brand */}
+    <footer className="jj-footer">
+      <div className="container-xl jj-footer__main">
+        <div className="jj-footer__grid">
           <div>
-            <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 20 }}>
-              <div style={{ width: 32, height: 32, background: "#1967D2", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <FiBriefcase style={{ color: "#fff", fontSize: 16 }} />
-              </div>
-              <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>JustJobNG</span>
-            </Link>
-            <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.7, maxWidth: 280, marginBottom: 24 }}>
-              Connecting talented professionals with top employers worldwide. Your dream career is one click away.
+            <Logo variant="light" size="md" />
+            <p className="jj-footer__tagline">
+              Nigeria&apos;s job discovery platform. Subscribe via <strong>*7098#</strong>, browse live listings, and land your next role.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                <FiMapPin style={{ color: "#1967D2", flexShrink: 0, marginTop: 2 }} size={14} />
-                <span style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>328 Queensberry Street, North Melbourne VIC 3051</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <FiPhone style={{ color: "#1967D2" }} size={14} />
-                <span style={{ fontSize: 13, color: "#d1d5db", fontWeight: 500 }}>123 456 7890</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <FiMail style={{ color: "#1967D2" }} size={14} />
-                <a href="mailto:support@justjobng.com" style={{ fontSize: 13, color: "#d1d5db", textDecoration: "none" }}>support@justjobng.com</a>
-              </div>
-            </div>
           </div>
-
           <div>
-            <h3 style={{ fontSize: 12, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 20 }}>
-              Explore
-            </h3>
+            <h3 className="jj-footer__heading">Explore</h3>
             {footerLinks.explore.map((l) => (
-              <Link key={l.href + l.label} href={l.href} style={linkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#60a5fa")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
-              >{l.label}</Link>
+              <Link key={l.href} href={l.href} className="jj-footer__link">{l.label}</Link>
             ))}
           </div>
-
           <div>
-            <h3 style={{ fontSize: 12, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 20 }}>
-              Company
-            </h3>
+            <h3 className="jj-footer__heading">Company</h3>
             {footerLinks.company.map((l) => (
-              <Link key={l.href + l.label} href={l.href} style={linkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#60a5fa")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
-              >{l.label}</Link>
+              <Link key={l.href} href={l.href} className="jj-footer__link">{l.label}</Link>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Bottom bar */}
-      <div style={{ borderTop: "1px solid #1f2937" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 1.5rem", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <p style={{ fontSize: 13, color: "#4b5563" }}>
-            © {new Date().getFullYear()} JustJobNG. All Rights Reserved.
-          </p>
-          <div style={{ display: "flex", gap: 8 }}>
+      <div className="jj-footer__bar">
+        <div className="container-xl jj-footer__bar-inner">
+          <p className="jj-footer__copy">© {new Date().getFullYear()} JustJobNG. All rights reserved.</p>
+          <div className="jj-footer__socials">
             {socials.map(({ icon: Icon, href, label }) => (
-              <a
-                key={label} href={href} aria-label={label}
-                style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "#1f2937", borderRadius: "50%", color: "#6b7280", textDecoration: "none", transition: "background 0.2s, color 0.2s" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#1967D2"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#1f2937"; (e.currentTarget as HTMLElement).style.color = "#6b7280"; }}
-              >
+              <a key={label} href={href} aria-label={label} className="jj-footer__social">
                 <Icon size={13} />
               </a>
             ))}
@@ -109,9 +62,43 @@ export default function Footer() {
       </div>
 
       <style>{`
-        .footer-grid { grid-template-columns: 1fr; }
-        @media (min-width: 640px)  { .footer-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; } }
+        .jj-footer { background: var(--ink); color: rgba(255,255,255,0.5); }
+        .jj-footer__main { padding: 4rem 0 3rem; }
+        .jj-footer__grid {
+          display: grid; gap: 2.5rem;
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 640px) { .jj-footer__grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .jj-footer__grid { grid-template-columns: 2fr 1fr 1fr; } }
+        .jj-footer__tagline {
+          font-size: 0.875rem; line-height: 1.7; max-width: 300px;
+          margin: 1.25rem 0 0; color: rgba(255,255,255,0.4);
+        }
+        .jj-footer__tagline strong { color: var(--gold-light); }
+        .jj-footer__heading {
+          font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
+          letter-spacing: 0.12em; color: rgba(255,255,255,0.85);
+          margin: 0 0 1.25rem;
+        }
+        .jj-footer__link {
+          display: block; font-size: 0.875rem; color: rgba(255,255,255,0.45);
+          text-decoration: none; padding: 5px 0; transition: color 0.15s;
+        }
+        .jj-footer__link:hover { color: var(--gold-light); }
+        .jj-footer__bar { border-top: 1px solid rgba(255,255,255,0.08); }
+        .jj-footer__bar-inner {
+          display: flex; flex-wrap: wrap; align-items: center;
+          justify-content: space-between; gap: 12px; padding: 1.25rem 0;
+        }
+        .jj-footer__copy { font-size: 0.8125rem; color: rgba(255,255,255,0.3); margin: 0; }
+        .jj-footer__socials { display: flex; gap: 8px; }
+        .jj-footer__social {
+          width: 34px; height: 34px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4);
+          text-decoration: none; transition: background 0.2s, color 0.2s;
+        }
+        .jj-footer__social:hover { background: var(--gold-muted); color: var(--gold-light); }
       `}</style>
     </footer>
   );

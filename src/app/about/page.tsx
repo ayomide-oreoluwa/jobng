@@ -2,13 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiUsers, FiBriefcase, FiAward, FiGlobe, FiArrowRight } from "react-icons/fi";
 
-const team = [
-  { name: "Sarah Mitchell", role: "CEO & Co-Founder", avatar: "https://ui-avatars.com/api/?name=Sarah+Mitchell&background=1967D2&color=fff&size=200" },
-  { name: "James Carter", role: "CTO", avatar: "https://ui-avatars.com/api/?name=James+Carter&background=0BAB64&color=fff&size=200" },
-  { name: "Nicole Wells", role: "Head of Marketing", avatar: "https://ui-avatars.com/api/?name=Nicole+Wells&background=F5A623&color=fff&size=200" },
-  { name: "David Brown", role: "Head of Product", avatar: "https://ui-avatars.com/api/?name=David+Brown&background=E8414E&color=fff&size=200" },
-];
-
 const values = [
   { icon: FiUsers, title: "People First", desc: "We believe in empowering every person to find meaningful work and build a fulfilling career." },
   { icon: FiBriefcase, title: "Quality Matches", desc: "We use smart matching to connect the right candidates with the right opportunities — every time." },
@@ -120,16 +113,14 @@ export default function AboutPage() {
             <span className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-2 block">The People Behind JustJobNG</span>
             <h2 className="text-3xl font-bold text-gray-900">Meet Our Team</h2>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            {team.map(({ name, role, avatar }) => (
-              <div key={name} className="text-center">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden mx-auto mb-3 border-2 border-gray-100">
-                  <Image src={avatar} alt={name} width={96} height={96} className="w-full h-full object-cover" />
-                </div>
-                <h4 className="font-semibold text-gray-900 text-sm">{name}</h4>
-                <p className="text-xs text-gray-500 mt-0.5">{role}</p>
-              </div>
-            ))}
+          <div className="max-w-md mx-auto text-center bg-gray-50 border border-dashed border-gray-200 rounded-2xl py-14 px-6">
+            <div className="w-14 h-14 bg-white rounded-2xl border border-gray-100 flex items-center justify-center mx-auto mb-4">
+              <FiUsers className="text-gray-400" size={24} />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-1.5">Coming soon</h3>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              We&apos;re putting the finishing touches on our team profiles. Check back soon to meet the people behind JustJobNG.
+            </p>
           </div>
         </div>
       </section>

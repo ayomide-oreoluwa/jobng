@@ -13,6 +13,8 @@ import {
 } from "react-icons/fi";
 import { authHeaders } from "@/lib/auth-client";
 import type { ApiJob } from "@/lib/justjobApi";
+import { sanitizeHtml } from "@/lib/html";
+import JobDetailSkeleton from "@/components/shared/JobDetailSkeleton";
 
 function formatDate(iso: string) {
   try {
@@ -24,6 +26,10 @@ function formatDate(iso: string) {
   } catch {
     return iso;
   }
+}
+
+function companyInitial(name: string) {
+  return name.trim().charAt(0).toUpperCase() || "J";
 }
 
 export default function JobDetailPage() {
@@ -66,27 +72,24 @@ export default function JobDetailPage() {
     return () => { cancelled = true; };
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-24 flex items-center justify-center text-gray-500">
-        Loading job…
-      </div>
-    );
-  }
+  if (loading) return <JobDetailSkeleton />;
 
   if (needsAuth) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 flex items-center justify-center px-4">
-        <div className="text-center max-w-md bg-white rounded-2xl border p-10">
-          <FiLogIn className="mx-auto text-blue-600 mb-4" size={40} />
-          <h1 className="text-xl font-bold mb-2">Sign in required</h1>
-          <p className="text-gray-500 mb-6 text-sm">Log in to view job details.</p>
-          <Link
-            href={`/login?callbackUrl=${encodeURIComponent(`/jobs/${id}`)}`}
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm"
-          >
-            Login / Register
-          </Link>
+      <div className="jj-detail">
+        <div className="container-xl" style={{ paddingTop: "6rem", paddingBottom: "4rem" }}>
+          <div className="jj-card" style={{ maxWidth: 420, margin: "0 auto", padding: "3rem 2rem", textAlign: "center" }}>
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "var(--gold-muted)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
+              <FiLogIn size={24} color="var(--gold-hover)" />
+            </div>
+            <h1 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 8px", color: "var(--ink)" }}>Sign in required</h1>
+            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: "0 0 1.5rem", lineHeight: 1.6 }}>
+              Log in to view job details. To subscribe, dial <strong style={{ color: "var(--ink)" }}>*7098#</strong> first.
+            </p>
+            <Link href={`/login?callbackUrl=${encodeURIComponent(`/jobs/${id}`)}`} className="jj-btn jj-btn--gold" style={{ padding: "12px 28px" }}>
+              Login
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -94,62 +97,80 @@ export default function JobDetailPage() {
 
   if (notFound || !job) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 flex flex-col items-center justify-center px-4">
-        <h1 className="text-2xl font-bold mb-2">Job not found</h1>
-        <button type="button" onClick={() => router.push("/jobs")} className="text-blue-600 font-semibold">
-          ← Back to jobs
-        </button>
+      <div className="jj-detail">
+        <div className="container-xl" style={{ paddingTop: "6rem", paddingBottom: "4rem", textAlign: "center" }}>
+          <p style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔍</p>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 8px" }}>Job not found</h1>
+          <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>This listing may have been removed or expired.</p>
+          <button type="button" onClick={() => router.push("/jobs")} className="jj-btn jj-btn--ghost" style={{ padding: "10px 20px" }}>
+            <FiArrowLeft size={14} /> Back to jobs
+          </button>
+        </div>
       </div>
     );
   }
 
   const title = job.job_title ?? "Untitled role";
+  const website = job.company_website
+    ? (job.company_website.startsWith("http") ? job.company_website : `https://${job.company_website}`)
+    : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="bg-gradient-to-r from-gray-900 to-blue-950 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/jobs" className="inline-flex items-center gap-2 text-blue-200 hover:text-white text-sm mb-6">
-            <FiArrowLeft size={14} /> Back to Jobs
+    <div className="jj-detail animate-fade-in-up">
+      {/* Hero */}
+      <div className="jj-detail__hero">
+        <div className="container-xl">
+          <Link href="/jobs" className="jj-detail__back">
+            <FiArrowLeft size={14} /> Back to all jobs
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">{title}</h1>
-          <p className="text-blue-200 text-lg">{job.company_name}</p>
+          <div className="jj-detail__hero-inner">
+            <div className="jj-detail__company-avatar">{companyInitial(job.company_name)}</div>
+            <div>
+              <h1 className="jj-detail__title">{title}</h1>
+              <p className="jj-detail__company">{job.company_name}</p>
+              <div className="jj-detail__meta">
+                <span className="jj-detail__meta-pill">
+                  <FiBriefcase size={12} /> {job.category ?? "General"}
+                </span>
+                <span className="jj-detail__meta-pill">
+                  <FiCalendar size={12} /> {formatDate(job.created_at)}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 grid grid-cols-2 gap-4 shadow-sm">
-              <div>
-                <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><FiBriefcase size={12} /> Category</p>
-                <p className="text-sm font-semibold">{job.category ?? "General"}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-1 flex items-center gap-1"><FiCalendar size={12} /> Posted</p>
-                <p className="text-sm font-semibold">{formatDate(job.created_at)}</p>
-              </div>
-            </div>
-
+      {/* Body */}
+      <div className="jj-detail__body">
+        <div className="container-xl jj-detail__grid">
+          <div>
             {job.description && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Job Description</h2>
-                <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{job.description}</p>
+              <div className="jj-card" style={{ padding: "1.75rem 2rem" }}>
+                <h2 className="jj-detail__section-title">About this role</h2>
+                <div
+                  className="job-description"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) }}
+                />
               </div>
             )}
           </div>
 
-          <div className="space-y-5">
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm sticky top-28">
-              <h3 className="font-bold text-gray-900 mb-4">{job.company_name}</h3>
-              {job.company_website && (
+          <aside>
+            <div className="jj-card jj-detail__sidebar-card">
+              <p className="jj-detail__sidebar-company">{job.company_name}</p>
+              {website && (
                 <a
-                  href={job.company_website.startsWith("http") ? job.company_website : `https://${job.company_website}`}
+                  href={website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-blue-600 mb-4 hover:underline"
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    fontSize: "0.875rem", color: "var(--gold-hover)",
+                    textDecoration: "none", marginBottom: "1.25rem", fontWeight: 600,
+                  }}
                 >
-                  <FiGlobe size={14} /> Company website
+                  <FiGlobe size={15} /> Visit company website
                 </a>
               )}
               {job.job_url ? (
@@ -157,15 +178,22 @@ export default function JobDetailPage() {
                   href={job.job_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm"
+                  className="jj-btn jj-btn--gold jj-detail__apply-btn"
                 >
-                  Apply on company site <FiExternalLink size={14} />
+                  Apply now <FiExternalLink size={15} />
                 </a>
               ) : (
-                <p className="text-sm text-gray-500 text-center">Contact the company directly to apply.</p>
+                <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", textAlign: "center", margin: 0 }}>
+                  Contact the company directly to apply.
+                </p>
               )}
+              <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid var(--border)" }}>
+                <p style={{ fontSize: "0.75rem", color: "var(--text-faint)", margin: 0, lineHeight: 1.5 }}>
+                  Posted {formatDate(job.created_at)} · ID #{job.job_id}
+                </p>
+              </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </div>
