@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -29,13 +29,18 @@ export const metadata: Metadata = {
   keywords: "jobs Nigeria, careers, employment, job search, JustJobNG, MTN jobs",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/favicon.svg" }],
+    apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "JustJobNG – Find Your Next Role",
     description: "Browse live job listings across Nigeria.",
     siteName: "JustJobNG",
+    type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0A0F1C",
 };
 
 export default function RootLayout({
@@ -44,11 +49,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${dmSans.variable}`}>
-      <body>
+    <html 
+      lang="en" 
+      className={`${plusJakarta.variable} ${dmSans.variable} scroll-smooth`}
+      suppressHydrationWarning
+    >
+      <body className="font-body antialiased min-h-screen flex flex-col bg-[var(--surface)] text-[var(--ink)]">
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-grow">{children}</main>
           <Footer />
         </AuthProvider>
       </body>

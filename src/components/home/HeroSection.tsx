@@ -1,12 +1,22 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay } },
+  hidden: { opacity: 0, y: 24 },
+  show: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.6, 
+      // Use a string for cubic-bezier to satisfy the TypeScript Easing type
+      ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number], 
+      delay 
+    } 
+  },
 });
 
 const popularTags = ["Engineering", "Finance", "Marketing", "Healthcare", "Remote"];
@@ -23,196 +33,111 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="jj-hero">
-      {/* Grid texture */}
-      <div className="jj-hero__grid" aria-hidden />
-      {/* Glow orbs */}
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-4 pt-32 pb-20 bg-gradient-to-br from-[#8DC63F] via-[#00A651] to-[#00863F]">
+      {/* Background Glow Layer / Grid Effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-10%,#CDEBB0_0%,transparent_60%)]" />
+      <div 
+        className="absolute inset-0 bg-[linear-gradient(rgba(10,15,28,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(10,15,28,0.05)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_50%,black_20%,transparent_100%)] pointer-events-none" 
+        aria-hidden 
+      />
+      
+      {/* Ambient Animated Orbs */}
       <motion.div
-        className="jj-hero__orb jj-hero__orb--gold"
+        className="absolute top-[10%] right-[5%] w-[420px] h-[420px] rounded-full bg-[#CDEBB0]/40 blur-[80px] pointer-events-none"
         animate={{ scale: [1, 1.12, 1], opacity: [0.4, 0.65, 0.4] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="jj-hero__orb jj-hero__orb--teal"
+        className="absolute bottom-[20%] left-0 w-[360px] h-[360px] rounded-full bg-white/20 blur-[80px] pointer-events-none"
         animate={{ scale: [1, 1.08, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 3 }}
       />
 
-      <div className="container-xl jj-hero__content">
-        <motion.div variants={fadeUp(0)} initial="hidden" animate="show" className="jj-hero__badge">
+      {/* Hero Interactive Main Window Wrapper */}
+      <div className="relative z-10 w-full max-w-[760px] mx-auto text-center">
+        
+        {/* Update Notification Ribbon Badge */}
+        <motion.div variants={fadeUp(0)} initial="hidden" animate="show" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[rgba(10,15,28,0.08)] border border-[rgba(10,15,28,0.14)] text-[rgba(10,15,28,0.72)] mb-7">
           <motion.span
-            className="jj-hero__badge-dot"
+            className="w-2 h-2 rounded-full bg-[#0F9D58] shadow-[0_0_0_3px_rgba(15,157,88,0.2)]"
             animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
           Live jobs updated daily
         </motion.div>
 
-        <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="jj-hero__title">
+        {/* Dynamic Typography Main Banner Headers */}
+        <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A0F1C] leading-[1.1] mb-5">
           Your next role<br />
-          <span className="jj-hero__title-accent">starts here.</span>
+          <span className="text-white drop-shadow-[0_2px_20px_rgba(120,53,15,0.25)]">starts here.</span>
         </motion.h1>
 
-        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="jj-hero__sub">
-          Discover opportunities across Nigeria. Subscribe via <strong>*7098#</strong>, then browse and apply in seconds.
+        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-[rgba(10,15,28,0.72)] max-w-[480px] mx-auto mb-10">
+          Discover opportunities across Nigeria. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong>, then browse and apply in seconds.
         </motion.p>
 
-        <motion.form variants={fadeUp(0.3)} initial="hidden" animate="show" onSubmit={handleSearch} className="jj-hero__search">
-          <FiSearch size={18} style={{ color: "var(--gold-hover)", flexShrink: 0 }} />
-          <input
-            type="text"
-            placeholder="Search job title or company..."
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="jj-hero__search-input"
-          />
-          <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} type="submit" className="jj-btn jj-btn--gold jj-hero__search-btn">
+        {/* Global Input Search Parameter Target Control Container */}
+        <motion.form 
+          variants={fadeUp(0.3)} initial="hidden" animate="show" 
+          onSubmit={handleSearch} 
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-[580px] mx-auto p-2 sm:p-2 sm:pl-4.5 bg-white rounded-2xl shadow-[0_24px_70px_rgba(120,53,15,0.28)] mb-6"
+        >
+          <div className="flex items-center gap-2.5 flex-1 py-2 sm:py-0 px-2 sm:px-0">
+            <FiSearch size={18} className="text-[var(--gold-hover)] shrink-0" />
+            <input
+              type="text"
+              placeholder="Search job title or company..."
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="w-full bg-transparent border-none outline-none text-sm text-[var(--ink)] placeholder-[var(--text-faint)] min-w-0 font-medium"
+            />
+          </div>
+          <motion.button 
+            whileHover={{ scale: 1.02 }} 
+            whileTap={{ scale: 0.98 }} 
+            type="submit" 
+            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3 px-5.5 whitespace-nowrap"
+          >
             Find Jobs <FiArrowRight size={16} />
           </motion.button>
         </motion.form>
 
-        <motion.div variants={fadeUp(0.42)} initial="hidden" animate="show" className="jj-hero__tags">
-          <span className="jj-hero__tags-label">Popular:</span>
+        {/* Popular Tags Segment Link Elements */}
+        <motion.div variants={fadeUp(0.42)} initial="hidden" animate="show" className="flex flex-wrap items-center justify-center gap-2 mb-12">
+          <span className="text-xs font-semibold text-[rgba(10,15,28,0.5)]">Popular:</span>
           {popularTags.map((tag) => (
-            <button key={tag} type="button" onClick={() => setKeyword(tag)} className="jj-hero__tag">
+            <button 
+              key={tag} 
+              type="button" 
+              onClick={() => setKeyword(tag)} 
+              className="bg-white/55 border border-[rgba(10,15,28,0.12)] text-[rgba(10,15,28,0.75)] rounded-full px-3.5 py-1 text-xs font-semibold transition-colors duration-200 hover:bg-[#0A0F1C] hover:border-[#0A0F1C] hover:text-[#8DC63F]"
+            >
               {tag}
             </button>
           ))}
         </motion.div>
 
-        <motion.div variants={fadeUp(0.52)} initial="hidden" animate="show" className="jj-hero__stats">
+        {/* Metrics/Stats Cluster Block */}
+        <motion.div variants={fadeUp(0.52)} initial="hidden" animate="show" className="flex flex-wrap justify-center gap-10 border-t border-[rgba(10,15,28,0.14)] pt-8">
           {[
             { value: "300+", label: "Live listings" },
             { value: "*7098#", label: "Subscribe via USSD" },
             { value: "24/7", label: "Always available" },
           ].map((s) => (
-            <div key={s.label} className="jj-hero__stat">
-              <span className="jj-hero__stat-value">{s.value}</span>
-              <span className="jj-hero__stat-label">{s.label}</span>
+            <div key={s.label} className="flex flex-col items-center gap-1">
+              <span className="font-display text-xl font-extrabold text-[#055A2B]">{s.value}</span>
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-[rgba(10,15,28,0.55)]">{s.label}</span>
             </div>
           ))}
         </motion.div>
       </div>
 
-      <div className="jj-hero__wave" aria-hidden>
-        <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 80 }}>
+      {/* Absolute Layer Page Context Cutout Wave */}
+      <div className="absolute bottom-0 left-0 right-0 line-height-0 pointer-events-none" aria-hidden>
+        <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none" className="block w-full h-20">
           <path d="M0 80H1440V30C1200 80 900 10 720 10C540 10 240 80 0 30V80Z" fill="var(--surface)" />
         </svg>
       </div>
-
-      <style>{`
-        .jj-hero {
-          background:
-            radial-gradient(ellipse 90% 70% at 50% -10%, #CDEBB0 0%, transparent 60%),
-            linear-gradient(160deg, #8DC63F 0%, #00A651 52%, #00863F 100%);
-          min-height: 92vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-          padding: calc(var(--nav-height) + 3rem) 0 5rem;
-        }
-        .jj-hero__grid {
-          position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(10,15,28,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,15,28,0.05) 1px, transparent 1px);
-          background-size: 48px 48px;
-          mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
-        }
-        .jj-hero__orb {
-          position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
-        }
-        .jj-hero__orb--gold {
-          top: 10%; right: 5%; width: 420px; height: 420px;
-          background: rgba(205, 235, 176, 0.55);
-        }
-        .jj-hero__orb--teal {
-          bottom: 20%; left: 0; width: 360px; height: 360px;
-          background: rgba(255, 255, 255, 0.25);
-        }
-        .jj-hero__content {
-          text-align: center;
-          position: relative;
-          z-index: 1;
-          max-width: 760px;
-        }
-        .jj-hero__badge {
-          display: inline-flex; align-items: center; gap: 8px;
-          background: rgba(10,15,28,0.08);
-          border: 1px solid rgba(10,15,28,0.14);
-          border-radius: 999px; padding: 6px 16px;
-          font-size: 0.8125rem; font-weight: 600;
-          color: rgba(10,15,28,0.72); margin-bottom: 1.75rem;
-        }
-        .jj-hero__badge-dot {
-          width: 7px; height: 7px; border-radius: 50%;
-          background: #0F9D58; display: inline-block;
-          box-shadow: 0 0 0 3px rgba(15,157,88,0.2);
-        }
-        .jj-hero__title {
-          font-size: clamp(2.5rem, 6vw, 4rem);
-          font-weight: 800; color: #0A0F1C;
-          line-height: 1.1; margin: 0 0 1.25rem;
-          letter-spacing: -0.03em;
-        }
-        .jj-hero__title-accent {
-          color: #fff;
-          text-shadow: 0 2px 20px rgba(120,53,15,0.25);
-        }
-        .jj-hero__sub {
-          font-size: 1.0625rem; color: rgba(10,15,28,0.72);
-          max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.65;
-        }
-        .jj-hero__sub strong { color: #055A2B; font-weight: 800; }
-        .jj-hero__search {
-          display: flex; align-items: center; gap: 10px;
-          background: #fff;
-          border-radius: var(--radius-md);
-          padding: 8px 8px 8px 18px;
-          box-shadow: 0 24px 70px rgba(120,53,15,0.28);
-          max-width: 580px; margin: 0 auto 1.5rem;
-        }
-        .jj-hero__search-input {
-          flex: 1; border: none; outline: none; background: transparent;
-          font-size: 0.9375rem; color: var(--ink); min-width: 0;
-        }
-        .jj-hero__search-input::placeholder { color: var(--text-faint); }
-        .jj-hero__search-btn { padding: 12px 22px; white-space: nowrap; flex-shrink: 0; }
-        .jj-hero__tags {
-          display: flex; flex-wrap: wrap; align-items: center;
-          justify-content: center; gap: 8px; margin-bottom: 3rem;
-        }
-        .jj-hero__tags-label { font-size: 0.8125rem; color: rgba(10,15,28,0.5); }
-        .jj-hero__tag {
-          background: rgba(255,255,255,0.55); border: 1px solid rgba(10,15,28,0.12);
-          color: rgba(10,15,28,0.75); border-radius: 999px;
-          padding: 5px 14px; font-size: 0.8125rem; font-weight: 600;
-          cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s;
-        }
-        .jj-hero__tag:hover {
-          background: #0A0F1C; border-color: #0A0F1C;
-          color: #8DC63F;
-        }
-        .jj-hero__stats {
-          display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
-          border-top: 1px solid rgba(10,15,28,0.14);
-          padding-top: 2rem;
-        }
-        .jj-hero__stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .jj-hero__stat-value {
-          font-family: var(--font-display), sans-serif;
-          font-size: 1.375rem; font-weight: 800; color: #055A2B;
-        }
-        .jj-hero__stat-label { font-size: 0.75rem; color: rgba(10,15,28,0.55); font-weight: 500; }
-        .jj-hero__wave { position: absolute; bottom: 0; left: 0; right: 0; line-height: 0; }
-        @media (max-width: 640px) {
-          .jj-hero__search { flex-wrap: wrap; padding: 12px; }
-          .jj-hero__search-btn { width: 100%; justify-content: center; }
-        }
-      `}</style>
     </section>
   );
 }

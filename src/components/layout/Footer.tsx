@@ -1,6 +1,7 @@
 "use client";
+
 import Link from "next/link";
-import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from "react-icons/fi";
+import { FiFacebook, FiXTwitter, FiInstagram, FiLinkedin } from "react-icons/fi";
 import Logo from "@/components/brand/Logo";
 
 const footerLinks = {
@@ -17,94 +18,88 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: FiFacebook, href: "#", label: "Facebook" },
-  { icon: FiTwitter, href: "#", label: "Twitter" },
-  { icon: FiInstagram, href: "#", label: "Instagram" },
-  { icon: FiLinkedin, href: "#", label: "LinkedIn" },
+  // { icon: FiFacebook, href: "#", label: "Facebook" },
+  // { icon: FiXTwitter, href: "#", label: "X" },
+  { icon: FiInstagram, href: "https://www.instagram.com/maekandex_communication_/", label: "Instagram" },
+  { icon: FiLinkedin, href: "https://ng.linkedin.com/company/maekandexcommunication", label: "LinkedIn" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="jj-footer">
-      <div className="container-xl jj-footer__main">
-        <div className="jj-footer__grid">
+    <footer className="bg-[radial-gradient(ellipse_80%_80%_at_80%_0%,#CDEBB0_0%,transparent_55%),linear-gradient(200deg,#8DC63F_0%,#00A651_55%,#00863F_100%)] text-ink/70">
+      {/* Main Grid Section */}
+      <div className="container-xl pt-16 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-10">
+          
+          {/* Brand Info Column */}
           <div>
             <Logo variant="dark" size="md" />
-            <p className="jj-footer__tagline">
-              Nigeria&apos;s job discovery platform. Subscribe via <strong>*7098#</strong>, browse live listings, and land your next role.
+            <p className="mt-5 text-sm line-clamp-3 leading-relaxed max-w-[300px] text-ink/65">
+              Nigeria&apos;s job discovery platform. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong>, browse live listings, and land your next role.
             </p>
           </div>
+
+          {/* Explore Links */}
           <div>
-            <h3 className="jj-footer__heading">Explore</h3>
-            {footerLinks.explore.map((l) => (
-              <Link key={l.href} href={l.href} className="jj-footer__link">{l.label}</Link>
-            ))}
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-ink mb-5">
+              Explore
+            </h3>
+            <div className="flex flex-col gap-1.5">
+              {footerLinks.explore.map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="text-sm text-ink/60 no-underline py-1 transition-colors duration-150 hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
+
+          {/* Company Links */}
           <div>
-            <h3 className="jj-footer__heading">Company</h3>
-            {footerLinks.company.map((l) => (
-              <Link key={l.href} href={l.href} className="jj-footer__link">{l.label}</Link>
-            ))}
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-ink mb-5">
+              Company
+            </h3>
+            <div className="flex flex-col gap-1.5">
+              {footerLinks.company.map((link) => (
+                <Link 
+                  key={link.href} 
+                  href={link.href} 
+                  className="text-sm text-ink/60 no-underline py-1 transition-colors duration-150 hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
+
         </div>
       </div>
-      <div className="jj-footer__bar">
-        <div className="container-xl jj-footer__bar-inner">
-          <p className="jj-footer__copy">© {new Date().getFullYear()} JustJobNG. All rights reserved.</p>
-          <div className="jj-footer__socials">
+
+      {/* Bottom Legal Bar */}
+      <div className="border-t border-ink/12">
+        <div className="container-xl flex flex-wrap items-center justify-between gap-3 py-5">
+          <p className="text-[13px] text-ink/55 m-0">
+            &copy; {new Date().getFullYear()} JustJobNG. All rights reserved.
+          </p>
+          
+          {/* Social Icons Strip */}
+          <div className="flex items-center gap-2">
             {socials.map(({ icon: Icon, href, label }) => (
-              <a key={label} href={href} aria-label={label} className="jj-footer__social">
+              <a 
+                key={label} 
+                href={href} 
+                aria-label={label} 
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-ink/8 text-ink/60 transition-all duration-200 hover:bg-ink hover:text-gold-hover"
+              >
                 <Icon size={13} />
               </a>
             ))}
           </div>
         </div>
       </div>
-
-      <style>{`
-        .jj-footer {
-          background:
-            radial-gradient(ellipse 80% 80% at 80% 0%, #CDEBB0 0%, transparent 55%),
-            linear-gradient(200deg, #8DC63F 0%, #00A651 55%, #00863F 100%);
-          color: rgba(10,15,28,0.7);
-        }
-        .jj-footer__main { padding: 4rem 0 3rem; }
-        .jj-footer__grid {
-          display: grid; gap: 2.5rem;
-          grid-template-columns: 1fr;
-        }
-        @media (min-width: 640px) { .jj-footer__grid { grid-template-columns: 1fr 1fr; } }
-        @media (min-width: 1024px) { .jj-footer__grid { grid-template-columns: 2fr 1fr 1fr; } }
-        .jj-footer__tagline {
-          font-size: 0.875rem; line-height: 1.7; max-width: 300px;
-          margin: 1.25rem 0 0; color: rgba(10,15,28,0.65);
-        }
-        .jj-footer__tagline strong { color: #055A2B; font-weight: 800; }
-        .jj-footer__heading {
-          font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 0.12em; color: #0A0F1C;
-          margin: 0 0 1.25rem;
-        }
-        .jj-footer__link {
-          display: block; font-size: 0.875rem; color: rgba(10,15,28,0.6);
-          text-decoration: none; padding: 5px 0; transition: color 0.15s;
-        }
-        .jj-footer__link:hover { color: #0A0F1C; }
-        .jj-footer__bar { border-top: 1px solid rgba(10,15,28,0.12); }
-        .jj-footer__bar-inner {
-          display: flex; flex-wrap: wrap; align-items: center;
-          justify-content: space-between; gap: 12px; padding: 1.25rem 0;
-        }
-        .jj-footer__copy { font-size: 0.8125rem; color: rgba(10,15,28,0.55); margin: 0; }
-        .jj-footer__socials { display: flex; gap: 8px; }
-        .jj-footer__social {
-          width: 34px; height: 34px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          background: rgba(10,15,28,0.08); color: rgba(10,15,28,0.6);
-          text-decoration: none; transition: background 0.2s, color 0.2s;
-        }
-        .jj-footer__social:hover { background: #0A0F1C; color: #8DC63F; }
-      `}</style>
     </footer>
   );
 }

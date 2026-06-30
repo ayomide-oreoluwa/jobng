@@ -22,7 +22,7 @@ const NAMED_ENTITIES: Record<string, string> = {
 };
 
 function decodeEntities(input: string): string {
-  return input.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, (match, body: string) => {
+  return input.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z0-9]+);/g, (match, body: string) => {
     if (body[0] === "#") {
       const isHex = body[1] === "x" || body[1] === "X";
       const code = parseInt(isHex ? body.slice(2) : body.slice(1), isHex ? 16 : 10);
@@ -56,9 +56,11 @@ const ALLOWED_TAGS = new Set([
 export function sanitizeHtml(html: string | null | undefined): string {
   if (!html) return "";
 
+  // FIX: Separate removal of dangerous blocks to ensure self-closing instances do not swallow text
   let out = html
+    .replace(/<\s*(script|style|iframe|object|embed|link|meta)[^>]*\/>/gi, "")
     .replace(/<\s*(script|style|iframe|object|embed|link|meta)[\s\S]*?<\/\s*\1\s*>/gi, "")
-    .replace(/<\s*(script|style|iframe|object|embed|link|meta)[^>]*\/?>/gi, "");
+    .replace(/<\s*(script|style|iframe|object|embed|link|meta)[^>]*>/gi, "");
 
   out = out.replace(/<\s*(\/?)\s*([a-zA-Z0-9]+)([^>]*)>/g, (match, slash: string, tag: string, attrs: string) => {
     const name = tag.toLowerCase();
@@ -66,9 +68,12 @@ export function sanitizeHtml(html: string | null | undefined): string {
     if (slash === "/") return `</${name}>`;
 
     if (name === "a") {
-      const hrefMatch = attrs.match(/href\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/i);
-      const href = hrefMatch ? (hrefMatch[2] ?? hrefMatch[3] ?? hrefMatch[4] ?? "") : "";
-      const safe = /^(https?:\/\/|mailto:|\/)/i.test(href) ? href : "";
+      // FIX: Robust href extraction that safely handles single, double, or omitted attribute quotation configurations
+      const hrefMatch = attrs.match(/href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const href = hrefMatch ? (hrefMatch[1] ?? hrefMatch[2] ?? hrefMatch[3] ?? "") : "";
+      
+      // Clean URL parameters validation tracking protocol
+      const safe = /^(https?:\/\/|mailto:|\/)/i.test(href.trim()) ? href.trim() : "";
       return safe
         ? `<a href="${safe}" target="_blank" rel="noopener noreferrer">`
         : "<a>";

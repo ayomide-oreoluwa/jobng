@@ -4,58 +4,87 @@ import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 
 const steps = [
-  { icon: FiSearch,       step: "01", title: "Search for Jobs",   bg: "#E6F6E6", color: "#00863F", border: "#BDE5A8", desc: "Browse thousands of job listings filtered by location, category, salary, and job type to find your perfect match." },
-  { icon: FiFileText,     step: "02", title: "Create Your Profile", bg: "#f0fdf4", color: "#16a34a", border: "#bbf7d0", desc: "Build a professional profile that showcases your skills, experience, and portfolio. Make employers notice you." },
-  { icon: FiSend,         step: "03", title: "Apply Instantly",    bg: "#faf5ff", color: "#7c3aed", border: "#e9d5ff", desc: "Apply to multiple jobs with a single click. Track your application status in real time from your dashboard." },
-  { icon: FiCheckCircle,  step: "04", title: "Get Hired",          bg: "#fff7ed", color: "#ea580c", border: "#fed7aa", desc: "Land interviews, negotiate offers, and start your new role. Thousands of candidates find jobs here every month." },
+  {
+    icon: FiSearch,
+    step: "01",
+    title: "Search for Jobs",
+    bg: "bg-amber-50",
+    color: "text-gold-hover",
+    border: "border-amber-200",
+    shadow: "hover:shadow-[0_20px_48px_rgba(217,119,6,0.14)]",
+    desc: "Browse thousands of job listings filtered by location, category, salary, and job type to find your perfect match.",
+  },
+  {
+    icon: FiFileText,
+    step: "02",
+    title: "Create Your Profile",
+    bg: "bg-green-50",
+    color: "text-green-600",
+    border: "border-green-200",
+    shadow: "hover:shadow-[0_20px_48px_rgba(22,163,74,0.14)]",
+    desc: "Build a professional profile that showcases your skills, experience, and portfolio. Make employers notice you.",
+  },
+  {
+    icon: FiSend,
+    step: "03",
+    title: "Apply Instantly",
+    bg: "bg-purple-50",
+    color: "text-purple-600",
+    border: "border-purple-200",
+    shadow: "hover:shadow-[0_20px_48px_rgba(124,58,237,0.14)]",
+    desc: "Apply to multiple jobs with a single click. Track your application status in real time from your dashboard.",
+  },
+  {
+    icon: FiCheckCircle,
+    step: "04",
+    title: "Get Hired",
+    bg: "bg-orange-50",
+    color: "text-orange-600",
+    border: "border-orange-200",
+    shadow: "hover:shadow-[0_20px_48px_rgba(234,88,12,0.14)]",
+    desc: "Land interviews, negotiate offers, and start your new role. Thousands of candidates find jobs here every month.",
+  },
 ];
 
 export default function HowItWorks() {
   return (
-    <section style={{ padding: "80px 0", background: "#fff" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 1.5rem" }}>
+    <section className="py-20 bg-surface-elevated">
+      <div className="max-w-[1280px] mx-auto px-6">
         <SectionHeader
           subtitle="Simple Process"
           title="How It Works"
           description="Get started with JustJobNG in four simple steps and land your dream job faster"
         />
 
-        <div className="how-grid" style={{ display: "grid", gap: 20 }}>
-          {steps.map(({ icon: Icon, step, title, bg, color, border, desc }, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map(({ icon: Icon, step, title, bg, color, border, shadow, desc }, i) => (
             <motion.div
               key={step}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}
-              whileHover={{ y: -8, boxShadow: `0 20px 48px ${color}22` }}
-              style={{
-                background: "#fff", border: `1.5px solid ${border}`,
-                borderRadius: 16, padding: 28, position: "relative",
-                textAlign: "center", cursor: "default",
-              }}
+              whileHover={{ y: -8 }}
+              className={`bg-surface-elevated border-[1.5px] ${border} rounded-md p-7 relative text-center cursor-default transition-shadow duration-300 ${shadow}`}
             >
-              <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)", background: "#111827", color: "#fff", fontSize: 11, fontWeight: 700, width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-ink text-white text-[11px] font-bold w-7 h-7 rounded-full flex items-center justify-center">
                 {step}
               </div>
+
               <motion.div
                 whileHover={{ rotate: [0, -8, 8, -4, 0] }}
                 transition={{ duration: 0.45 }}
-                style={{ width: 56, height: 56, background: bg, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", margin: "16px auto 16px" }}
+                className={`w-14 h-14 ${bg} rounded-[14px] flex items-center justify-center mx-auto mt-4 mb-4`}
               >
-                <Icon style={{ color, fontSize: 24 }} />
+                <Icon className={`${color} text-2xl`} aria-hidden="true" />
               </motion.div>
-              <h3 style={{ fontWeight: 700, fontSize: 16, color: "#111827", marginBottom: 8 }}>{title}</h3>
-              <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6 }}>{desc}</p>
+
+              <h3 className="font-bold text-base text-ink mb-2">{title}</h3>
+              <p className="text-sm text-text-muted leading-relaxed">{desc}</p>
             </motion.div>
           ))}
         </div>
       </div>
-      <style>{`
-        .how-grid { grid-template-columns: 1fr; }
-        @media (min-width: 640px)  { .how-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (min-width: 1024px) { .how-grid { grid-template-columns: repeat(4,1fr); } }
-      `}</style>
     </section>
   );
 }
