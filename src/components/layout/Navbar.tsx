@@ -35,7 +35,7 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 h-[var(--spacing-nav-height)] flex items-center transition-all duration-350 ${
+        className={`fixed top-0 left-0 right-0 z-50 h-(--spacing-nav-height) flex items-center transition-all duration-350 ${
           transparent
             ? "bg-transparent"
             : "bg-surface/92 backdrop-blur-md shadow-[0_1px_0_rgba(15,23,42,0.08)]"
@@ -120,13 +120,14 @@ export default function Navbar() {
 
       {/* Mobile Sidebar Drawer Layout Elements */}
       <div 
-        className={`fixed top-0 right-0 h-full w-[300px] max-w-[85vw] bg-surface-elevated z-51 shadow-lg flex flex-col transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`fixed top-0 right-0 h-full w-75 max-w-[85vw] bg-surface-elevated z-51 shadow-lg flex flex-col transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between p-[18px_20px] border-b border-border-strong">
           <Logo size="sm" />
-          <button 
+          <button
+            title="close button"
             type="button" 
             onClick={() => setMobileOpen(false)} 
             className="bg-transparent border-none cursor-pointer text-text-muted p-1"
