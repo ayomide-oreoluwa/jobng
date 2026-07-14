@@ -1,11 +1,12 @@
 "use client";
-
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { FiPhone, FiCheckCircle, FiEye, FiEyeOff, FiChevronDown, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import Logo from "@/components/brand/Logo";
+import { OtpInput } from "@/components/auth/OTPInput";
 
 const PIN_LENGTH = 4;
+const OTP_LENGTH = 6;
 
 const countryCodes = [
   { code: "+234", flag: "🇳🇬", name: "NG" },
@@ -28,7 +29,6 @@ function PhoneInput({
 }) {
   const [open, setOpen] = useState(false);
   const selected = countryCodes.find((c) => c.code === countryCode) ?? countryCodes[0];
-
   return (
     <div className="jj-login-field">
       <button type="button" className="jj-login-field__cc" onClick={() => setOpen(!open)}>
@@ -69,7 +69,6 @@ function PhoneInput({
 
 function PinInput({ value, onChange, placeholder = "••••" }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   const [show, setShow] = useState(false);
-
   return (
     <div>
       <div className="jj-login-field jj-login-field--pin">
@@ -89,34 +88,34 @@ function PinInput({ value, onChange, placeholder = "••••" }: { value: st
           {show ? <FiEyeOff size={16} /> : <FiEye size={16} />}
         </button>
       </div>
-      <div className="jj-login-pin-dots" aria-hidden>
-        {Array.from({ length: PIN_LENGTH }).map((_, i) => (
-          <span key={i} className={`jj-login-pin-dot ${i < value.length ? "jj-login-pin-dot--filled" : ""}`} />
-        ))}
-      </div>
     </div>
   );
 }
 
+
 export default function ForgotPasswordPage() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState("");
-  
+
   // Step 1 state
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("+234");
-  
+
   // Step 2 state
+  const [otp, setOtp] = useState("");
+
+  // Step 3 state
   const [pin, setPin] = useState("");
 
-  const handleRequestReset = async (e: React.FormEvent) => {
+  const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length < 7) return;
-    
+
     setLoading(true);
     setError("");
-    
+
     try {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
@@ -124,12 +123,12 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ phone, countryCode }),
       });
       const data = await res.json();
-      
+
       if (!res.ok || !data.ok) {
         setError(data.error || "Failed to request reset");
         return;
       }
-      
+
       setStep(2);
     } catch {
       setError("Network error. Please try again.");
@@ -138,26 +137,26 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  const handleResetPin = async (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin.length !== PIN_LENGTH) return;
-    
+    if (otp.length !== OTP_LENGTH) return;
+
     setLoading(true);
     setError("");
-    
+
     try {
-      const res = await fetch("/api/auth/reset-password", {
+      const res = await fetch("/api/auth/otp-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, pin, countryCode }),
+        body: JSON.stringify({ phone, countryCode, otp }),
       });
       const data = await res.json();
-      
+
       if (!res.ok || !data.ok) {
-        setError(data.error || "Failed to reset PIN");
+        setError(data.error || "Invalid or expired code");
         return;
       }
-      
+
       setStep(3);
     } catch {
       setError("Network error. Please try again.");
@@ -166,7 +165,55 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  if (step === 3) {
+  const handleResendOtp = async () => {
+    setResending(true);
+    setError("");
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, countryCode }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setError(data.error || "Failed to resend code");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setResending(false);
+    }
+  };
+
+  const handleResetPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pin.length !== PIN_LENGTH) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, pin, countryCode }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        setError(data.error || "Failed to reset PIN");
+        return;
+      }
+
+      setStep(4);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (step === 4) {
     return (
       <div className="jj-login-page">
         <div className="jj-login-card jj-login-card--success">
@@ -204,23 +251,27 @@ export default function ForgotPasswordPage() {
             </div>
           </div>
         </div>
-
         {/* Right panel — form */}
         <div className="jj-login-panel jj-login-panel--form">
           <div className="jj-login-form-wrap">
-            <Link href="/login" className="inline-flex items-center gap-2 text-[var(--text-muted)] text-sm font-semibold no-underline mb-8 hover:text-[var(--ink)] transition-colors">
+            <Link href="/login" className="inline-flex items-center gap-2 text-(--text-muted) text-sm font-semibold no-underline mb-8 hover:text-(--ink) transition-colors">
               <FiArrowLeft size={16} /> Back to Login
             </Link>
-
             <div className="jj-login-form-head">
-              <h2>{step === 1 ? "Forgot your PIN?" : "Enter new PIN"}</h2>
-              <p>{step === 1 ? "Enter your phone number to continue" : "We've sent an SMS with a reset code. Enter your new PIN."}</p>
+              <h2>
+                {step === 1 ? "Forgot your PIN?" : step === 2 ? "Verify it's you" : "Enter new PIN"}
+              </h2>
+              <p>
+                {step === 1
+                  ? "Enter your phone number to continue"
+                  : step === 2
+                  ? `We've sent a 6-digit code via SMS to ${countryCode} ${phone}.`
+                  : "Enter your new 4-digit PIN."}
+              </p>
             </div>
-
             {error && <div className="jj-login-error">{error}</div>}
-
-            {step === 1 ? (
-              <form onSubmit={handleRequestReset} className="jj-login-form">
+            {step === 1 && (
+              <form onSubmit={handleResetRequest} className="jj-login-form">
                 <div className="jj-login-form-group">
                   <label className="jj-login-label">Phone number</label>
                   <PhoneInput
@@ -230,7 +281,6 @@ export default function ForgotPasswordPage() {
                     onCountryChange={setCountryCode}
                   />
                 </div>
-
                 <button type="submit" disabled={phone.length < 7 || loading} className="jj-btn jj-btn--gold jj-login-submit">
                   {loading ? (
                     <><span className="jj-login-spinner" /> Processing…</>
@@ -239,13 +289,36 @@ export default function ForgotPasswordPage() {
                   )}
                 </button>
               </form>
-            ) : (
+            )}
+            {step === 2 && (
+              <form onSubmit={handleVerifyOtp} className="jj-login-form">
+                <div className="jj-login-form-group">
+                  <label className="jj-login-label">Verification code</label>
+                  <OtpInput value={otp} onChange={setOtp} />
+                </div>
+                <button type="submit" disabled={otp.length !== OTP_LENGTH || loading} className="jj-btn jj-btn--gold jj-login-submit">
+                  {loading ? (
+                    <><span className="jj-login-spinner" /> Verifying…</>
+                  ) : (
+                    <>Verify Code <FiArrowRight size={16} /></>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resending}
+                  className="inline-flex items-center gap-2 text-(--text-muted) text-sm font-semibold mt-4 hover:text-(--ink) transition-colors"
+                >
+                  {resending ? "Resending…" : "Didn't get a code? Resend"}
+                </button>
+              </form>
+            )}
+            {step === 3 && (
               <form onSubmit={handleResetPin} className="jj-login-form">
                 <div className="jj-login-form-group">
                   <label className="jj-login-label">New 4-digit PIN</label>
                   <PinInput value={pin} onChange={setPin} placeholder="Enter new PIN" />
                 </div>
-
                 <button type="submit" disabled={pin.length !== PIN_LENGTH || loading} className="jj-btn jj-btn--gold jj-login-submit">
                   {loading ? (
                     <><span className="jj-login-spinner" /> Resetting PIN…</>
