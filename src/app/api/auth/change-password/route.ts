@@ -8,6 +8,7 @@ export interface ChangePasswordBody {
   old_pin: string;
   pin: string;
   confirm_pin: string;
+
 }
 
 export async function POST(request: Request) {
@@ -18,6 +19,16 @@ export async function POST(request: Request) {
     const old_pin = body.old_pin?.trim();
     const pin = body.pin?.trim();
     const confirm_pin = body.confirm_pin?.trim();
+
+    const authHeader = request.headers.get("authorization") ?? undefined;
+    const token = authHeader?.replace(/^Bearer\s+/i, "");
+
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized. Please log in again." },
+        { status: 401 }
+      );
+    }
 
     if (!number || !old_pin || !pin || !confirm_pin) {
       return NextResponse.json(
@@ -48,9 +59,11 @@ export async function POST(request: Request) {
     }
 
     const result = await changePassword({
-      new_pin: pin,
+      new_pin: pin, 
       old_pin,
-    });
+    },
+      token
+    );
 
     if (!result.ok) {
       return NextResponse.json(

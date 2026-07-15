@@ -16,11 +16,9 @@ export interface PagedJobsResponse {
   count: number;
 }
 
-export interface ApiResult<T = Record<string, unknown>> {
-  ok: boolean;
-  status: number;
-  data: T;
-}
+export type ApiResult<T = Record<string, unknown>> =
+  | { ok: true; status: number; data: T }
+  | { ok: false; status: number; data: Record<string, unknown> };
 export interface UpdateApiResult {
   ok: boolean;
   status: number;
@@ -105,13 +103,19 @@ export async function verifyOtp(body: {
   return { ok: res.ok, status: res.status, data: await parseJson(res) };
 }
 
-export async function changePassword(body: {
-  new_pin: string;
-  old_pin: string;
-}): Promise<ApiResult> {
+export async function changePassword(
+  body: {
+    new_pin: string;
+    old_pin: string;
+  },
+  token: string // 👈 Accept the authenticated user's token
+): Promise<ApiResult> {
   const res = await fetch(`${API_BASE_URL}/api/justjob/change/password/`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}` // 👈 Secure this endpoint
+    },
     body: JSON.stringify(body),
   });
   return { ok: res.ok, status: res.status, data: await parseJson(res) };
@@ -174,7 +178,9 @@ export async function getJobs(
   );
 
   const data = (await parseJson(res)) as unknown as PagedJobsResponse;
-  return { ok: res.ok, status: res.status, data };
+  return res.ok
+    ? { ok: true, status: res.status, data }
+    : { ok: false, status: res.status, data: await parseJson(res) };
 }
 
 export async function getSingleJob(
@@ -191,5 +197,7 @@ export async function getSingleJob(
   );
 
   const data = (await parseJson(res)) as unknown as ApiJob;
-  return { ok: res.ok, status: res.status, data };
+  return res.ok
+    ? { ok: true, status: res.status, data }
+    : { ok: false, status: res.status, data: await parseJson(res) };
 }
