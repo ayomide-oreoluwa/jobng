@@ -21,8 +21,8 @@ export default function SectionHeader({ subtitle, title, description, center = t
         <span
           style={{
             display: "inline-block", fontSize: 12, fontWeight: 700,
-            textTransform: "uppercase", letterSpacing: "0.1em",
-            color: "#00863F", marginBottom: 8,
+            textTransform: "uppercase", letterSpacing: "0.15em",
+            color: "var(--gold)", marginBottom: 8,
           }}
         >
           {subtitle}
@@ -31,7 +31,7 @@ export default function SectionHeader({ subtitle, title, description, center = t
       <h2
         style={{
           fontSize: "clamp(1.75rem, 3vw, 2.25rem)",
-          fontWeight: 800, color: "#111827", lineHeight: 1.2,
+          fontWeight: 800, color: "#ffffff", lineHeight: 1.2,
           letterSpacing: "-0.02em", margin: 0,
         }}
       >
@@ -40,7 +40,7 @@ export default function SectionHeader({ subtitle, title, description, center = t
       {description && (
         <p
           style={{
-            marginTop: 12, color: "#6b7280", fontSize: 16, lineHeight: 1.6,
+            marginTop: 12, color: "var(--text-muted)", fontSize: 15, lineHeight: 1.6,
             maxWidth: center ? 520 : "100%",
             marginLeft: center ? "auto" : 0,
             marginRight: center ? "auto" : 0,

@@ -35,7 +35,7 @@ export function extractError(
   if (Array.isArray(first) && typeof first[0] === "string") return first[0];
   return fallback;
 }
-
+console.log("API_BASE_URL:", API_BASE_URL);
 export function extractToken(data: Record<string, unknown>): string | null {
   const token =
     data.access ??

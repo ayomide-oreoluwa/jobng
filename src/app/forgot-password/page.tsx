@@ -91,7 +91,7 @@ function PinInput({ value, onChange, placeholder = "••••" }: { value: st
   );
 }
 
-export function OtpInput({
+function OtpInput({
   value,
   onChange,
 }: {

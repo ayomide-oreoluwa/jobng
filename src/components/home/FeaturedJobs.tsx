@@ -67,10 +67,12 @@ export default function FeaturedJobs() {
           </div>
         ) : needsAuth ? (
           <div className="jj-card jj-featured__auth">
-            <FiLogIn size={32} style={{ color: "var(--gold-hover)", marginBottom: 12 }} />
-            <h3 style={{ fontSize: "1.125rem", fontWeight: 800, margin: "0 0 8px", color: "var(--ink)" }}>Sign in to view jobs</h3>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: "0 0 1.25rem" }}>
-              Dial <strong style={{ color: "var(--ink)" }}>*7098#</strong> to subscribe, then log in to browse live listings.
+            <div style={{ width: 56, height: 56, borderRadius: 16, background: "var(--gold-muted)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
+              <FiLogIn size={26} style={{ color: "var(--gold)" }} />
+            </div>
+            <h3 style={{ fontSize: "1.125rem", fontWeight: 800, margin: "0 0 8px", color: "#fff" }}>Sign in to view jobs</h3>
+            <p style={{ fontSize: "0.875rem", color: "var(--text-muted)", margin: "0 0 1.25rem", lineHeight: 1.6 }}>
+              Dial <strong style={{ color: "var(--gold)" }}>*7098#</strong> to subscribe, then log in to browse live listings.
             </p>
             <Link href="/login" className="jj-btn jj-btn--gold" style={{ padding: "10px 24px" }}>
               Login
@@ -96,7 +98,7 @@ export default function FeaturedJobs() {
       </div>
 
       <style>{`
-        .jj-featured { padding: 5rem 0; background: var(--surface); }
+        .jj-featured { padding: 5rem 0; bg: #0A0A0C; }
         .jj-featured__head {
           display: flex; flex-wrap: wrap; align-items: flex-end;
           justify-content: space-between; gap: 1rem; margin-bottom: 2.5rem;
@@ -104,14 +106,15 @@ export default function FeaturedJobs() {
         .jj-featured__eyebrow {
           display: block; font-size: 0.75rem; font-weight: 700;
           text-transform: uppercase; letter-spacing: 0.12em;
-          color: var(--gold-hover); margin-bottom: 8px;
+          color: var(--gold); margin-bottom: 8px;
         }
         .jj-featured__title {
           font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800;
-          color: var(--ink); margin: 0 0 6px;
+          color: #fff; margin: 0 0 6px;
         }
         .jj-featured__sub { font-size: 0.9375rem; color: var(--text-muted); margin: 0; }
-        .jj-featured__all { padding: 10px 18px; white-space: nowrap; }
+        .jj-featured__all { padding: 10px 18px; white-space: nowrap; border-color: var(--border-strong) !important; color: white !important; }
+        .jj-featured__all:hover { bg: white/5 !important; }
         .jj-featured__grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -119,6 +122,8 @@ export default function FeaturedJobs() {
         }
         .jj-featured__auth {
           text-align: center; padding: 3rem 2rem; max-width: 480px; margin: 0 auto;
+          bg: var(--surface-elevated) !important;
+          border-color: var(--border) !important;
         }
       `}</style>
     </section>

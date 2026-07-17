@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const token = authHeader?.replace(/^Bearer\s+/i, "");
 
     const result = await getJobs({ search, category, page, page_size }, token);
-
+    console.log(result)
     if (result.status === 401) {
       return NextResponse.json(
         { ok: false, requiresAuth: true, error: "Sign in to browse jobs." },
@@ -34,9 +34,10 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ ok: true, ...result.data });
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, error: "An unexpected route error occurred." },
-      { status: 500 }
-    );
-  }
+  console.error("GET /jobs error:", error); // add this
+  return NextResponse.json(
+    { ok: false, error: "An unexpected route error occurred." },
+    { status: 500 }
+  );
+}
 }
