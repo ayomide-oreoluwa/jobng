@@ -158,9 +158,14 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <Link href="/login" className="jj-btn jj-btn--gold px-5 py-2.5">
-                <FiLogIn size={15} /> Login
-              </Link>
+              <div className="flex items-center gap-2.5">
+                <Link href="/signup" className="jj-btn jj-btn--ghost px-5 py-2.5">
+                  Sign Up
+                </Link>
+                <Link href="/login" className="jj-btn jj-btn--gold px-5 py-2.5">
+                  <FiLogIn size={15} /> Login
+                </Link>
+              </div>
             )}
           </div>
 
@@ -225,9 +230,15 @@ export default function Navbar() {
               <FiLogOut size={14} /> Logout
             </button>
           ) : (
-            <Link href="/login" onClick={() => setMobileOpen(false)} className="jj-btn jj-btn--gold w-full py-3">
-              <FiLogIn size={14} /> Login
-            </Link>
+            <div className="flex gap-2">
+              <Link href="/login" onClick={() => setMobileOpen(false)} className="jj-btn jj-btn--gold w-full py-3">
+                <FiLogIn size={14} /> Login
+              </Link>
+
+              <Link href="/signup" onClick={() => setMobileOpen(false)} className="jj-btn jj-btn--gold w-full py-3">
+                Signup
+              </Link>
+            </div>
           )}
         </div>
       </div>
