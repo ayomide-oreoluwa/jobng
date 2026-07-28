@@ -174,7 +174,7 @@ export default function Navbar() {
             className="lg:hidden bg-transparent border-none cursor-pointer p-2 rounded-sm text-ink"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle navigation menu"
-            // aria-expanded={`${mobileOpen}`}
+            aria-expanded={`${mobileOpen}`}
           >
             {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
           </button>
