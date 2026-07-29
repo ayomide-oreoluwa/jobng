@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { authHeaders } from "@/lib/auth-client";
 
