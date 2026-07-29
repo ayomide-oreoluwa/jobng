@@ -1,20 +1,21 @@
 # syntax=docker/dockerfile:1
 
-FROM node:20-alpine AS deps
+# Lean multi-stage build — avoids copying node_modules between stages
+# (that COPY often OOMs low-memory Coolify hosts).
+
+FROM node:20-alpine AS builder
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 COPY package.json package-lock.json ./
 RUN npm ci
-
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN mkdir -p public
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS=--max-old-space-size=1536
 ARG JUSTJOB_API_BASE_URL=https://mtn.lenhub.net
 ENV JUSTJOB_API_BASE_URL=$JUSTJOB_API_BASE_URL
-RUN npm run build
+RUN npm run build \
+  && npm prune --omit=dev
 
 FROM node:20-alpine AS runner
 WORKDIR /app
