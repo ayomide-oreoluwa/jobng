@@ -8,13 +8,12 @@ import Logo from "@/components/brand/Logo";
 const footerLinks = {
   explore: [
     { label: "Browse Jobs", href: "/jobs" },
-    { label: "Login", href: "/login" },
     { label: "Forgot PIN", href: "/forgot-password" },
   ],
   company: [
-    { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
     { label: "FAQ", href: "/faq" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
   ],
 };
 
@@ -23,6 +22,7 @@ const socials = [
   // { icon: FiXTwitter, href: "#", label: "X" },
   { icon: FiInstagram, href: "https://www.instagram.com/maekandex_communication_/", label: "Instagram" },
   { icon: FiLinkedin, href: "https://ng.linkedin.com/company/maekandexcommunication", label: "LinkedIn" },
+  { icon: FiFacebook, href: "#", label: "Facebook" },
 ];
 
 // Framer Motion animation variants
@@ -81,7 +81,7 @@ export default function Footer() {
           <motion.div variants={itemVariants} className="md:col-span-2 flex flex-col items-start">
             <Logo variant="dark" size="md" />
             <p className="mt-5 text-[15px] leading-relaxed max-w-sm text-ink/80">
-              Nigeria&apos;s job discovery platform. Subscribe via <strong className="text-[#055A2B] font-extrabold tracking-wide">*7098#</strong>, browse live listings, and land your next role.
+              Nigeria&apos;s job discovery platform. Subscribe via <strong className="text-[#055A2B] font-extrabold tracking-wide">*7098#</strong>, browse live listings, and land your next Job.
             </p>
           </motion.div>
 
@@ -135,7 +135,7 @@ export default function Footer() {
         className="container-xl mx-auto px-4 md:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-5 py-6 border-t border-ink/10"
       >
         <p className="text-[14px] text-ink/70 m-0 text-center sm:text-left">
-          &copy; {new Date().getFullYear()} JustJobNG. All rights reserved.
+          &copy; {new Date().getFullYear()} jobNG. All rights reserved.
         </p>
         
         {/* Social Icons Strip */}

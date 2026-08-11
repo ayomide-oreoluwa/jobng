@@ -9,6 +9,8 @@ export interface ApiJob {
   company_website: string | null;
   category: string | null;
   description: string | null;
+  is_active?: boolean;
+  status?: string; 
 }
 
 export interface PagedJobsResponse {
@@ -16,9 +18,12 @@ export interface PagedJobsResponse {
   count: number;
 }
 
-export type ApiResult<T = Record<string, unknown>> =
-  | { ok: true; status: number; data: T }
-  | { ok: false; status: number; data: Record<string, unknown> };
+export interface ApiResult<T = Record<string, unknown>> {
+  ok: boolean;
+  status: number;
+  data: T;
+  datalength?: number; // Optional property to hold the length of data.items
+}
 export interface UpdateApiResult {
   ok: boolean;
   status: number;
@@ -35,6 +40,7 @@ export function extractError(
   if (Array.isArray(first) && typeof first[0] === "string") return first[0];
   return fallback;
 }
+
 
 export function extractToken(data: Record<string, unknown>): string | null {
   const token =
@@ -67,12 +73,26 @@ async function parseJson(res: Response): Promise<Record<string, unknown>> {
     return { message: text || res.statusText || "An unexpected error occurred" };
   }
 }
+export async function registerUser(body: {
+  // name: string;
+  number: string;
+  pin: string;
+  confirm_pin: string;
+}): Promise<ApiResult> {
+  const res = await fetch(`${API_BASE_URL}/api/job/create/user/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  console.log(res.status)
+  return { ok: res.ok, status: res.status, data: await parseJson(res) };
+}
 
 export async function loginUser(body: {
   number: string;
   pin: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/login/user/`, {
+  const res = await fetch(`${API_BASE_URL}/api/job/login/user/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -83,7 +103,7 @@ export async function loginUser(body: {
 export async function forgotPassword(body: {
   phone_number: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/forgot/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/job/forgot/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -95,7 +115,7 @@ export async function verifyOtp(body: {
   phone_number: string;
   otp: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/verify/otp/`, {
+  const res = await fetch(`${API_BASE_URL}/api/job/verify/otp/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -104,18 +124,15 @@ export async function verifyOtp(body: {
 }
 
 export async function changePassword(
-  body: {
-    new_pin: string;
-    old_pin: string;
-  },
-  token: string // 👈 Accept the authenticated user's token
+  body: { new_pin: string; old_pin: string },
+  token?: string
 ): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/change/password/`, {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const res = await fetch(`${API_BASE_URL}/api/job/change/password/`, {
     method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` // 👈 Secure this endpoint
-    },
+    headers,
     body: JSON.stringify(body),
   });
   return { ok: res.ok, status: res.status, data: await parseJson(res) };
@@ -130,7 +147,7 @@ export async function updatePassword({
   pin: string;
   confirm_pin: string;
 }): Promise<UpdateApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/update/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/job/update/password/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -151,7 +168,7 @@ export async function resetPassword(body: {
   phone_number: string;
   pin: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/reset/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/job/reset/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -173,14 +190,17 @@ export async function getJobs(
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(
-    `${API_BASE_URL}/api/justjob/jobs/${qs.toString() ? `?${qs}` : ""}`,
+    `${API_BASE_URL}/api/job/jobs/${qs.toString() ? `?${qs}` : ""}`,
     { headers, cache: "no-store" }
   );
 
-  const data = (await parseJson(res)) as unknown as PagedJobsResponse;
-  return res.ok
-    ? { ok: true, status: res.status, data }
-    : { ok: false, status: res.status, data: await parseJson(res) };
+  // Cast temporarily to 'any' to safely check properties without TypeScript errors
+  const data = (await parseJson(res)) as any;
+  
+  // Safely check for count, then items.length, and fallback to 0
+  const datalength = data?.count ?? data?.items?.length ?? 0;
+  
+  return { ok: res.ok, status: res.status, data, datalength };
 }
 
 export async function getSingleJob(
@@ -192,12 +212,10 @@ export async function getSingleJob(
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(
-    `${API_BASE_URL}/api/justjob/single/job/?${qs}`,
+    `${API_BASE_URL}/api/job/single/job/?${qs}`,
     { headers, cache: "no-store" }
   );
 
   const data = (await parseJson(res)) as unknown as ApiJob;
-  return res.ok
-    ? { ok: true, status: res.status, data }
-    : { ok: false, status: res.status, data: await parseJson(res) };
+  return { ok: res.ok, status: res.status, data };
 }

@@ -21,20 +21,20 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "JustJobNG – Find Your Next Role",
-    template: "%s | JustJobNG",
+    default: "jobNG – Find Your Next Job",
+    template: "%s | jobNG",
   },
   description:
-    "Nigeria's job discovery platform. Browse live listings, apply to top roles, and grow your career. Subscribe via *7098#.",
-  keywords: "jobs Nigeria, careers, employment, job search, JustJobNG, MTN jobs",
+    "Nigeria's No. 1 job aggregrator platform. Browse live listings, apply to top Jobs, and grow your career. Subscribe via *7098#.",
+  keywords: "jobs Nigeria, careers, employment, job search, jobNG, MTN jobs",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: "JustJobNG – Find Your Next Role",
+    title: "jobNG – Find Your Next Job",
     description: "Browse live job listings across Nigeria.",
-    siteName: "JustJobNG",
+    siteName: "jobNG",
     type: "website",
   },
 };

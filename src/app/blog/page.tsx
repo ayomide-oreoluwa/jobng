@@ -28,7 +28,7 @@ export default function BlogPage() {
             News & Articles
           </h1>
           <p className="text-white/70 text-lg max-w-[600px] mx-auto">
-            Career advice, hiring tips, and industry insights from JustJobNG
+            Career advice, hiring tips, and industry insights from jobNG
           </p>
         </div>
       </section>

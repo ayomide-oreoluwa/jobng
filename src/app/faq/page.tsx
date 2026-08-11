@@ -9,16 +9,8 @@ const faqData = [
     category: "For Job Seekers",
     items: [
       { q: "How do I apply for jobs via USSD?", a: "Dial *7098# on your MTN line, select 'Find Jobs', and follow the prompts. You can browse by category or location and submit your profile directly." },
-      { q: "Is the USSD service free?", a: "Browsing job titles is free. To view full details or apply, you need an active subscription which costs ₦100/week or ₦300/month." },
+      { q: "Is the USSD service free?", a: "Browsing job titles is free. To view full details or apply, you need an active subscription which costs ₦100/day." },
       { q: "Do I need a CV to apply?", a: "For USSD applications, we use your built-in profile as your CV. For website applications, some employers may request an external CV upload." },
-    ]
-  },
-  {
-    category: "For Employers",
-    items: [
-      { q: "How much does it cost to post a job?", a: "Standard job postings are ₦5,000 per listing. Premium listings with top placement and SMS alerts to candidates are ₦15,000." },
-      { q: "How do I receive applications?", a: "Applications will be sent to your employer dashboard on the website, and you'll receive a daily summary via email." },
-      { q: "Can I search the candidate database?", a: "Yes, Employers on the Premium or Enterprise plans get full access to search and filter our database of over 120,000 active candidates." },
     ]
   },
   {
@@ -56,7 +48,7 @@ export default function FAQPage() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("All");
 
-  const categories = ["All", "For Job Seekers", "For Employers", "Account & Privacy"];
+  const categories = ["All", "For Job Seekers", "Account & Privacy"];
 
   const filteredData = faqData.map(section => {
     return {
@@ -78,7 +70,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-white/70 text-lg max-w-[600px] mx-auto mb-8">
-            Everything you need to know about using JustJobNG on the web or via *7098#.
+            Everything you need to know about using jobNG on the web or via *7098#.
           </p>
           
           <div className="max-w-[500px] mx-auto relative">
@@ -119,7 +111,7 @@ export default function FAQPage() {
           <div className="text-center py-16">
             <div className="text-5xl mb-4">🔍</div>
             <h3 className="text-xl font-extrabold text-[var(--ink)] mb-2">No results found</h3>
-            <p className="text-[var(--text-muted)]">We couldn't find any questions matching "{search}"</p>
+            <p className="text-[var(--text-muted)]">We couldn&apos;t find any questions matching &quot;{search}&quot;</p>
           </div>
         ) : (
           filteredData.map((section, idx) => (

@@ -13,13 +13,13 @@ export const blogPosts: BlogPost[] = [
       <p>Before your interview, spend at least two hours researching the company. Understand their products, services, culture, and recent news. Visit their website, read their blog, and check their LinkedIn page. Interviewers are always impressed by candidates who demonstrate genuine knowledge and interest.</p>
 
       <h2>2. Prepare Your STAR Stories</h2>
-      <p>Behavioral questions like "Tell me about a time when..." are common in interviews. Use the STAR method — Situation, Task, Action, Result — to structure compelling answers. Prepare 5-7 stories from your past experience that demonstrate key competencies relevant to the role.</p>
+      <p>Behavioral questions like "Tell me about a time when..." are common in interviews. Use the STAR method — Situation, Task, Action, Result — to structure compelling answers. Prepare 5-7 stories from your past experience that demonstrate key competencies relevant to the Job.</p>
 
       <h2>3. Dress the Part</h2>
       <p>First impressions matter tremendously. Research the company's dress code beforehand and aim to dress one level above it. When in doubt, it's always better to be slightly overdressed than underdressed. Make sure your clothes are clean, pressed, and fit well.</p>
 
       <h2>4. Ask Thoughtful Questions</h2>
-      <p>Interviews are a two-way street. Prepare five to seven thoughtful questions to ask your interviewer. This shows genuine interest and helps you evaluate whether the role and company are the right fit for you. Avoid asking about salary or benefits in the first interview.</p>
+      <p>Interviews are a two-way street. Prepare five to seven thoughtful questions to ask your interviewer. This shows genuine interest and helps you evaluate whether the Job and company are the right fit for you. Avoid asking about salary or benefits in the first interview.</p>
 
       <h2>5. Follow Up Professionally</h2>
       <p>Send a personalized thank-you email within 24 hours of your interview. Reference specific topics from the conversation to show you were engaged. This small gesture can set you apart from other candidates and reinforce your interest in the position.</p>
@@ -100,10 +100,10 @@ export const blogPosts: BlogPost[] = [
       <p>Studies show that only 37% of workers always negotiate their salary, and yet 70% of employers expect candidates to negotiate. Leaving money on the table is a costly mistake that compounds over your entire career.</p>
 
       <h2>Do Your Research</h2>
-      <p>Before any salary conversation, research the market rate for your role, experience level, and location using resources like LinkedIn Salary, Glassdoor, and Levels.fyi. Come to negotiations with data, not just feelings. Know your range and be able to justify it.</p>
+      <p>Before any salary conversation, research the market rate for your Job, experience level, and location using resources like LinkedIn Salary, Glassdoor, and Levels.fyi. Come to negotiations with data, not just feelings. Know your range and be able to justify it.</p>
 
       <h2>Delay the Salary Discussion</h2>
-      <p>Whenever possible, let the employer make the first offer. If you're asked for your salary expectations early in the process, it's acceptable to say: "I'd prefer to learn more about the role and the full compensation package before discussing numbers. Can we revisit this later?"</p>
+      <p>Whenever possible, let the employer make the first offer. If you're asked for your salary expectations early in the process, it's acceptable to say: "I'd prefer to learn more about the Job and the full compensation package before discussing numbers. Can we revisit this later?"</p>
 
       <h2>Negotiate the Whole Package</h2>
       <p>Base salary is just one component of your total compensation. Consider equity, bonuses, health benefits, vacation time, remote work flexibility, professional development budget, and signing bonuses. Sometimes an employer can't move on base salary but has flexibility elsewhere.</p>
@@ -132,7 +132,7 @@ export const blogPosts: BlogPost[] = [
       <p>A generic resume rarely works. Read each job description carefully and customize your resume to reflect the specific skills, keywords, and experience they're looking for. Applicant tracking systems (ATS) filter resumes automatically, so matching the language from the job posting is critical.</p>
 
       <h2>Lead with Impact</h2>
-      <p>Under each role, lead with your biggest accomplishments, not just your duties. "Managed social media accounts" is weak. "Grew Instagram following by 145% in 6 months, generating $80K in attributed revenue" is powerful. Quantify your impact wherever possible.</p>
+      <p>Under each Job, lead with your biggest accomplishments, not just your duties. "Managed social media accounts" is weak. "Grew Instagram following by 145% in 6 months, generating $80K in attributed revenue" is powerful. Quantify your impact wherever possible.</p>
 
       <h2>Keep It Clean and Scannable</h2>
       <p>Use a clean, professional font, consistent formatting, and plenty of white space. Keep it to one page if you have under 10 years of experience, two pages if more. Use bullet points, bold key terms, and clear section headers to make it easy to scan quickly.</p>
@@ -161,7 +161,7 @@ export const blogPosts: BlogPost[] = [
       <p>You already have a network — you just might not think of it that way. Former colleagues, classmates, professors, and even friends and family are all potential connections. Start by reconnecting with people you already know before reaching out to strangers.</p>
 
       <h2>Optimize Your LinkedIn Profile</h2>
-      <p>LinkedIn is the world's largest professional network. Make sure your profile is complete, has a professional headshot, and clearly communicates your value proposition. Post thoughtful content, engage with others' posts, and connect strategically with people in your target companies and roles.</p>
+      <p>LinkedIn is the world's largest professional network. Make sure your profile is complete, has a professional headshot, and clearly communicates your value proposition. Post thoughtful content, engage with others' posts, and connect strategically with people in your target companies and Jobs.</p>
 
       <h2>Attend Industry Events</h2>
       <p>Conferences, meetups, and professional association events are goldmines for networking. Set a goal to have three meaningful conversations at each event you attend. Follow up the next day while you're still fresh in people's minds.</p>

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { resetPassword, extractError } from "@/lib/justjobApi";
+import { resetPassword, extractError } from "@/lib/jobApi";
 import { normalizeNigerianPhone } from "@/lib/phone";
 
 export interface requestBodyData {

@@ -8,7 +8,7 @@ import JobCard from "@/components/shared/JobCard";
 import JobCardSkeleton from "@/components/shared/JobCardSkeleton";
 import PageLoader from "@/components/shared/PageLoader";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/justjobApi";
+import type { ApiJob } from "@/lib/jobApi";
 
 function JobsContent() {
   const searchParams = useSearchParams();
@@ -62,9 +62,7 @@ function JobsContent() {
     fetchJobs();
   }, [fetchJobs]);
 
-  const categories = Array.from(
-    new Set(jobs.map((j) => j.category).filter(Boolean) as string[])
-  ).sort();
+  const CATEGORY_OPTIONS = ["Remote", "On-site", "Hybrid", "Full-time", "Part-time"];
 
   return (
     <div className="jj-jobs-page">
@@ -72,7 +70,7 @@ function JobsContent() {
         <div className="container-xl">
           <h1 className="jj-jobs-hero__title">Browse Jobs</h1>
           <p className="jj-jobs-hero__sub">
-            {total > 0 ? `${total.toLocaleString()} live roles across Nigeria` : "Live listings from the JustJobNG network"}
+            {total > 0 ? `${total.toLocaleString()} live Jobs across Nigeria` : "Live listings from the jobNG network"}
           </p>
         </div>
       </div>
@@ -95,7 +93,7 @@ function JobsContent() {
                 </button>
               )}
             </div>
-            {categories.length > 0 && (
+            {CATEGORY_OPTIONS.length > 0 && (
               <div className="jj-jobs-search" style={{ flex: "0 1 200px" }}>
                 <FiGrid size={14} style={{ color: "var(--gold-hover)", flexShrink: 0 }} />
                 <select
@@ -105,7 +103,7 @@ function JobsContent() {
                   style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: "0.875rem", color: "var(--text)", cursor: "pointer" }}
                 >
                   <option value="">All categories</option>
-                  {categories.map((c) => (
+                  {CATEGORY_OPTIONS.map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}
                 </select>

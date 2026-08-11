@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { forgotPassword, extractError } from "@/lib/justjobApi";
+import { forgotPassword, extractError } from "@/lib/jobApi";
 import { normalizeNigerianPhone } from "@/lib/phone";
 
 export async function POST(req: Request) {

@@ -54,24 +54,14 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
           
           {/* Info Sidebar */}
-          <div className="flex flex-col gap-4">
-            <div className="jj-card p-6 flex gap-4 items-start">
-              <div className="w-12 h-12 rounded-full bg-[var(--gold-muted)] flex items-center justify-center text-[var(--gold)] shrink-0">
-                <FiMapPin size={20} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[var(--text-faint)] uppercase tracking-widest mb-1">Office</h4>
-                <p className="text-[var(--ink)] font-semibold text-base m-0">14 Admiralty Way,<br />Lekki Phase 1, Lagos</p>
-              </div>
-            </div>
-            
+          <div className="flex flex-col gap-4">     
             <div className="jj-card p-6 flex gap-4 items-start">
               <div className="w-12 h-12 rounded-full bg-[var(--gold-muted)] flex items-center justify-center text-[var(--gold)] shrink-0">
                 <FiPhone size={20} />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[var(--text-faint)] uppercase tracking-widest mb-1">Phone & USSD</h4>
-                <p className="text-[var(--ink)] font-semibold text-base m-0">*7098#<br />+234 800 JUSTJOB</p>
+                <p className="text-[var(--ink)] font-semibold text-base m-0">*7098#<br />+234 800 job</p>
               </div>
             </div>
 
@@ -81,17 +71,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[var(--text-faint)] uppercase tracking-widest mb-1">Email</h4>
-                <p className="text-[var(--ink)] font-semibold text-base m-0">hello@justjobng.com</p>
-              </div>
-            </div>
-
-            <div className="jj-card p-6 flex gap-4 items-start">
-              <div className="w-12 h-12 rounded-full bg-[var(--gold-muted)] flex items-center justify-center text-[var(--gold)] shrink-0">
-                <FiClock size={20} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[var(--text-faint)] uppercase tracking-widest mb-1">Hours</h4>
-                <p className="text-[var(--ink)] font-semibold text-base m-0">Mon-Fri: 8am - 6pm WAT<br />Sat-Sun: Closed</p>
+                <p className="text-[var(--ink)] font-semibold text-base m-0">hello@jobng.com</p>
               </div>
             </div>
           </div>

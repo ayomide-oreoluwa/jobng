@@ -14,7 +14,7 @@ export default function TestimonialsSection() {
         <SectionHeader
           subtitle="What People Say"
           title="Testimonials From Our Users"
-          description="Thousands of job seekers and employers trust JustJobNG to make their next move"
+          description="Thousands of job seekers and employers trust jobNG to make their next move"
         />
 
         <Swiper
@@ -51,7 +51,7 @@ export default function TestimonialsSection() {
                   </div>
                   <div>
                     <p style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{t.name}</p>
-                    <p style={{ fontSize: 12, color: "#9ca3af" }}>{t.role} — {t.company}</p>
+                    <p style={{ fontSize: 12, color: "#9ca3af" }}>{t.Job} — {t.company}</p>
                   </div>
                 </div>
               </div>
