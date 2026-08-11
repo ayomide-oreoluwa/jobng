@@ -54,7 +54,7 @@ function LogoMark({ size, animated = true }: { size: number; animated?: boolean 
 
 export default function Logo({
   showText = true,
-  variant = "dark",
+  variant = "light",
   size = "md",
   href = "/",
   className = "",
@@ -81,7 +81,7 @@ export default function Logo({
               fontFamily: "var(--font-display), sans-serif",
             }}
           >
-            JustJob
+            Job
           </span>
           <span
             className={animated ? "jj-logo-ng" : undefined}
@@ -102,7 +102,7 @@ export default function Logo({
 
   if (href) {
     return (
-      <Link href={href} style={{ textDecoration: "none" }} aria-label="JustJobNG home">
+      <Link href={href} style={{ textDecoration: "none" }} aria-label="jobNG home">
         {content}
       </Link>
     );

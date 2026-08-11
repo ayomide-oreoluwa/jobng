@@ -208,7 +208,7 @@ function LoginPageContent() {
           <p className="jj-login-success-sub">
             {isLogin
               ? "Welcome back. Redirecting you to jobs…"
-              : "Welcome to JustJob. Redirecting you to jobs…"}
+              : "Welcome to job. Redirecting you to jobs…"}
           </p>
           <Link href="/jobs" className="jj-btn jj-btn--gold" style={{ padding: "12px 28px" }}>
             Browse Jobs <FiArrowRight size={16} />
@@ -227,7 +227,7 @@ function LoginPageContent() {
           <div className="jj-login-panel__content">
             <Logo variant="dark" size="lg" href="/" />
             <h1 className="jj-login-panel__title">
-              Find your next role<br />
+              Find your next Job<br />
               <span>in Nigeria.</span>
             </h1>
             <p className="jj-login-panel__sub">

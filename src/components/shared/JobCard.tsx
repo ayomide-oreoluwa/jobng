@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FiBriefcase, FiCalendar, FiExternalLink, FiArrowUpRight } from "react-icons/fi";
-import type { ApiJob } from "@/lib/justjobApi";
+import type { ApiJob } from "@/lib/jobApi";
 import { stripHtml } from "@/lib/html";
 
 // Known valid work-type values — anything outside this set (e.g. stray
@@ -37,7 +37,7 @@ interface JobCardProps {
 }
 
 export default function JobCard({ job, variant = "list" }: JobCardProps) {
-  const title = job.job_title ?? "Untitled role";
+  const title = job.job_title ?? "Untitled Job";
   const workType = resolveWorkType(job.category);
   const plainDescription = stripHtml(job.description);
   const avatar = (
@@ -64,7 +64,7 @@ export default function JobCard({ job, variant = "list" }: JobCardProps) {
           <p className="jj-job-card__excerpt">{plainDescription}</p>
         )}
         <Link href={`/jobs/${job.job_id}`} className="jj-job-card__cta">
-          View role <FiArrowUpRight size={13} />
+          View Job <FiArrowUpRight size={13} />
         </Link>
       </div>
     );

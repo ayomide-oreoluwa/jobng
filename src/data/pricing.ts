@@ -6,7 +6,7 @@ export const pricingPlans: PricingPlan[] = [
     name: "Free Browse",
     price: 0,
     period: "month",
-    description: "Start exploring opportunities on JustJobNG at no cost.",
+    description: "Start exploring opportunities on jobNG at no cost.",
     features: [
       "Browse all live job listings",
       "View job descriptions",

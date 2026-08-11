@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { changePassword, extractError } from "@/lib/justjobApi";
+import { changePassword, extractError } from "@/lib/jobApi";
 
 export interface ChangePasswordBody {
   old_pin: string;
   pin: string;
+  confirm_pin: string;
+
 }
 
 export async function POST(request: Request) {
@@ -22,6 +24,7 @@ export async function POST(request: Request) {
 
     const old_pin = body.old_pin?.trim();
     const pin = body.pin?.trim();
+    const confirm_pin = body.confirm_pin?.trim();
 
     if (!old_pin || !pin) {
       return NextResponse.json(
@@ -50,7 +53,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await changePassword({ new_pin: pin, old_pin }, token);
+    const result = await changePassword({
+      new_pin: pin, 
+      old_pin,
+    },
+      token
+    );
 
     if (!result.ok) {
       return NextResponse.json(

@@ -75,7 +75,7 @@ export interface Testimonial {
   id: string;
   name: string;
   avatar: string;
-  role: string;
+  Job: string;
   company: string;
   content: string;
   rating: number;

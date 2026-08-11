@@ -32,7 +32,7 @@ export default function CategorySection() {
         <SectionHeader
           subtitle="Explore by Category"
           title="Browse Job Categories"
-          description="Find the perfect role in your field. Choose from our most popular job categories."
+          description="Find the perfect Job in your field. Choose from our most popular job categories."
         />
 
         <div

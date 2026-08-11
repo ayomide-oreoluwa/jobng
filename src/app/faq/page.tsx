@@ -14,14 +14,6 @@ const faqData = [
     ]
   },
   {
-    category: "For Employers",
-    items: [
-      { q: "How much does it cost to post a job?", a: "Standard job postings are ₦5,000 per listing. Premium listings with top placement and SMS alerts to candidates are ₦15,000." },
-      { q: "How do I receive applications?", a: "Applications will be sent to your employer dashboard on the website, and you'll receive a daily summary via email." },
-      { q: "Can I search the candidate database?", a: "Yes, Employers on the Premium or Enterprise plans get full access to search and filter our database of over 120,000 active candidates." },
-    ]
-  },
-  {
     category: "Account & Privacy",
     items: [
       { q: "I forgot my 4-digit PIN. How do I reset it?", a: "Click on 'Forgot PIN' on the login page, enter your phone number, and we'll send you an SMS to reset it. You can also dial *7098# and select 'Account'." },
@@ -56,7 +48,7 @@ export default function FAQPage() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("All");
 
-  const categories = ["All", "For Job Seekers", "For Employers", "Account & Privacy"];
+  const categories = ["All", "For Job Seekers", "Account & Privacy"];
 
   const filteredData = faqData.map(section => {
     return {
@@ -78,7 +70,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-white/70 text-lg max-w-[600px] mx-auto mb-8">
-            Everything you need to know about using JustJobNG on the web or via *7098#.
+            Everything you need to know about using jobNG on the web or via *7098#.
           </p>
           
           <div className="max-w-[500px] mx-auto relative">

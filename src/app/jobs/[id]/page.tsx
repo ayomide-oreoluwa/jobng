@@ -12,7 +12,7 @@ import {
   FiLogIn,
 } from "react-icons/fi";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/justjobApi";
+import type { ApiJob } from "@/lib/jobApi";
 import { sanitizeHtml } from "@/lib/html";
 import JobDetailSkeleton from "@/components/shared/JobDetailSkeleton";
 import { getJobById } from "@/data/jobs";
@@ -151,7 +151,7 @@ export default function JobDetailPage() {
     );
   }
 
-  const title = job.job_title ?? "Untitled role";
+  const title = job.job_title ?? "Untitled Job";
   const website = job.company_website
     ? (job.company_website.startsWith("http") ? job.company_website : `https://${job.company_website}`)
     : null;
@@ -204,7 +204,7 @@ export default function JobDetailPage() {
               <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-1 h-5 bg-gradient-to-b from-[var(--gold-light)] to-[var(--gold)] rounded-full" />
-                  <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">About this role</h2>
+                  <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">About this Job</h2>
                 </div>
                 
                 {/* Clean Editor-safe HTML Injection styling with Tailwind Typography conventions */}

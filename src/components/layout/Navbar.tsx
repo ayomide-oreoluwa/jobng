@@ -136,7 +136,7 @@ export default function Navbar() {
                       <Avatar size={44} />
                       <div className="min-w-0">
                         <p className="font-display text-[15px] font-bold text-ink truncate tracking-tight">{phone ?? "No phone on file"}</p>
-                        <p className="text-[12px] text-text-muted">Job seeker account</p>
+                        <p className="text-[12px] text-text-muted">Username</p>
                       </div>
                     </div>
                     <div className="h-px bg-border-strong" />

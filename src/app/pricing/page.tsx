@@ -4,7 +4,7 @@ import { FiCheck, FiPhoneCall } from "react-icons/fi";
 import { pricingPlans } from "@/data/pricing";
 
 export const metadata: Metadata = {
-  title: "Pricing | JustJobNG",
+  title: "Pricing | jobNG",
   description: "Simple, transparent pricing for job seekers and employers in Nigeria.",
 };
 

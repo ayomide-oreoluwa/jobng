@@ -8,7 +8,7 @@ import JobCard from "@/components/shared/JobCard";
 import JobCardSkeleton from "@/components/shared/JobCardSkeleton";
 import PageLoader from "@/components/shared/PageLoader";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/justjobApi";
+import type { ApiJob } from "@/lib/jobApi";
 
 function JobsContent() {
   const searchParams = useSearchParams();
@@ -70,7 +70,7 @@ function JobsContent() {
         <div className="container-xl">
           <h1 className="jj-jobs-hero__title">Browse Jobs</h1>
           <p className="jj-jobs-hero__sub">
-            {total > 0 ? `${total.toLocaleString()} live roles across Nigeria` : "Live listings from the JustJobNG network"}
+            {total > 0 ? `${total.toLocaleString()} live Jobs across Nigeria` : "Live listings from the jobNG network"}
           </p>
         </div>
       </div>
