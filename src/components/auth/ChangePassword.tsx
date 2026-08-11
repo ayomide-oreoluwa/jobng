@@ -101,7 +101,7 @@ export default function ChangePassword() {
     <div className="jj-login-form-wrap mx-auto animate-fade-in-up">
       <div className="jj-login-form-head">
         <h2>Change PIN</h2>
-        <p>Update the access PIN for your JustJobNG account.</p>
+        <p>Update the access PIN for your jobNG account.</p>
       </div>
       {error && <div className="jj-login-error animate-fade-in-up">{error}</div>}
       <form onSubmit={handleSubmit} className="jj-login-form">

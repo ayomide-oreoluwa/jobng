@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSingleJob } from "@/lib/justjobApi";
+import { getSingleJob } from "@/lib/jobApi";
 
 export async function GET(
   req: Request,

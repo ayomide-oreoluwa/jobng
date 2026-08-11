@@ -269,7 +269,7 @@ export default function PostJobPage() {
               <div className="animate-fade-in flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-[var(--ink)]">Job Description *</label>
-                  <textarea name="description" value={formData.description} onChange={updateForm} rows={8} className="border-[1.5px] border-[var(--border-strong)] rounded-[var(--radius-sm)] py-3 px-3.5 outline-none focus:border-[var(--gold)] focus:ring-[3px] focus:ring-[var(--gold-muted)] transition-all resize-y bg-[var(--surface-elevated)]" placeholder="Describe the role, team, and what the candidate will be doing..." />
+                  <textarea name="description" value={formData.description} onChange={updateForm} rows={8} className="border-[1.5px] border-[var(--border-strong)] rounded-[var(--radius-sm)] py-3 px-3.5 outline-none focus:border-[var(--gold)] focus:ring-[3px] focus:ring-[var(--gold-muted)] transition-all resize-y bg-[var(--surface-elevated)]" placeholder="Describe the Job, team, and what the candidate will be doing..." />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-[var(--ink)]">Key Responsibilities *</label>

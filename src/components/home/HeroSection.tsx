@@ -68,11 +68,11 @@ export default function HeroSection() {
 
         {/* Dynamic Typography Main Banner Headers */}
         <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A0F1C] leading-[1.1] mb-5">
-          Your next role<br />
+          Your next Job<br />
           <span className="text-white drop-shadow-[0_2px_20px_rgba(120,53,15,0.25)]">starts here.</span>
         </motion.h1>
 
-        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-[rgba(10,15,28,0.72)] max-w-[480px] mx-auto mb-10">
+        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-[#ffffff] max-w-[480px] mx-auto mb-10">
           Discover opportunities across Nigeria. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong>, then browse and apply in seconds.
         </motion.p>
 
@@ -96,7 +96,7 @@ export default function HeroSection() {
             whileHover={{ scale: 1.02 }} 
             whileTap={{ scale: 0.98 }} 
             type="submit" 
-            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3 px-5.5 whitespace-nowrap"
+            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[#ffffff] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3 px-5.5 whitespace-nowrap"
           >
             Find Jobs <FiArrowRight size={16} />
           </motion.button>
@@ -125,8 +125,8 @@ export default function HeroSection() {
             { value: "24/7", label: "Always available" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col items-center gap-1">
-              <span className="font-display text-xl font-extrabold text-[#055A2B]">{s.value}</span>
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-[rgba(10,15,28,0.55)]">{s.label}</span>
+              <span className="font-display text-xl font-extrabold text-[#ffffff]">{s.value}</span>
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-[#ffffff]">{s.label}</span>
             </div>
           ))}
         </motion.div>

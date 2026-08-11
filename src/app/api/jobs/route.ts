@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getJobs } from "@/lib/justjobApi";
+import { getJobs } from "@/lib/jobApi";
 
 export async function GET(req: Request) {
   try {
@@ -66,7 +66,7 @@ export async function GET(req: Request) {
         { status: result.status || 500 }
       );
     }
-    return NextResponse.json({ ok: true, ...result.data });
+    return NextResponse.json({ ok: true, ...result.data, count: result.datalength ?? result.data.items.length });
   } catch (error) {
     console.error("GET /jobs error:", error);
     return NextResponse.json(

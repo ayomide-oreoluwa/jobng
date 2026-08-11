@@ -1,28 +1,29 @@
 "use client";
-import { FiSearch, FiFileText, FiSend, FiCheckCircle } from "react-icons/fi";
+import { FiFileText, FiSend, FiCheckCircle } from "react-icons/fi";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
+import { FiUser } from "react-icons/fi";
 
 const steps = [
   {
-    icon: FiSearch,
+    icon: FiUser,
     step: "01",
-    title: "Search for Jobs",
+    title: "Dial Code and Register",
     bg: "bg-amber-50",
     color: "text-gold-hover",
     border: "border-amber-200",
     shadow: "hover:shadow-[0_20px_48px_rgba(217,119,6,0.14)]",
-    desc: "Browse thousands of job listings filtered by location, category, salary, and job type to find your perfect match.",
+    desc: "Dial *7098# to register on jobNG. Create a profile, upload your CV, and set your job preferences to get started.`",
   },
   {
     icon: FiFileText,
     step: "02",
-    title: "Create Your Profile",
+    title: "Search for Jobs",
     bg: "bg-green-50",
     color: "text-green-600",
     border: "border-green-200",
     shadow: "hover:shadow-[0_20px_48px_rgba(22,163,74,0.14)]",
-    desc: "Build a professional profile that showcases your skills, experience, and portfolio. Make employers notice you.",
+    desc: "Browse thousands of job listings filtered by location, category, salary, and job type to find your perfect match.",
   },
   {
     icon: FiSend,
@@ -42,7 +43,7 @@ const steps = [
     color: "text-orange-600",
     border: "border-orange-200",
     shadow: "hover:shadow-[0_20px_48px_rgba(234,88,12,0.14)]",
-    desc: "Land interviews, negotiate offers, and start your new role. Thousands of candidates find jobs here every month.",
+    desc: "Land interviews, negotiate offers, and start your new Job. Thousands of candidates find jobs here every month.",
   },
 ];
 
@@ -53,7 +54,7 @@ export default function HowItWorks() {
         <SectionHeader
           subtitle="Simple Process"
           title="How It Works"
-          description="Get started with JustJobNG in four simple steps and land your dream job faster"
+          description="Get started with jobNG in four simple steps and land your dream job faster"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

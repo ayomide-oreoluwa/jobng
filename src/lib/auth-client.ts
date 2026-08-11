@@ -1,5 +1,5 @@
-const TOKEN_KEY = "justjob_token";
-const PHONE_KEY = "justjob_phone";
+const TOKEN_KEY = "job_token";
+const PHONE_KEY = "job_phone";
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;

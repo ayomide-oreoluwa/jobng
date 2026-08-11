@@ -45,10 +45,10 @@ export default function CTASection() {
             </span>
             <h2 className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold text-white leading-tight mb-3.5 tracking-tight">
               The Smarter Way to Find Your{" "}
-              <span className="text-teal">Next Opportunity</span>
+              <span className="text-teal">Next Job</span>
             </h2>
             <p className="text-base text-[#CDEBB0]/88 leading-relaxed max-w-[460px]">
-              Join over 4 million professionals already using JustJobNG. Whether you&apos;re looking for your first job or your next big career move — we&apos;ve got you covered.
+              Join over 4 million professionals already using jobNG. Whether you&apos;re looking for your first job or your next big career move — we&apos;ve got you covered.
             </p>
           </motion.div>
 
@@ -69,20 +69,6 @@ export default function CTASection() {
                 Browse Jobs
               </Link>
             </motion.div>
-
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="/post-job"
-                className="flex items-center justify-center gap-2.5 bg-white/12 text-white border-[1.5px] border-white/25 font-bold text-[15px] no-underline px-8 py-3.5 rounded-sm hover:bg-white/20 transition-colors duration-200"
-              >
-                <FiBriefcase size={16} />
-                Post a Job
-              </Link>
-            </motion.div>
-
-            <p className="text-[12px] text-white/45 text-center mt-1">
-              No credit card required · Cancel anytime
-            </p>
           </motion.div>
 
         </div>

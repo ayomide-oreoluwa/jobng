@@ -1,5 +1,5 @@
 /**
- * Helpers for handling the raw HTML that the JustJob API returns in job
+ * Helpers for handling the raw HTML that the job API returns in job
  * descriptions. The API sends markup like <b>, <i>, <p>, <br>, <span> (often
  * with stray attributes), so we either strip it to plain text for previews or
  * sanitise it to a small allowlist for full rendering.

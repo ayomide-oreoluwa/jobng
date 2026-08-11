@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { changePassword, extractError } from "@/lib/justjobApi";
+import { changePassword, extractError } from "@/lib/jobApi";
 
 export interface ChangePasswordBody {
   old_pin: string;

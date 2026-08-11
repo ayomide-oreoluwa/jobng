@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = blogPosts.find(p => p.slug === slug);
   return { 
-    title: post ? `${post.title} | JustJobNG Blog` : 'Blog | JustJobNG', 
+    title: post ? `${post.title} | jobNG Blog` : 'Blog | jobNG', 
     description: post?.excerpt 
   };
 }
