@@ -17,10 +17,8 @@ export async function GET(req: Request) {
     const token = authHeader?.replace(/^Bearer\s+/i, "");
 
     if (search) {
-      // Fetch a broad set from the backend WITHOUT relying on its search param,
-      // then filter locally by title OR company name.
       const broad = await getJobs(
-        { category, page: 1, page_size: 500 }, // ASSUMPTION: backend allows page_size=500. Lower if it caps/errors.
+        { category, page: 1, page_size: 500 }, 
         token
       );
 
@@ -38,8 +36,11 @@ export async function GET(req: Request) {
       }
 
       const term = search.toLowerCase();
-      const allItems = broad.data.items ?? [];
-      const filtered = allItems.filter((j) => {
+      
+      // SAFELY access items. If the backend returned an array directly, handle that too.
+      const allItems = broad.data?.items ?? (Array.isArray(broad.data) ? broad.data : []); 
+      
+      const filtered = allItems.filter((j: any) => {
         const titleMatch = j.job_title?.toLowerCase().includes(term);
         const companyMatch = j.company_name?.toLowerCase().includes(term);
         return titleMatch || companyMatch;
@@ -66,7 +67,13 @@ export async function GET(req: Request) {
         { status: result.status || 500 }
       );
     }
-    return NextResponse.json({ ok: true, ...result.data, count: result.datalength ?? result.data.items.length });
+    
+    // SAFELY spread data and calculate count
+    return NextResponse.json({ 
+      ok: true, 
+      ...(result.data || {}), 
+      count: result.datalength ?? result.data?.items?.length ?? 0 
+    });
   } catch (error) {
     console.error("GET /jobs error:", error);
     return NextResponse.json(
@@ -74,4 +81,4 @@ export async function GET(req: Request) {
       { status: 500 }
     );
   }
-} 
+}

@@ -194,8 +194,12 @@ export async function getJobs(
     { headers, cache: "no-store" }
   );
 
-  const data = (await parseJson(res)) as unknown as PagedJobsResponse;
-  const datalength = data.items.length;
+  // Cast temporarily to 'any' to safely check properties without TypeScript errors
+  const data = (await parseJson(res)) as any;
+  
+  // Safely check for count, then items.length, and fallback to 0
+  const datalength = data?.count ?? data?.items?.length ?? 0;
+  
   return { ok: res.ok, status: res.status, data, datalength };
 }
 
