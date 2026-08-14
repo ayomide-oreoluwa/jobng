@@ -44,7 +44,6 @@ export default function AboutPage() {
       <section className="bg-[var(--ink)] pt-[calc(var(--nav-height)+3rem)] pb-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_100%_0%,rgba(0,166,81,0.08)_0%,transparent_60%),radial-gradient(ellipse_40%_60%_at_0%_100%,rgba(141,198,63,0.06)_0%,transparent_50%)] pointer-events-none" />
         <div className="container-xl relative text-center">
-          <span className="jj-pill mb-4 inline-block">Our Story</span>
           <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold text-white mb-4 -tracking-[0.02em] leading-[1.1]">
             Nigeria&apos;s No. 1 job aggregrator platform<br />built for every Nigerian
           </h1>

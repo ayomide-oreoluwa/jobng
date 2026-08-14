@@ -131,7 +131,7 @@ export default function UpdatePasswordPage() {
                       id="number"
                       name="number"
                       type="tel"
-                      placeholder="e.g. 08012345678"
+                      placeholder="e.g. 8012345678"
                       value={formData.number}
                       onChange={handleChange}
                       className="jj-login-field__input"
