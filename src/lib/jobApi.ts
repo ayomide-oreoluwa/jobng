@@ -1,9 +1,9 @@
 import { API_BASE_URL } from "./config";
 
 export interface Apijustjob {
-  justjob_id: string;
-  justjob_title: string | null;
-  justjob_url: string | null;
+  job_id: string;
+  job_title: string | null;
+  job_url: string | null;
   created_at: string;
   company_name: string;
   company_website: string | null;

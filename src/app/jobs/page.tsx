@@ -8,14 +8,14 @@ import JobCard from "@/components/shared/JobCard";
 import JobCardSkeleton from "@/components/shared/JobCardSkeleton";
 import PageLoader from "@/components/shared/PageLoader";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/jobApi";
+import { Apijustjob } from "@/lib/jobApi";
 
 function JobsContent() {
   const searchParams = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState(searchParams.get("category") ?? "");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
-  const [jobs, setJobs] = useState<ApiJob[]>([]);
+  const [jobs, setJobs] = useState<Apijustjob[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
