@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FiBriefcase, FiCalendar, FiExternalLink, FiArrowUpRight } from "react-icons/fi";
-import type { ApiJob } from "@/lib/jobApi";
 import { stripHtml } from "@/lib/html";
+import { Apijustjob } from "@/lib/jobApi";
 
 // Known valid work-type values — anything outside this set (e.g. stray
 // placeholder strings like "feature" from the backend) is treated as unset.
@@ -32,7 +32,7 @@ function resolveWorkType(category: string | null): string {
 }
 
 interface JobCardProps {
-  job: ApiJob;
+  job: Apijustjob;
   variant?: "list" | "grid";
 }
 

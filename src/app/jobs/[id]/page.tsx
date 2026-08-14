@@ -12,10 +12,10 @@ import {
   FiLogIn,
 } from "react-icons/fi";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/jobApi";
 import { sanitizeHtml } from "@/lib/html";
 import JobDetailSkeleton from "@/components/shared/JobDetailSkeleton";
 import { getJobById } from "@/data/jobs";
+import { Apijustjob } from "@/lib/jobApi";
 
 function formatDate(iso: string) {
   try {
@@ -33,7 +33,7 @@ function companyInitial(name: string) {
   return name.trim().charAt(0).toUpperCase() || "J";
 }
 
-function mockToApiJob(mock: ReturnType<typeof getJobById>): ApiJob | null {
+function mockToApiJob(mock: ReturnType<typeof getJobById>): Apijustjob | null {
   if (!mock) return null;
   return {
     job_id: mock.id,
@@ -60,7 +60,7 @@ export default function JobDetailPage() {
   const router = useRouter();
   const id = typeof params.id === "string" ? params.id : "";
 
-  const [job, setJob] = useState<ApiJob | null>(null);
+  const [job, setJob] = useState<Apijustjob | null>(null);
   const [loading, setLoading] = useState(true);
   const [needsAuth, setNeedsAuth] = useState(false);
   const [notFound, setNotFound] = useState(false);
