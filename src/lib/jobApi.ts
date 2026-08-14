@@ -22,25 +22,30 @@ export interface ApiResult<T = Record<string, unknown>> {
   ok: boolean;
   status: number;
   data: T;
-  datalength?: number; // Optional property to hold the length of data.items
+  datalength?: number;
 }
+
 export interface UpdateApiResult {
   ok: boolean;
   status: number;
   message: string;
 }
+
 export function extractError(
   data: Record<string, unknown>,
   fallback = "Something went wrong. Please try again."
 ): string {
+  if (!data) return fallback;
   if (typeof data.detail === "string") return data.detail;
   if (typeof data.error === "string") return data.error;
   if (typeof data.message === "string") return data.message;
+  
   const first = Object.values(data)[0];
   if (Array.isArray(first) && typeof first[0] === "string") return first[0];
+  if (typeof first === "string") return first;
+  
   return fallback;
 }
-
 
 export function extractToken(data: Record<string, unknown>): string | null {
   const token =
@@ -48,33 +53,26 @@ export function extractToken(data: Record<string, unknown>): string | null {
     data.token ??
     data.access_token ??
     (typeof data.data === "object" &&
-    data.data &&
-    ((data.data as Record<string, unknown>).access ??
-      (data.data as Record<string, unknown>).token));
+      data.data &&
+      ((data.data as Record<string, unknown>).access ??
+        (data.data as Record<string, unknown>).token));
   return typeof token === "string" ? token : null;
 }
 
 async function parseJson(res: Response): Promise<Record<string, unknown>> {
-  const text = await res.text(); // Get raw response first
-  
+  const text = await res.text();
   try {
-    // Attempt to parse as JSON
     const data = JSON.parse(text);
-    
-    // If it's a plain string, wrap it in a 'message' property
     if (typeof data === "string") {
       return { message: data };
     }
-    
-    // If it's an object, return it as is
     return data as Record<string, unknown>;
   } catch {
-    // If it's not JSON, assume it's a plain text error message
     return { message: text || res.statusText || "An unexpected error occurred" };
   }
 }
+
 export async function registerUser(body: {
-  // name: string;
   number: string;
   pin: string;
   confirm_pin: string;
@@ -84,7 +82,6 @@ export async function registerUser(body: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  console.log(res.status)
   return { ok: res.ok, status: res.status, data: await parseJson(res) };
 }
 
@@ -149,18 +146,15 @@ export async function updatePassword({
 }): Promise<UpdateApiResult> {
   const res = await fetch(`${API_BASE_URL}/api/justjob/update/password/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ number, pin, confirm_pin }),
   });
 
   const data = await parseJson(res);
-  console.log(data)
   return {
     ok: res.ok,
     status: res.status,
-    message: extractError(data)
+    message: extractError(data),
   };
 }
 
@@ -189,33 +183,82 @@ export async function getJobs(
   const headers: Record<string, string> = {};
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(
-    `${API_BASE_URL}/api/justjob/jobs/${qs.toString() ? `?${qs}` : ""}`,
-    { headers, cache: "no-store" }
-  );
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/justjob/jobs/${qs.toString() ? `?${qs.toString()}` : ""}`,
+      { headers, cache: "no-store" }
+    );
 
-  // Cast temporarily to 'any' to safely check properties without TypeScript errors
-  const data = (await parseJson(res)) as any;
-  
-  // Safely check for count, then items.length, and fallback to 0
-  const datalength = data?.count ?? data?.items?.length ?? 0;
-  
-  return { ok: res.ok, status: res.status, data, datalength };
+    const data = (await parseJson(res)) as any;
+    const datalength =
+      data?.count ??
+      data?.total ??
+      (Array.isArray(data?.items) ? data.items.length : Array.isArray(data) ? data.length : 0);
+
+    return { ok: res.ok, status: res.status, data, datalength };
+  } catch (error) {
+    console.error("getJobs error:", error);
+    return {
+      ok: false,
+      status: 500,
+      data: { message: "Failed to reach backend job API" } as any,
+      datalength: 0,
+    };
+  }
 }
 
 export async function getSingleJob(
   justjobId: string,
   token?: string
 ): Promise<ApiResult<Apijustjob>> {
-  const qs = new URLSearchParams({ justjob_id: justjobId });
+  if (!justjobId) {
+    return { ok: false, status: 400, data: null as unknown as Apijustjob };
+  }
+
+  const qs = new URLSearchParams();
+  qs.set("job_id", justjobId);
+
   const headers: Record<string, string> = {};
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(
-    `${API_BASE_URL}/api/justjob/single/job/?${qs}`,
-    { headers, cache: "no-store" }
-  );
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/justjob/single/job/?${qs.toString()}`,
+      { headers, cache: "no-store" }
+    );
 
-  const data = (await parseJson(res)) as unknown as Apijustjob;
-  return { ok: res.ok, status: res.status, data };
+    const rawData = await parseJson(res);
+
+    if (!res.ok) {
+      return {
+        ok: false,
+        status: res.status,
+        data: rawData as unknown as Apijustjob,
+      };
+    }
+
+    let unwrappedJob = rawData;
+    if (rawData && typeof rawData === "object") {
+      if ("data" in rawData && rawData.data && typeof rawData.data === "object") {
+        unwrappedJob = rawData.data as Record<string, unknown>;
+      } else if ("job" in rawData && rawData.job && typeof rawData.job === "object") {
+        unwrappedJob = rawData.job as Record<string, unknown>;
+      } else if ("items" in rawData && Array.isArray(rawData.items) && rawData.items.length > 0) {
+        unwrappedJob = rawData.items[0];
+      }
+    }
+
+    return {
+      ok: true,
+      status: res.status,
+      data: unwrappedJob as unknown as Apijustjob,
+    };
+  } catch (error) {
+    console.error("getSingleJob error:", error);
+    return {
+      ok: false,
+      status: 500,
+      data: null as unknown as Apijustjob,
+    };
+  }
 }

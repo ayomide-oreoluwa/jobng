@@ -55,17 +55,6 @@ export default function HeroSection() {
 
       {/* Hero Interactive Main Window Wrapper */}
       <div className="relative z-10 w-full max-w-[760px] mx-auto text-center">
-        
-        {/* Update Notification Ribbon Badge */}
-        <motion.div variants={fadeUp(0)} initial="hidden" animate="show" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[rgba(10,15,28,0.08)] border border-[rgba(10,15,28,0.14)] text-[rgba(10,15,28,0.72)] mb-7">
-          <motion.span
-            className="w-2 h-2 rounded-full bg-[#0F9D58] shadow-[0_0_0_3px_rgba(15,157,88,0.2)]"
-            animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          Live jobs updated daily
-        </motion.div>
-
         {/* Dynamic Typography Main Banner Headers */}
         <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A0F1C] leading-[1.1] mb-5">
           Your next Job<br />
@@ -73,7 +62,7 @@ export default function HeroSection() {
         </motion.h1>
 
         <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-[#ffffff] max-w-[480px] mx-auto mb-10">
-          Discover opportunities across Nigeria. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong>, then browse and apply in seconds.
+          Discover opportunities across Nigeria. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong> then browse and apply in seconds.
         </motion.p>
 
         {/* Global Input Search Parameter Target Control Container */}

@@ -61,7 +61,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[var(--text-faint)] uppercase tracking-widest mb-1">Phone & USSD</h4>
-                <p className="text-[var(--ink)] font-semibold text-base m-0">*7098#<br />+234 800 job</p>
+                <p className="text-[var(--ink)] font-semibold text-base m-0">*7098#<br />+234 801 234 5678</p>
               </div>
             </div>
 
