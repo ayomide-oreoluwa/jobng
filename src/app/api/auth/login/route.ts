@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: extractError(result.data) }, { status: result.status });
     }
 
-    const token = extractToken(result.data);
+    const token = extractToken(result?.data);
     if (!token) {
       return NextResponse.json({ ok: false, error: "Login succeeded but no token was returned." }, { status: 502 });
     }

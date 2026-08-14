@@ -1,9 +1,9 @@
 import { API_BASE_URL } from "./config";
 
-export interface ApiJob {
-  job_id: string;
-  job_title: string | null;
-  job_url: string | null;
+export interface Apijustjob {
+  justjob_id: string;
+  justjob_title: string | null;
+  justjob_url: string | null;
   created_at: string;
   company_name: string;
   company_website: string | null;
@@ -14,7 +14,7 @@ export interface ApiJob {
 }
 
 export interface PagedJobsResponse {
-  items: ApiJob[];
+  items: Apijustjob[];
   count: number;
 }
 
@@ -79,7 +79,7 @@ export async function registerUser(body: {
   pin: string;
   confirm_pin: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/create/user/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/create/user/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -92,7 +92,7 @@ export async function loginUser(body: {
   number: string;
   pin: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/login/user/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/login/user/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -103,7 +103,7 @@ export async function loginUser(body: {
 export async function forgotPassword(body: {
   phone_number: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/forgot/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/forgot/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -115,7 +115,7 @@ export async function verifyOtp(body: {
   phone_number: string;
   otp: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/verify/otp/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/verify/otp/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -130,7 +130,7 @@ export async function changePassword(
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE_URL}/api/job/change/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/change/password/`, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
@@ -147,7 +147,7 @@ export async function updatePassword({
   pin: string;
   confirm_pin: string;
 }): Promise<UpdateApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/update/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/update/password/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -168,7 +168,7 @@ export async function resetPassword(body: {
   phone_number: string;
   pin: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/job/reset/password/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/reset/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -190,7 +190,7 @@ export async function getJobs(
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(
-    `${API_BASE_URL}/api/job/jobs/${qs.toString() ? `?${qs}` : ""}`,
+    `${API_BASE_URL}/api/justjob/jobs/${qs.toString() ? `?${qs}` : ""}`,
     { headers, cache: "no-store" }
   );
 
@@ -204,18 +204,18 @@ export async function getJobs(
 }
 
 export async function getSingleJob(
-  jobId: string,
+  justjobId: string,
   token?: string
-): Promise<ApiResult<ApiJob>> {
-  const qs = new URLSearchParams({ job_id: jobId });
+): Promise<ApiResult<Apijustjob>> {
+  const qs = new URLSearchParams({ justjob_id: justjobId });
   const headers: Record<string, string> = {};
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(
-    `${API_BASE_URL}/api/job/single/job/?${qs}`,
+    `${API_BASE_URL}/api/justjob/single/job/?${qs}`,
     { headers, cache: "no-store" }
   );
 
-  const data = (await parseJson(res)) as unknown as ApiJob;
+  const data = (await parseJson(res)) as unknown as Apijustjob;
   return { ok: res.ok, status: res.status, data };
 }
