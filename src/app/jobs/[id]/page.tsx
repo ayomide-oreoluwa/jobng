@@ -12,10 +12,9 @@ import {
   FiLogIn,
 } from "react-icons/fi";
 import { authHeaders } from "@/lib/auth-client";
-import type { ApiJob } from "@/lib/jobApi";
 import { sanitizeHtml } from "@/lib/html";
 import JobDetailSkeleton from "@/components/shared/JobDetailSkeleton";
-import { getJobById } from "@/data/jobs";
+import { Apijustjob } from "@/lib/jobApi";
 
 function formatDate(iso: string) {
   try {
@@ -33,34 +32,12 @@ function companyInitial(name: string) {
   return name.trim().charAt(0).toUpperCase() || "J";
 }
 
-function mockToApiJob(mock: ReturnType<typeof getJobById>): ApiJob | null {
-  if (!mock) return null;
-  return {
-    job_id: mock.id,
-    job_title: mock.title,
-    job_url: null,
-    created_at: mock.postedDate,
-    company_name: mock.company,
-    company_website: null,
-    category: mock.category,
-    description: `<p>${mock.description}</p>${
-      mock.responsibilities.length
-        ? `<h3>Responsibilities</h3><ul>${mock.responsibilities.map((r) => `<li>${r}</li>`).join("")}</ul>`
-        : ""
-    }${
-      mock.requirements.length
-        ? `<h3>Requirements</h3><ul>${mock.requirements.map((r) => `<li>${r}</li>`).join("")}</ul>`
-        : ""
-    }`,
-  };
-}
-
 export default function JobDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = typeof params.id === "string" ? params.id : "";
 
-  const [job, setJob] = useState<ApiJob | null>(null);
+  const [job, setJob] = useState<Apijustjob | null>(null);
   const [loading, setLoading] = useState(true);
   const [needsAuth, setNeedsAuth] = useState(false);
   const [notFound, setNotFound] = useState(false);
@@ -68,6 +45,7 @@ export default function JobDetailPage() {
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
+
     (async () => {
       setLoading(true);
       try {
@@ -82,12 +60,7 @@ export default function JobDetailPage() {
           return;
         }
 
-        if (res.status === 404 || !data.ok) {
-          const mockJob = mockToApiJob(getJobById(id));
-          if (mockJob) {
-            setJob(mockJob);
-            return;
-          }
+        if (!res.ok || !data.job) {
           setNotFound(true);
           return;
         }
@@ -95,15 +68,16 @@ export default function JobDetailPage() {
         setJob(data.job);
       } catch {
         if (!cancelled) {
-          const mockJob = mockToApiJob(getJobById(id));
-          if (mockJob) { setJob(mockJob); return; }
           setNotFound(true);
         }
       } finally {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (loading) return <JobDetailSkeleton />;
@@ -207,7 +181,6 @@ export default function JobDetailPage() {
                   <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">About this Job</h2>
                 </div>
                 
-                {/* Clean Editor-safe HTML Injection styling with Tailwind Typography conventions */}
                 <div
                   className="prose max-w-none text-sm leading-relaxed text-[var(--text-muted)]
                     prose-p:mb-4 prose-p:last:mb-0
@@ -260,7 +233,6 @@ export default function JobDetailPage() {
               )}
               
               <div className="mt-5 pt-4 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-semibold text-[var(--text-faint)] tracking-wide uppercase">
-                <span>ID: #{job.job_id}</span>
                 <span>Posted {new Date(job.created_at).toLocaleDateString("en-NG", { month: "short", day: "numeric" })}</span>
               </div>
             </div>
