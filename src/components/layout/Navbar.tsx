@@ -12,7 +12,9 @@ import {
   FiLogOut,
   FiLock,
   FiChevronDown,
+  FiUser,
 } from "react-icons/fi";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 import { useAuth } from "@/context/AuthContext";
 import Logo from "@/components/brand/Logo";
 import Image from "next/image";
@@ -24,10 +26,22 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+function formatPhoneNumber(phone?: string | null) {
+  if (!phone) return "Account Member";
+  const cleaned = phone.replace(/\D/g, "");
+  if (cleaned.length === 11) {
+    return `${cleaned.slice(0, 4)} ${cleaned.slice(4, 7)} ${cleaned.slice(7)}`;
+  }
+  if (cleaned.length === 13 && cleaned.startsWith("234")) {
+    return `+${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)} ${cleaned.slice(9)}`;
+  }
+  return phone;
+}
+
 function getInitials(phone?: string | null) {
   if (!phone) return "U";
   const digits = phone.replace(/\D/g, "");
-  return digits.slice(-2) || "U";
+  return digits ? digits.slice(-2) : "U";
 }
 
 export default function Navbar() {
@@ -71,171 +85,291 @@ export default function Navbar() {
     router.push("/");
   };
 
-  const Avatar = ({ size = 34 }: { size?: number }) =>
+  const Avatar = ({ size = 36 }: { size?: number }) =>
     avatarUrl ? (
       <Image
         src={avatarUrl}
-        alt="Profile"
-        className="rounded-full object-cover border border-ink/10 shrink-0"
-        width={`${size}`}
-        height={`${size}`}
+        alt="User Avatar"
+        className="rounded-full object-cover border border-slate-200 shrink-0 shadow-xs"
+        width={size}
+        height={size}
       />
     ) : (
       <div
-        className="rounded-full bg-[#055A2B] text-white flex items-center justify-center font-bold uppercase shrink-0"
-        style={{ width: size, height: size, fontSize: size * 0.38 }}
+        className="rounded-full bg-gradient-to-tr from-[#044420] to-[#067337] text-white flex items-center justify-center font-bold tracking-wider uppercase shrink-0 shadow-xs border border-white/20"
+        style={{ width: size, height: size, fontSize: Math.max(12, size * 0.36) }}
       >
-        {getInitials(phone)}
+        {phone ? getInitials(phone) : <FiUser size={size * 0.45} />}
       </div>
     );
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 h-(--spacing-nav-height) flex items-center bg-white shadow-[0_1px_0_rgba(15,23,42,0.08)]">
-        <div className="container-xl flex items-center justify-between gap-4 w-full">
-          {isAuthenticated ? <Logo variant="dark" size="md" href="/jobs"/> : <Logo variant="dark" size="md" />}
-          
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 sm:h-20 flex items-center bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] transition-all duration-200">
+        <div className="container-xl flex items-center justify-between gap-6 w-full px-4 sm:px-6">
+          <div className="flex items-center shrink-0">
+            {isAuthenticated ? (
+              <Logo variant="dark" size="md" href="/jobs" />
+            ) : (
+              <Logo variant="dark" size="md" />
+            )}
+          </div>
 
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1.5 bg-slate-50/80 p-1.5 rounded-full border border-slate-200/60">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-4 py-2 rounded-full text-xs font-semibold no-underline transition-all duration-200 ${
+                    active
+                      ? "bg-white text-ink shadow-xs border border-slate-200/80 font-bold"
+                      : "text-text-muted hover:text-ink hover:bg-white/60"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+
+            {ready && isAuthenticated && (
               <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3.5 py-2 rounded-sm text-sm font-semibold no-underline transition-colors duration-200 ${
-                  isActive(link.href)
-                    ? "text-gold-hover bg-ink/4"
-                    : "text-text-muted hover:text-ink hover:bg-ink/4"
+                href="/prep-interview/practice"
+                className={`px-4 py-2 rounded-full text-xs font-semibold no-underline transition-all duration-200 flex items-center gap-2 ${
+                  isActive("/prep-interview")
+                    ? "bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs font-bold"
+                    : "text-emerald-700 hover:bg-emerald-50/60"
                 }`}
               >
-                {link.label}
+                <FaWandMagicSparkles className="text-emerald-600 w-3.5 h-3.5 shrink-0 animate-pulse" />
+                <span>Prep Interview</span>
               </Link>
-            ))}
+            )}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-2.5">
+          {/* Right Action Menu */}
+          <div className="hidden lg:flex items-center gap-3">
             {ready && isAuthenticated ? (
               <div className="relative" ref={profileRef}>
                 <button
-                  title="profile"
+                  title="Profile menu"
                   type="button"
                   onClick={() => setProfileOpen((v) => !v)}
-                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-gold-hover hover:bg-ink/4"
+                  className="flex items-center gap-2.5 p-1.5 pl-2 pr-3 rounded-full bg-slate-50 border border-slate-200/80 hover:border-slate-300 hover:bg-slate-100/70 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
                   aria-haspopup="menu"
-                  // aria-expanded={profileOpen}
+                  aria-expanded={profileOpen}
                 >
                   <Avatar size={34} />
+                  <span className="text-xs font-bold text-ink max-w-[130px] truncate">
+                    {formatPhoneNumber(phone)}
+                  </span>
                   <FiChevronDown
-                    size={15}
-                    className={`transition-transform duration-200 ${profileOpen ? "rotate-180" : ""} text-text-muted`}
+                    size={14}
+                    className={`transition-transform duration-200 ${
+                      profileOpen ? "rotate-180 text-ink" : "text-text-muted"
+                    }`}
                   />
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 top-[calc(100%+12px)] w-72 bg-white rounded-xl border border-border-strong overflow-hidden z-50">
-                    <div className="flex items-center gap-3 p-5">
-                      <Avatar size={44} />
-                      <div className="min-w-0">
-                        <p className="font-display text-[15px] font-bold text-ink truncate tracking-tight">{phone ?? "No phone on file"}</p>
-                        <p className="text-[12px] text-text-muted">Username</p>
+                  <div className="absolute right-0 top-[calc(100%+10px)] w-72 bg-white rounded-2xl border border-slate-200/80 shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="p-4 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 flex items-center gap-3.5">
+                      <Avatar size={42} />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-ink truncate tracking-tight">
+                          {formatPhoneNumber(phone)}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                          <span className="text-[11px] font-medium text-text-muted">
+                            Active Account
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="h-px bg-border-strong" />
-                    <div className="p-1.5">
-                      <Link href="/change-password" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-ink no-underline hover:bg-ink/4 transition-colors">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-ink/5 text-text-muted shrink-0">
+
+                    <div className="p-2 space-y-1">
+                      <Link
+                        href="/prep-interview/practice"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-ink no-underline hover:bg-emerald-50/70 hover:text-emerald-900 transition-colors group"
+                      >
+                        <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100/60 text-emerald-700 shrink-0 group-hover:scale-105 transition-transform">
+                          <FaWandMagicSparkles size={14} />
+                        </span>
+                        Prep Interview
+                      </Link>
+
+                      <Link
+                        href="/change-password"
+                        onClick={() => setProfileOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-ink no-underline hover:bg-slate-100/70 transition-colors group"
+                      >
+                        <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-slate-600 shrink-0 group-hover:scale-105 transition-transform">
                           <FiLock size={15} />
                         </span>
-                        Change password
+                        Change Password
                       </Link>
-                      <button type="button" onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] font-semibold text-red-600 hover:bg-red-50 transition-colors">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-600 shrink-0">
+
+                      <div className="h-px bg-slate-100 my-1" />
+
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50/80 transition-colors group text-left cursor-pointer"
+                      >
+                        <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-rose-100/60 text-rose-600 shrink-0 group-hover:scale-105 transition-transform">
                           <FiLogOut size={15} />
                         </span>
-                        Logout
+                        Sign Out
                       </button>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2.5">
-                <Link href="/signup" className="jj-btn jj-btn--ghost px-5 py-2.5">
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/signup"
+                  className="px-4 py-2.5 rounded-full text-xs font-semibold text-text-muted hover:text-ink hover:bg-slate-100 transition-all duration-200"
+                >
                   Sign Up
                 </Link>
-                <Link href="/login" className="jj-btn jj-btn--gold px-5 py-2.5">
-                  <FiLogIn size={15} /> Login
+                <Link
+                  href="/login"
+                  className="px-5 py-2.5 rounded-full text-xs font-bold text-bg-slate-800 bg-white shadow-xs hover:shadow transition-all duration-200 flex items-center gap-2"
+                >
+                  <FiLogIn size={14} /> Login
                 </Link>
               </div>
             )}
           </div>
 
+          {/* Mobile Menu Toggle */}
           <button
             type="button"
-            className="lg:hidden bg-transparent border-none cursor-pointer p-2 rounded-sm text-ink"
+            className="lg:hidden p-2.5 rounded-xl bg-slate-100/80 hover:bg-slate-200/80 text-ink transition-colors cursor-pointer"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle navigation menu"
-            aria-expanded={`${mobileOpen}`}
+            aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+            {mobileOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
         </div>
       </header>
 
+      {/* Backdrop */}
       {mobileOpen && (
-        <div 
-          className="fixed inset-0 bg-ink/50 z-49 backdrop-blur-[2px]" 
-          onClick={() => setMobileOpen(false)} 
-          aria-hidden="true" 
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[49] transition-opacity"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
         />
       )}
 
-      <div className={`fixed top-0 right-0 h-full w-75 max-w-[85vw] bg-white z-51 shadow-lg flex flex-col transition-transform duration-350 ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}>
-        <div className="flex items-center justify-end p-[18px_20px] border-b border-border-strong">
-          <button type="button" onClick={() => setMobileOpen(false)} className="bg-transparent border-none cursor-pointer text-text-muted p-1" aria-label="Close menu">
-            <FiX size={20} />
+      {/* Mobile Drawer */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white z-[50] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+          mobileOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between p-5 border-b border-slate-100">
+          <Logo variant="dark" size="sm" />
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+            aria-label="Close menu"
+          >
+            <FiX size={18} />
           </button>
         </div>
 
-        <nav className="py-4 flex-1 overflow-y-auto">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className={`block px-5 py-3 text-[15px] font-semibold no-underline transition-colors ${
-                isActive(link.href) ? "text-gold-hover bg-gold-muted" : "text-ink hover:bg-ink/4"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {ready && isAuthenticated && (
+          <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
+            <Avatar size={40} />
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-ink truncate">
+                {formatPhoneNumber(phone)}
+              </p>
+              <p className="text-[11px] font-medium text-emerald-700">Verified Member</p>
+            </div>
+          </div>
+        )}
+
+        <nav className="p-4 space-y-1.5 flex-1 overflow-y-auto">
+          {navLinks.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+                  active
+                    ? "text-ink bg-slate-100 font-bold"
+                    : "text-text-muted hover:text-ink hover:bg-slate-50"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+
           {ready && isAuthenticated && (
-            <Link
-              href="/change-password"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-5 py-3 text-[15px] font-semibold text-ink no-underline hover:bg-ink/4 transition-colors border-t border-border-strong mt-2 pt-4"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-ink/5 text-text-muted shrink-0">
-                <FiLock size={15} />
-              </span>
-              Change password
-            </Link>
+            <>
+              <Link
+                href="/prep-interview/practice"
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+                  isActive("/prep-interview")
+                    ? "text-emerald-900 bg-emerald-50 font-bold"
+                    : "text-emerald-700 hover:bg-emerald-50/60"
+                }`}
+              >
+                <FaWandMagicSparkles size={16} className="text-emerald-600 shrink-0" />
+                Prep Interview
+              </Link>
+
+              <Link
+                href="/change-password"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-text-muted hover:text-ink hover:bg-slate-50 transition-all mt-4 border-t border-slate-100 pt-4"
+              >
+                <FiLock size={16} className="text-slate-500 shrink-0" />
+                Change Password
+              </Link>
+            </>
           )}
         </nav>
 
-        <div className="p-[16px_20px] border-t border-border-strong bg-surface/40">
+        <div className="p-5 border-t border-slate-100 bg-slate-50/50">
           {ready && isAuthenticated ? (
-            <button type="button" className="jj-btn jj-btn--ghost w-full py-3" onClick={handleLogout}>
-              <FiLogOut size={14} /> Logout
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100/80 transition-colors cursor-pointer"
+              onClick={handleLogout}
+            >
+              <FiLogOut size={16} /> Sign Out
             </button>
           ) : (
-            <div className="flex gap-2">
-              <Link href="/login" onClick={() => setMobileOpen(false)} className="jj-btn jj-btn--gold w-full py-3">
-                <FiLogIn size={14} /> Login
+            <div className="flex flex-col gap-2.5">
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-bg-slate-800 bg-white transition-colors shadow-xs"
+              >
+                <FiLogIn size={16} /> Login
               </Link>
 
-              <Link href="/signup" onClick={() => setMobileOpen(false)} className="jj-btn jj-btn--gold w-full py-3">
-                Signup
+              <Link
+                href="/signup"
+                onClick={() => setMobileOpen(false)}
+                className="w-full flex items-center justify-center py-3 rounded-xl text-sm font-semibold text-text-muted bg-white border border-slate-200 hover:bg-slate-50 transition-colors"
+              >
+                Sign Up
               </Link>
             </div>
           )}

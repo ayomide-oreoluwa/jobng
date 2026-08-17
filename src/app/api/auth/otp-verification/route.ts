@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     const otp = (body.otp ?? "").trim();
-    if (!/^\d{4}$/.test(otp)) {
+    if (!/^\d{6}$/.test(otp)) {
       return NextResponse.json({ ok: false, error: "Enter the 6-digit code sent to your phone." }, { status: 400 });
     }
 

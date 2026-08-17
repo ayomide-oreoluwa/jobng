@@ -10,26 +10,42 @@ import {
   FiExternalLink,
   FiGlobe,
   FiLogIn,
+  FiSearch,
+  FiShare2,
+  FiCheck,
+  FiShieldCheck,
+  FiClock,
 } from "react-icons/fi";
 import { authHeaders } from "@/lib/auth-client";
 import { sanitizeHtml } from "@/lib/html";
 import JobDetailSkeleton from "@/components/shared/JobDetailSkeleton";
 import { Apijustjob } from "@/lib/jobApi";
+import { FiShield } from "react-icons/fi";
 
-function formatDate(iso: string) {
+function formatDate(iso?: string | null, short = false): string {
+  if (!iso) return "N/A";
   try {
-    return new Date(iso).toLocaleDateString("en-NG", {
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return iso;
+    return date.toLocaleDateString("en-NG", {
       day: "numeric",
-      month: "long",
-      year: "numeric",
+      month: short ? "short" : "long",
+      year: short ? undefined : "numeric",
     });
   } catch {
     return iso;
   }
 }
 
-function companyInitial(name: string) {
-  return name.trim().charAt(0).toUpperCase() || "J";
+function companyInitial(name?: string | null): string {
+  return name?.trim().charAt(0).toUpperCase() || "J";
+}
+
+function formatWebsiteUrl(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+  return trimmed.startsWith("http") ? trimmed : `https://${trimmed}`;
 }
 
 export default function JobDetailPage() {
@@ -41,6 +57,7 @@ export default function JobDetailPage() {
   const [loading, setLoading] = useState(true);
   const [needsAuth, setNeedsAuth] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -80,45 +97,72 @@ export default function JobDetailPage() {
     };
   }, [id]);
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: job?.job_title ?? "Job Opportunity",
+          url: window.location.href,
+        });
+        return;
+      } catch {
+        // Fallback to clipboard if share interface is dismissed/unsupported
+      }
+    }
+    await navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
   if (loading) return <JobDetailSkeleton />;
 
+  /* --- Premium Auth Required View --- */
   if (needsAuth) {
     return (
       <div className="min-h-screen bg-[var(--surface)] pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div className="max-w-[420px] w-full bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-md)] p-8 md:p-12 text-center">
-          <div className="w-14 h-14 rounded-[var(--radius-sm)] bg-[var(--gold-muted)] flex items-center justify-center mx-auto mb-5">
-            <FiLogIn size={24} className="text-[var(--gold)]" />
+        <div className="max-w-[440px] w-full bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-md)] p-8 md:p-10 text-center relative overflow-hidden backdrop-blur-md">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--gold-light)]" />
+          
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--gold-muted)] to-[var(--surface)] border border-[var(--gold)]/20 flex items-center justify-center mx-auto mb-6 shadow-inner">
+            <FiLogIn size={26} className="text-[var(--gold)]" />
           </div>
-          <h1 className="text-xl font-extrabold tracking-tight text-[var(--ink)] mb-2">
-            Sign in required
+
+          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--ink)] mb-3">
+            Sign in Required
           </h1>
-          <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-6">
-            Log in to view job details. To subscribe, dial <strong className="text-[var(--ink)] font-bold">*7098#</strong> first.
+          <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-8">
+            Please log in to access full details for this role. To subscribe via USSD, dial <strong className="text-[var(--ink)] font-bold">*7098#</strong>.
           </p>
+
           <Link 
             href={`/login?callbackUrl=${encodeURIComponent(`/jobs/${id}`)}`} 
-            className="inline-flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] px-7 py-3 transition duration-200 active:scale-98 hover:translate-y-[-1px] hover:shadow-[0_12px_40px_rgba(0,166,81,0.35)]"
+            className="inline-flex items-center justify-center gap-2 w-full font-bold text-sm bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--gold-hover)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3.5 transition-all duration-200 active:scale-[0.98] hover:shadow-[0_12px_30px_rgba(0,166,81,0.3)] hover:-translate-y-0.5"
           >
-            Login
+            Sign In to Continue
           </Link>
         </div>
       </div>
     );
   }
 
+  /* --- Premium Not Found View --- */
   if (notFound || !job) {
     return (
       <div className="min-h-screen bg-[var(--surface)] pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
-        <div className="max-w-md w-full">
-          <span className="text-5xl mb-4 block animate-bounce">🔍</span>
-          <h1 className="text-2xl font-extrabold text-[var(--ink)] tracking-tight mb-2">Job not found</h1>
-          <p className="text-[var(--text-muted)] text-sm mb-6">This listing may have been removed or expired.</p>
+        <div className="max-w-md w-full flex flex-col items-center">
+          <div className="w-20 h-20 rounded-3xl bg-[var(--surface-elevated)] border border-[var(--border)] flex items-center justify-center mb-5 text-[var(--text-muted)] shadow-[var(--shadow-sm)]">
+            <FiSearch size={32} />
+          </div>
+          <h1 className="text-2xl font-extrabold text-[var(--ink)] tracking-tight mb-2">Job Listing Unavailable</h1>
+          <p className="text-[var(--text-muted)] text-sm mb-8 leading-relaxed">
+            This position may have been filled, unlisted, or expired.
+          </p>
           <button 
             type="button" 
             onClick={() => router.push("/jobs")} 
-            className="inline-flex items-center justify-center gap-2 font-bold text-sm bg-transparent text-[var(--text)] border-1.5 border-[var(--border-strong)] rounded-[var(--radius-sm)] px-5 py-2.5 transition duration-200 active:scale-98 hover:bg-[rgba(10,15,28,0.04)]"
+            className="inline-flex items-center justify-center gap-2.5 font-bold text-sm bg-[var(--surface-elevated)] text-[var(--ink)] border border-[var(--border-strong)] rounded-[var(--radius-sm)] px-6 py-3 transition-all duration-200 hover:bg-[var(--surface)] hover:border-[var(--ink)]/30 active:scale-[0.98]"
           >
-            <FiArrowLeft size={14} /> Back to jobs
+            <FiArrowLeft size={16} /> Explore Other Roles
           </button>
         </div>
       </div>
@@ -126,120 +170,177 @@ export default function JobDetailPage() {
   }
 
   const title = job.job_title ?? "Untitled Job";
-  const website = job.company_website
-    ? (job.company_website.startsWith("http") ? job.company_website : `https://${job.company_website}`)
-    : null;
+  const companyName = job.company_name ?? "Unknown Company";
+  const website = formatWebsiteUrl(job.company_website);
 
   return (
     <div className="min-h-screen bg-[var(--surface)] animate-fade-in-up">
-      {/* Premium Hero Section */}
-      <div className="bg-[var(--ink)] relative overflow-hidden pt-12 pb-16 md:py-20 border-b border-[var(--gold-muted)]/20 shadow-sm">
-        {/* Ambient Glow Effects */}
-        <div className="absolute top-[-40%] right-[-10%] w-[500px] h-[500px] bg-radial from-[var(--gold)]/12 to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--gold)]/30 to-transparent" />
+      {/* Premium Hero Header */}
+      <header className="bg-[var(--ink)] relative overflow-hidden pt-10 pb-14 md:pt-14 md:pb-20 border-b border-[var(--border)]/20 shadow-lg">
+        {/* Ambient Gradient Flares */}
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-radial from-[var(--gold)]/15 via-[var(--gold)]/5 to-transparent pointer-events-none rounded-full blur-2xl" />
+        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-radial from-emerald-500/10 to-transparent pointer-events-none rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[var(--gold)]/40 to-transparent" />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/jobs" className="inline-flex items-center gap-2 text-xs font-semibold text-white/55 hover:text-[var(--gold-light)] transition mb-6 group">
-            <FiArrowLeft size={14} className="group-hover:translate-x-[-2px] transition-transform" /> Back to all jobs
-          </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Navigation & Action Bar */}
+          <div className="flex items-center justify-between mb-8">
+            <Link 
+              href="/jobs" 
+              className="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-white/60 hover:text-[var(--gold-light)] transition-colors duration-200 group bg-white/5 border border-white/10 rounded-full px-4 py-2 backdrop-blur-sm"
+            >
+              <FiArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform duration-200" /> 
+              Back to all jobs
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/70 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-4 py-2 transition-all duration-200 backdrop-blur-sm active:scale-[0.97]"
+            >
+              {copied ? <FiCheck size={14} className="text-emerald-400" /> : <FiShare2 size={14} />}
+              <span>{copied ? "Link Copied" : "Share Job"}</span>
+            </button>
+          </div>
           
-          <div className="flex flex-col md:flex-row gap-5 md:items-center justify-between">
-            <div className="flex items-start gap-5">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-[var(--radius-md)] bg-gradient-to-br from-[var(--gold)]/20 to-[var(--gold)]/5 border border-[var(--gold)]/25 flex items-center justify-center font-black text-2xl md:text-3xl text-[var(--gold-light)] shrink-0 shadow-inner">
-                {companyInitial(job.company_name)}
+          {/* Main Hero Card Content */}
+          <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
+            <div className="flex items-start gap-5 sm:gap-6">
+              {/* Company Logo Badge */}
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[var(--gold)]/25 via-[var(--gold)]/10 to-transparent border border-[var(--gold)]/30 flex items-center justify-center font-black text-2xl sm:text-3xl text-[var(--gold-light)] shrink-0 shadow-2xl backdrop-blur-md">
+                {companyInitial(companyName)}
               </div>
-              <div className="space-y-1.5">
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold tracking-wider uppercase text-[var(--gold-light)] bg-[var(--gold)]/15 border border-[var(--gold)]/30 px-2.5 py-0.5 rounded-full">
+                    <FiShield size={12} /> Verified Role
+                  </span>
+                </div>
+
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
                   {title}
                 </h1>
-                <p className="text-base font-medium text-white/60">{job.company_name}</p>
+
+                <p className="text-base font-medium text-white/70">{companyName}</p>
                 
-                <div className="flex flex-wrap gap-2 pt-1">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/75 bg-white/8 border border-white/12 rounded-full px-3.5 py-1.5 shadow-sm">
-                    <FiBriefcase size={12} className="text-[var(--gold-light)]" /> {job.category ?? "General"}
+                {/* Meta Attributes */}
+                <div className="flex flex-wrap gap-2.5 pt-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-white/80 bg-white/8 border border-white/12 rounded-lg px-3.5 py-1.5 backdrop-blur-sm shadow-sm">
+                    <FiBriefcase size={13} className="text-[var(--gold-light)]" /> {job.category ?? "General"}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/75 bg-white/8 border border-white/12 rounded-full px-3.5 py-1.5 shadow-sm">
-                    <FiCalendar size={12} className="text-[var(--gold-light)]" /> {formatDate(job.created_at)}
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-white/80 bg-white/8 border border-white/12 rounded-lg px-3.5 py-1.5 backdrop-blur-sm shadow-sm">
+                    <FiCalendar size={13} className="text-[var(--gold-light)]" /> {formatDate(job.created_at)}
                   </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content Layout Block */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      {/* Main Content Layout Grid */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
-          {/* Main Description Body */}
+          {/* Main Description Column */}
           <div className="lg:col-span-2 space-y-6">
-            {job.description && (
-              <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-1 h-5 bg-gradient-to-b from-[var(--gold-light)] to-[var(--gold)] rounded-full" />
-                  <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">About this Job</h2>
+            {job.description ? (
+              <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-9 transition-all duration-200">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border)]">
+                  <div className="w-1.5 h-6 bg-gradient-to-b from-[var(--gold-light)] to-[var(--gold)] rounded-full" />
+                  <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">Job Overview & Requirements</h2>
                 </div>
                 
                 <div
                   className="prose max-w-none text-sm leading-relaxed text-[var(--text-muted)]
                     prose-p:mb-4 prose-p:last:mb-0
-                    prose-headings:text-[var(--ink)] prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:mt-6 prose-headings:mb-3
+                    prose-headings:text-[var(--ink)] prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:mt-7 prose-headings:mb-3
                     prose-h3:text-base
                     prose-strong:text-[var(--ink)] prose-strong:font-bold
-                    prose-ul:list-disc prose-ul:pl-5 prose-ul:my-3
-                    prose-ol:list-decimal prose-ol:pl-5 prose-ol:my-3
+                    prose-ul:list-disc prose-ul:pl-5 prose-ul:my-4 prose-ul:space-y-1.5
+                    prose-ol:list-decimal prose-ol:pl-5 prose-ol:my-4 prose-ol:space-y-1.5
                     prose-li:mb-1.5
-                    prose-a:text-[var(--gold-hover)] prose-a:underline prose-a:underline-offset-2
-                    prose-blockquote:border-l-3 prose-blockquote:border-[var(--gold)] prose-blockquote:pl-4 prose-blockquote:my-4 prose-blockquote:italic text-[var(--text-muted)]"
+                    prose-a:text-[var(--gold-hover)] prose-a:underline prose-a:underline-offset-4 prose-a:font-semibold
+                    prose-blockquote:border-l-4 prose-blockquote:border-[var(--gold)] prose-blockquote:bg-[var(--surface)] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-md prose-blockquote:italic"
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) }}
                 />
+              </div>
+            ) : (
+              <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-8 text-center text-[var(--text-muted)] text-sm">
+                No description provided for this position.
               </div>
             )}
           </div>
 
-          {/* Sticky Sidebar Interactive Card */}
-          <aside className="lg:sticky lg:top-28">
-            <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 transition duration-300 hover:shadow-[var(--shadow-md)]">
-              <p className="text-xs font-bold uppercase tracking-wider text-[var(--text-faint)] mb-1">Hiring Enterprise</p>
-              <h3 className="text-lg font-extrabold text-[var(--ink)] tracking-tight mb-4">{job.company_name}</h3>
-              
+          {/* Sticky Sidebar Column */}
+          <aside className="lg:sticky lg:top-28 space-y-5">
+            <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-7 transition-all duration-300 hover:shadow-[var(--shadow-md)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--gold-light)]" />
+
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--text-faint)] mb-1">
+                Employer Details
+              </p>
+              <h3 className="text-xl font-extrabold text-[var(--ink)] tracking-tight mb-2">
+                {companyName}
+              </h3>
+
               {website && (
                 <a
                   href={website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--gold-hover)] hover:text-[var(--gold)] transition mb-5"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--gold-hover)] hover:text-[var(--gold)] transition-colors mb-6 group"
                 >
-                  <FiGlobe size={15} /> Visit company website
+                  <FiGlobe size={14} /> 
+                  <span className="group-hover:underline underline-offset-2">Visit Official Website</span>
                 </a>
               )}
-              
-              {job.job_url ? (
-                <a
-                  href={job.job_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full text-center font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3.5 px-5 transition duration-200 active:scale-98 hover:translate-y-[-1px] hover:shadow-[0_12px_40px_rgba(0,166,81,0.35)]"
-                >
-                  Apply now <FiExternalLink size={15} />
-                </a>
-              ) : (
-                <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-sm)] p-3.5 text-center">
-                  <p className="text-xs font-medium text-[var(--text-muted)] leading-normal">
-                    Contact the company directly to submit your application tracking documents.
-                  </p>
+
+              {/* Primary Apply Action Button */}
+              <div className="pt-2">
+                {job.job_url ? (
+                  <a
+                    href={job.job_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full text-center font-bold text-sm bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--gold-hover)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3.5 px-5 transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5 hover:shadow-[0_14px_35px_rgba(0,166,81,0.35)]"
+                  >
+                    Apply for Position <FiExternalLink size={15} />
+                  </a>
+                ) : (
+                  <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-sm)] p-4 text-center">
+                    <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed">
+                      Direct online application link is unavailable. Please check the company website to apply.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Sidebar Quick Meta List */}
+              <div className="mt-6 pt-5 border-t border-[var(--border)] space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[var(--text-muted)] flex items-center gap-1.5">
+                    <FiClock size={13} /> Date Posted
+                  </span>
+                  <span className="font-semibold text-[var(--ink)]">
+                    {formatDate(job.created_at, true)}
+                  </span>
                 </div>
-              )}
-              
-              <div className="mt-5 pt-4 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-semibold text-[var(--text-faint)] tracking-wide uppercase">
-                <span>Posted {new Date(job.created_at).toLocaleDateString("en-NG", { month: "short", day: "numeric" })}</span>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[var(--text-muted)] flex items-center gap-1.5">
+                    <FiShield size={13} /> Verification
+                  </span>
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                    Active Listing
+                  </span>
+                </div>
               </div>
             </div>
           </aside>
 
         </div>
-      </div>
+      </main>
     </div>
   );
 }

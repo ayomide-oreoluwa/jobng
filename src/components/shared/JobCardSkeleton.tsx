@@ -3,8 +3,7 @@ interface JobCardSkeletonProps {
 }
 
 const shimmer: React.CSSProperties = {
-  background:
-    "linear-gradient(100deg, #eef2f7 30%, #f8fafc 50%, #eef2f7 70%)",
+  background: "linear-gradient(100deg, #eef2f7 30%, #f8fafc 50%, #eef2f7 70%)",
   backgroundSize: "200% 100%",
   animation: "jjShimmer 1.3s ease-in-out infinite",
   borderRadius: 6,

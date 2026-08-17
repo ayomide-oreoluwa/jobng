@@ -18,12 +18,8 @@ const fetchJobsCount = async (): Promise<number> => {
       cache: "no-store",
     });
 
-    // If 401 Unauthorized (not logged in), return hardcoded fallback without throwing
-    if (res.status === 401) {
-      return HARDCODED_FALLBACK_COUNT;
-    }
-
-    if (!res.ok) {
+    // If 401 Unauthorized or any non-OK status, return hardcoded fallback gracefully
+    if (res.status === 401 || !res.ok) {
       return HARDCODED_FALLBACK_COUNT;
     }
 
@@ -55,15 +51,15 @@ export default function AboutStats() {
   }, []);
 
   return (
-    <div>
-      <div className="text-[2.5rem] font-extrabold text-[var(--ink)] mb-2 -tracking-[0.02em]">
+    <div className="flex flex-col items-center justify-center p-2 text-center">
+      <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-1 min-h-[44px] flex items-center justify-center">
         {targetCount === null ? (
-          "..."
+          <span className="inline-block w-20 h-8 rounded-lg bg-slate-200/80 animate-pulse" />
         ) : (
           <CountUp target={targetCount} suffix="+" className="inline" />
         )}
       </div>
-      <div className="text-[var(--text-muted)] text-sm font-semibold uppercase tracking-widest">
+      <div className="text-slate-500 text-xs sm:text-sm font-extrabold uppercase tracking-widest">
         Active Listings
       </div>
     </div>
