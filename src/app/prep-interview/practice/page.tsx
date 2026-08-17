@@ -5,7 +5,7 @@ import { InterviewConfig, Question, UserResponse } from '@/types/interview';
 import { generateInterviewSession } from '@/data/interviewData';
 import { ActiveInterviewSession } from '@/components/interview/ActiveInterviewSession';
 import { InterviewResults } from '@/components/interview/InterviewResults';
-import { InterviewSetup } from '@/components/interview/Interviewsetup';
+import { InterviewSetup } from '@/components/interview/InterviewSetup';
 
 export default function InterviewPrepPracticePage() {
   const [config, setConfig] = useState<InterviewConfig | null>(null);
