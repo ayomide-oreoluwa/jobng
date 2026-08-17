@@ -1,8 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiFacebook, FiXTwitter, FiInstagram, FiLinkedin } from "react-icons/fi";
+import { 
+  FiInstagram, 
+  FiLinkedin, 
+  FiFacebook, 
+  FiArrowUpRight,
+  FiPhoneCall
+} from "react-icons/fi";
 import Logo from "@/components/brand/Logo";
 
 const footerLinks = {
@@ -18,142 +25,176 @@ const footerLinks = {
 };
 
 const socials = [
-  // { icon: FiFacebook, href: "#", label: "Facebook" },
-  // { icon: FiXTwitter, href: "#", label: "X" },
   { icon: FiInstagram, href: "https://www.instagram.com/maekandex_communication_/", label: "Instagram" },
   { icon: FiLinkedin, href: "https://ng.linkedin.com/company/maekandexcommunication", label: "LinkedIn" },
   { icon: FiFacebook, href: "#", label: "Facebook" },
 ];
 
-// Framer Motion animation variants
+// Motion Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
+  hidden: { opacity: 0, y: 20 },
+  show: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } 
+  },
 };
 
 export default function Footer() {
+  const [year, setYear] = useState<number | null>(null);
+
+  // Prevent SSR hydration mismatch for dynamic date
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
-    <footer className="relative bg-[radial-gradient(ellipse_80%_80%_at_80%_0%,#CDEBB0_0%,transparent_55%),linear-gradient(200deg,#8DC63F_0%,#00A651_55%,#00863F_100%)] text-ink mt-20 pt-8">
+    <footer className="relative bg-[radial-gradient(ellipse_100%_100%_at_50%_0%,#CDEBB0_0%,#8DC63F_35%,#00A651_70%,#006831_100%)] text-ink overflow-hidden select-none">
       
-      {/* 1. Classical SVG Wave Top Border to blend with the section above */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden rotate-180 transform translate-y-[-99%]">
+      {/* 1. Subtle Premium Top Wave Separator */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none pointer-events-none -translate-y-[98%]">
         <svg
-          className="relative block w-[calc(100%+1.3px)] h-12 md:h-17"
+          className="relative block w-full h-12 sm:h-16 md:h-20"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
         >
           <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-gray-200"
-          ></path>
+            d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,50 L1200,120 L0,120 Z"
+            className="fill-[#8DC63F]/20"
+          />
+          <path
+            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            className="fill-[#00A651]"
+          />
         </svg>
       </div>
 
-      {/* 2. Creative Animated Top Line over the border */}
+      {/* 2. Top Accent Glow Line */}
       <motion.div 
-        initial={{ opacity: 0, scaleX: 0 }}
-        whileInView={{ opacity: 1, scaleX: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-[#055A2B] to-transparent origin-center opacity-40"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent origin-center"
       />
 
-      {/* Main Grid Section with Staggered Entrance */}
+      {/* Main Grid Content Container */}
       <motion.div 
         variants={containerVariants}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        className="container-xl mx-auto px-4 md:px-6 pt-16 pb-12"
+        viewport={{ once: true, amount: 0.15 }}
+        className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-16 pb-12 relative z-10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
           
-          {/* Brand Info Column */}
-          <motion.div variants={itemVariants} className="md:col-span-2 flex flex-col items-start">
-            <Logo variant="dark" size="md" />
-            <p className="mt-5 text-[15px] leading-relaxed max-w-sm text-ink/80">
-              Nigeria&apos;s job discovery platform. Subscribe via <strong className="text-[#055A2B] font-extrabold tracking-wide">*7098#</strong>, browse live listings, and land your next Job.
+          {/* Brand Info Column (Spans 5 cols on Large Screens) */}
+          <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-5 flex flex-col items-start pr-0 lg:pr-8">
+            <div className="p-1 rounded-xl bg-white/10 backdrop-blur-md inline-block border border-white/20 shadow-xs">
+              <Logo variant="dark" size="md" />
+            </div>
+            
+            <p className="mt-5 text-[15px] leading-relaxed text-ink/85 max-w-md font-normal">
+              Nigeria&apos;s leading job discovery platform. Stay connected, explore verified job listings, and kickstart your career anywhere.
             </p>
+
+            {/* USSD Quick Action Badge */}
+            <div className="mt-6 flex items-center gap-3 p-2.5 px-4 rounded-2xl bg-white/15 border border-white/25 backdrop-blur-md shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-[#055A2B] text-white flex items-center justify-center shrink-0">
+                <FiPhoneCall size={14} />
+              </div>
+              <div className="text-xs">
+                <span className="block text-ink/70 font-medium">Quick Dial Subscription</span>
+                <span className="text-sm font-black text-[#055A2B] tracking-wide">*7098#</span>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Explore Links */}
-          <motion.div variants={itemVariants}>
-            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-ink mb-5 relative inline-block">
+          {/* Explore Links Column (Spans 3 cols) */}
+          <motion.div variants={itemVariants} className="lg:col-span-3">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ink/90 mb-5 flex items-center gap-2">
               Explore
-              <span className="absolute -bottom-1 left-0 w-1/2 h-[2px] bg-ink/20 rounded-full"></span>
+              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block"></span>
             </h3>
-            <div className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2.5 p-0 m-0 list-none">
               {footerLinks.explore.map((link) => (
-                <Link 
-                  key={link.href} 
-                  href={link.href} 
-                  className="text-[15px] text-ink/75 font-medium w-fit no-underline py-1 transition-all duration-200 hover:text-ink hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
-                >
-                  {link.label}
-                </Link>
+                <li key={link.href}>
+                  <Link 
+                    href={link.href} 
+                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
+                  >
+                    <span>{link.label}</span>
+                    <FiArrowUpRight size={14} className="opacity-0 -translate-x-1 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0" />
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
 
-          {/* Company Links */}
-          <motion.div variants={itemVariants}>
-            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-ink mb-5 relative inline-block">
+          {/* Company Links Column (Spans 4 cols) */}
+          <motion.div variants={itemVariants} className="lg:col-span-4">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ink/90 mb-5 flex items-center gap-2">
               Company
-              <span className="absolute -bottom-1 left-0 w-1/2 h-[2px] bg-ink/20 rounded-full"></span>
+              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block"></span>
             </h3>
-            <div className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2.5 p-0 m-0 list-none">
               {footerLinks.company.map((link) => (
-                <Link 
-                  key={link.href} 
-                  href={link.href} 
-                  className="text-[15px] text-ink/75 font-medium w-fit no-underline py-1 transition-all duration-200 hover:text-ink hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
-                >
-                  {link.label}
-                </Link>
+                <li key={link.href}>
+                  <Link 
+                    href={link.href} 
+                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
+                  >
+                    <span>{link.label}</span>
+                    <FiArrowUpRight size={14} className="opacity-0 -translate-x-1 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0" />
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
 
         </div>
       </motion.div>
 
-      {/* Bottom Legal Bar */}
+      {/* Bottom Legal & Social Bar */}
       <motion.div 
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.8, duration: 0.8 }}
-        className="container-xl mx-auto px-4 md:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-5 py-6 border-t border-ink/10"
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="border-t border-black/10 bg-black/5 backdrop-blur-xs relative z-10"
       >
-        <p className="text-[14px] text-ink/70 m-0 text-center sm:text-left">
-          &copy; {new Date().getFullYear()} jobNG. All rights reserved.
-        </p>
-        
-        {/* Social Icons Strip */}
-        <div className="flex items-center gap-3">
-          {socials.map(({ icon: Icon, href, label }) => (
-            <a 
-              key={label} 
-              href={href} 
-              aria-label={label} 
-              target="_blank"            
-              rel="noopener noreferrer" 
-              className="w-10 h-10 rounded-full flex items-center justify-center bg-ink/5 text-ink/75 transition-all duration-300 hover:bg-ink hover:text-white hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50"
-            >
-              <Icon size={16} />
-            </a>
-          ))}
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs sm:text-sm text-ink/80 m-0 text-center sm:text-left font-medium">
+            &copy; {year ?? "2026"} jobNG. All rights reserved.
+          </p>
+          
+          {/* Social Links */}
+          <div className="flex items-center gap-2.5">
+            {socials.map(({ icon: Icon, href, label }) => (
+              <a 
+                key={label} 
+                href={href} 
+                aria-label={label} 
+                target="_blank"             
+                rel="noopener noreferrer" 
+                className="w-9 h-9 rounded-xl flex items-center justify-center bg-white/10 text-ink/90 border border-white/20 transition-all duration-300 hover:bg-[#055A2B] hover:text-white hover:border-[#055A2B] hover:-translate-y-1 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50"
+              >
+                <Icon size={16} />
+              </a>
+            ))}
+          </div>
         </div>
       </motion.div>
+
     </footer>
   );
 }

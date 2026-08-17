@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { FiSearch, FiGrid, FiX, FiList, FiSquare, FiLogIn, FiRefreshCw } from "react-icons/fi";
 import JobCard from "@/components/shared/JobCard";
@@ -11,8 +11,14 @@ import PageLoader from "@/components/shared/PageLoader";
 import { authHeaders } from "@/lib/auth-client";
 import { Apijustjob } from "@/lib/jobApi";
 
+const CATEGORY_OPTIONS = ["Remote", "On-site", "Hybrid", "Full-time", "Part-time"];
+const PAGE_SIZE = 20;
+
 function JobsContent() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const [keyword, setKeyword] = useState(searchParams.get("q") ?? "");
   const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);
   const [category, setCategory] = useState(searchParams.get("category") ?? "");
@@ -24,7 +30,16 @@ function JobsContent() {
   const [needsAuth, setNeedsAuth] = useState(false);
   const [page, setPage] = useState(1);
 
-  // Debounce search input to avoid spamming the API on every keystroke
+  // Keep state in sync if search params change externally (e.g. browser back/forward buttons)
+  useEffect(() => {
+    const qParam = searchParams.get("q") ?? "";
+    const catParam = searchParams.get("category") ?? "";
+    setKeyword(qParam);
+    setDebouncedKeyword(qParam);
+    setCategory(catParam);
+  }, [searchParams]);
+
+  // Debounce search input updates
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedKeyword(keyword.trim());
@@ -33,7 +48,19 @@ function JobsContent() {
     return () => clearTimeout(timer);
   }, [keyword]);
 
-  const fetchJobs = useCallback(async () => {
+  // Synchronize state back into the browser URL without triggering full page refreshes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (debouncedKeyword) params.set("q", debouncedKeyword);
+    if (category) params.set("category", category);
+
+    const queryString = params.toString();
+    const targetUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+    router.replace(targetUrl, { scroll: false });
+  }, [debouncedKeyword, category, pathname, router]);
+
+  const fetchJobs = useCallback(async (signal: AbortSignal) => {
     setLoading(true);
     setError("");
     setNeedsAuth(false);
@@ -42,9 +69,12 @@ function JobsContent() {
       if (debouncedKeyword) qs.set("search", debouncedKeyword);
       if (category) qs.set("category", category);
       qs.set("page", String(page));
-      qs.set("page_size", "20");
+      qs.set("page_size", String(PAGE_SIZE));
 
-      const res = await fetch(`/api/jobs?${qs.toString()}`, { headers: authHeaders() });
+      const res = await fetch(`/api/jobs?${qs.toString()}`, {
+        headers: authHeaders(),
+        signal,
+      });
       const data = await res.json();
 
       if (res.status === 401 || data.requiresAuth) {
@@ -63,7 +93,8 @@ function JobsContent() {
 
       setJobs(data.items ?? []);
       setTotal(data.count ?? 0);
-    } catch {
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
       setError("Network error occurred. Please check your connection and try again.");
     } finally {
       setLoading(false);
@@ -71,7 +102,9 @@ function JobsContent() {
   }, [debouncedKeyword, category, page]);
 
   useEffect(() => {
-    fetchJobs();
+    const controller = new AbortController();
+    fetchJobs(controller.signal);
+    return () => controller.abort();
   }, [fetchJobs]);
 
   const resetFilters = () => {
@@ -80,7 +113,7 @@ function JobsContent() {
     setPage(1);
   };
 
-  const CATEGORY_OPTIONS = ["Remote", "On-site", "Hybrid", "Full-time", "Part-time"];
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div className="jj-jobs-page">
@@ -106,6 +139,7 @@ function JobsContent() {
                 placeholder="Job title, company, or keywords..."
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                aria-label="Search job title or keywords"
                 style={{
                   flex: 1,
                   border: "none",
@@ -132,6 +166,7 @@ function JobsContent() {
               <FiGrid size={14} style={{ color: "var(--gold-hover)", flexShrink: 0 }} />
               <select
                 title="Filter by category"
+                aria-label="Filter jobs by category"
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
@@ -217,7 +252,7 @@ function JobsContent() {
             <p style={{ color: "#ef4444", fontWeight: 600, marginBottom: 16 }}>{error}</p>
             <button
               type="button"
-              onClick={fetchJobs}
+              onClick={() => fetchJobs(new AbortController().signal)}
               className="jj-btn jj-btn--gold"
               style={{ padding: "10px 24px", display: "inline-flex", alignItems: "center", gap: 8 }}
             >
@@ -241,6 +276,7 @@ function JobsContent() {
                   <button
                     key={mode}
                     type="button"
+                    aria-label={`Switch to ${mode} view`}
                     onClick={() => setViewMode(mode)}
                     style={{
                       padding: "6px 10px",
@@ -287,7 +323,7 @@ function JobsContent() {
               </div>
             )}
 
-            {total > jobs.length && (
+            {totalPages > 1 && (
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginTop: 32 }}>
                 <button
                   type="button"
@@ -298,13 +334,15 @@ function JobsContent() {
                 >
                   Previous
                 </button>
-                <span style={{ fontSize: "0.875rem", color: "var(--text-muted)", fontWeight: 600 }}>Page {page}</span>
+                <span style={{ fontSize: "0.875rem", color: "var(--text-muted)", fontWeight: 600 }}>
+                  Page {page} of {totalPages}
+                </span>
                 <button
                   type="button"
-                  disabled={jobs.length < 20}
-                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   className="jj-btn jj-btn--ghost"
-                  style={{ padding: "8px 18px", opacity: jobs.length < 20 ? 0.4 : 1 }}
+                  style={{ padding: "8px 18px", opacity: page >= totalPages ? 0.4 : 1 }}
                 >
                   Next
                 </button>

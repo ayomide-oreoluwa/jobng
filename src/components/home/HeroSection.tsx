@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+import { FaWandMagicSparkles } from "react-icons/fa6";
+import { authHeaders } from "@/lib/auth-client";
 
-const fadeUp = (delay = 0) => ({
+const fadeUp = (delay = 0): Variants => ({
   hidden: { opacity: 0, y: 24 },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.6, 
-      // Use a string for cubic-bezier to satisfy the TypeScript Easing type
-      ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number], 
-      delay 
-    } 
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.215, 0.61, 0.355, 1] as const,
+      delay,
+    },
   },
 });
 
@@ -24,12 +26,25 @@ const popularTags = ["Engineering", "Finance", "Marketing", "Healthcare", "Remot
 export default function HeroSection() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    // Check auth client-side after hydration to avoid SSR mismatch
+    const headers = authHeaders();
+    setIsLoggedIn(Boolean(headers && Object.keys(headers).length > 0));
+  }, []);
+
+  const handleSearch = (e?: React.FormEvent, searchKeyword?: string) => {
+    if (e) e.preventDefault();
+    const query = searchKeyword !== undefined ? searchKeyword : keyword;
     const params = new URLSearchParams();
-    if (keyword) params.set("q", keyword);
+    if (query.trim()) params.set("q", query.trim());
     router.push(`/jobs?${params.toString()}`);
+  };
+
+  const handleTagClick = (tag: string) => {
+    setKeyword(tag);
+    handleSearch(undefined, tag);
   };
 
   return (
@@ -53,78 +68,101 @@ export default function HeroSection() {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 3 }}
       />
 
-      {/* Hero Interactive Main Window Wrapper */}
+      {/* Hero Content Wrapper */}
       <div className="relative z-10 w-full max-w-[760px] mx-auto text-center">
-        {/* Dynamic Typography Main Banner Headers */}
+        
+        {/* Prep Interview Callout Pill */}
+        {isLoggedIn && (
+          <motion.div 
+            variants={fadeUp(0.05)} 
+            initial="hidden" 
+            animate="show" 
+            className="mb-5 inline-block"
+          >
+            <Link
+              href="/prep-interview/practice"
+              className="group inline-flex items-center gap-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md px-4 py-2 text-xs sm:text-sm font-semibold text-white border border-white/30 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span className="flex items-center justify-center p-1 rounded-full bg-[#0A0F1C]/20 text-[#0A0F1C]">
+                <FaWandMagicSparkles className="text-yellow-300 w-3.5 h-3.5" />
+              </span>
+              <span>Ace Your Next Interview with <strong className="underline underline-offset-2 decoration-[#0A0F1C]">Prep Interview</strong></span>
+              <FiArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
+        )}
+
+        {/* Header Banner */}
         <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A0F1C] leading-[1.1] mb-5">
           Your next Job<br />
           <span className="text-white drop-shadow-[0_2px_20px_rgba(120,53,15,0.25)]">starts here.</span>
         </motion.h1>
 
-        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-[#ffffff] max-w-[480px] mx-auto mb-10">
+        <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-white max-w-[480px] mx-auto mb-10">
           Discover opportunities across Nigeria. Subscribe via <strong className="text-[#055A2B] font-extrabold">*7098#</strong> then browse and apply in seconds.
         </motion.p>
 
-        {/* Global Input Search Parameter Target Control Container */}
+        {/* Search Input Form */}
         <motion.form 
           variants={fadeUp(0.3)} initial="hidden" animate="show" 
           onSubmit={handleSearch} 
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-[580px] mx-auto p-2 sm:p-2 sm:pl-4.5 bg-white rounded-2xl shadow-[0_24px_70px_rgba(120,53,15,0.28)] mb-6"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-[580px] mx-auto p-2 sm:pl-4 bg-white rounded-2xl shadow-[0_24px_70px_rgba(120,53,15,0.28)] mb-6"
         >
           <div className="flex items-center gap-2.5 flex-1 py-2 sm:py-0 px-2 sm:px-0">
-            <FiSearch size={18} className="text-[var(--gold-hover)] shrink-0" />
+            <FiSearch size={18} className="text-emerald-600 shrink-0" />
             <input
               type="text"
               placeholder="Search job title or company..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="w-full bg-transparent border-none outline-none text-sm text-[var(--ink)] placeholder-[var(--text-faint)] min-w-0 font-medium"
+              aria-label="Search job title or company"
+              className="w-full bg-transparent border-none outline-none text-sm text-slate-900 placeholder-slate-400 min-w-0 font-medium"
             />
           </div>
           <motion.button 
             whileHover={{ scale: 1.02 }} 
             whileTap={{ scale: 0.98 }} 
             type="submit" 
-            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] text-[#ffffff] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3 px-5.5 whitespace-nowrap"
+            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[#00A651] to-[#00863F] hover:from-[#00863F] hover:to-[#055A2B] text-white rounded-xl py-3 px-6 whitespace-nowrap shadow-md transition-all"
           >
             Find Jobs <FiArrowRight size={16} />
           </motion.button>
         </motion.form>
 
-        {/* Popular Tags Segment Link Elements */}
+        {/* Popular Tags */}
         <motion.div variants={fadeUp(0.42)} initial="hidden" animate="show" className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          <span className="text-xs font-semibold text-[rgba(10,15,28,0.5)]">Popular:</span>
+          <span className="text-xs font-semibold text-[#0A0F1C]/60">Popular:</span>
           {popularTags.map((tag) => (
             <button 
               key={tag} 
               type="button" 
-              onClick={() => setKeyword(tag)} 
-              className="bg-white/55 border border-[rgba(10,15,28,0.12)] text-[rgba(10,15,28,0.75)] rounded-full px-3.5 py-1 text-xs font-semibold transition-colors duration-200 hover:bg-[#0A0F1C] hover:border-[#0A0F1C] hover:text-[#8DC63F]"
+              onClick={() => handleTagClick(tag)} 
+              className="bg-white/60 border border-[#0A0F1C]/10 text-[#0A0F1C]/80 rounded-full px-3.5 py-1 text-xs font-semibold transition-all duration-200 hover:bg-[#0A0F1C] hover:border-[#0A0F1C] hover:text-[#8DC63F]"
             >
               {tag}
             </button>
           ))}
         </motion.div>
 
-        {/* Metrics/Stats Cluster Block */}
-        <motion.div variants={fadeUp(0.52)} initial="hidden" animate="show" className="flex flex-wrap justify-center gap-10 border-t border-[rgba(10,15,28,0.14)] pt-8">
+        {/* Metrics/Stats Cluster */}
+        <motion.div variants={fadeUp(0.52)} initial="hidden" animate="show" className="flex flex-wrap justify-center gap-10 border-t border-[#0A0F1C]/15 pt-8">
           {[
             { value: "300+", label: "Live listings" },
             { value: "*7098#", label: "Subscribe via USSD" },
             { value: "24/7", label: "Always available" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col items-center gap-1">
-              <span className="font-display text-xl font-extrabold text-[#ffffff]">{s.value}</span>
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-[#ffffff]">{s.label}</span>
+              <span className="text-xl font-extrabold text-white">{s.value}</span>
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-white/90">{s.label}</span>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Absolute Layer Page Context Cutout Wave */}
-      <div className="absolute bottom-0 left-0 right-0 line-height-0 pointer-events-none" aria-hidden>
+      {/* Wave Section Separator */}
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden>
         <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none" className="block w-full h-20">
-          <path d="M0 80H1440V30C1200 80 900 10 720 10C540 10 240 80 0 30V80Z" fill="var(--surface)" />
+          <path d="M0 80H1440V30C1200 80 900 10 720 10C540 10 240 80 0 30V80Z" className="fill-slate-50" />
         </svg>
       </div>
     </section>

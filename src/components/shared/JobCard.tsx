@@ -3,13 +3,14 @@ import { FiBriefcase, FiCalendar, FiExternalLink, FiArrowUpRight } from "react-i
 import { stripHtml } from "@/lib/html";
 import { Apijustjob } from "@/lib/jobApi";
 
-// Known valid work-type values — anything outside this set (e.g. stray
-// placeholder strings like "feature" from the backend) is treated as unset.
 const VALID_WORK_TYPES = ["Remote", "On-site", "Hybrid", "Full-time", "Part-time"];
 
-function formatDate(iso: string) {
+function formatDate(iso?: string | null) {
+  if (!iso) return "";
   try {
-    return new Date(iso).toLocaleDateString("en-NG", {
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return iso;
+    return date.toLocaleDateString("en-NG", {
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -19,11 +20,11 @@ function formatDate(iso: string) {
   }
 }
 
-function companyInitial(name: string) {
-  return name.trim().charAt(0).toUpperCase() || "J";
+function companyInitial(name?: string | null) {
+  return name?.trim().charAt(0).toUpperCase() || "J";
 }
 
-function resolveWorkType(category: string | null): string {
+function resolveWorkType(category?: string | null): string {
   if (!category) return "Not specified";
   const match = VALID_WORK_TYPES.find(
     (type) => type.toLowerCase() === category.trim().toLowerCase()
@@ -38,10 +39,11 @@ interface JobCardProps {
 
 export default function JobCard({ job, variant = "list" }: JobCardProps) {
   const title = job.job_title ?? "Untitled Job";
+  const company = job.company_name ?? "Unknown Company";
   const workType = resolveWorkType(job.category);
-  const plainDescription = stripHtml(job.description);
+  const plainDescription = stripHtml(job.description ?? "");
   const avatar = (
-    <div className="jj-job-card__avatar">{companyInitial(job.company_name)}</div>
+    <div className="jj-job-card__avatar">{companyInitial(company)}</div>
   );
 
   if (variant === "grid") {
@@ -53,7 +55,7 @@ export default function JobCard({ job, variant = "list" }: JobCardProps) {
             <Link href={`/jobs/${job.job_id}`} className="jj-job-card__title">
               {title}
             </Link>
-            <p className="jj-job-card__company">{job.company_name}</p>
+            <p className="jj-job-card__company">{company}</p>
           </div>
         </div>
         <div className="jj-job-card__meta">
@@ -77,7 +79,7 @@ export default function JobCard({ job, variant = "list" }: JobCardProps) {
         <Link href={`/jobs/${job.job_id}`} className="jj-job-card__title jj-job-card__title--lg">
           {title}
         </Link>
-        <p className="jj-job-card__company">{job.company_name}</p>
+        <p className="jj-job-card__company">{company}</p>
         <div className="jj-job-card__meta">
           <span className="jj-pill"><FiBriefcase size={10} /> {workType}</span>
           <span className="jj-job-card__date"><FiCalendar size={11} /> {formatDate(job.created_at)}</span>
