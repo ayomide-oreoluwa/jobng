@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-
 import { JOB_ROLES } from '@/data/interviewData';
-import { InterviewConfig, JobRole, DifficultyLevel, TimerOption } from '@/types/interview';
-import { FiBriefcase, FiSliders, FiTimer, FiHelpCircle, FiArrowRight } from 'react-icons/fi';
-import { FiClock } from 'react-icons/fi';
+import { InterviewConfig, JobRole, DifficultyLevel } from '@/types/interview';
+import { FiBriefcase, FiSliders, FiHelpCircle, FiArrowRight, FiCheckCircle } from 'react-icons/fi';
 
 interface InterviewSetupProps {
   onStartSession: (config: InterviewConfig) => void;
@@ -14,143 +12,155 @@ interface InterviewSetupProps {
 export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }) => {
   const [selectedRole, setSelectedRole] = useState<JobRole>('frontend');
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('medium');
-  const [timer, setTimer] = useState<TimerOption>(120);
-  const [questionCount, setQuestionCount] = useState<number>(20);
+  const [questionCount, setQuestionCount] = useState<number>(10);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onStartSession({
       jobRole: selectedRole,
       difficulty,
-      timerPerQuestion: timer,
       questionCount,
     });
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white border border-[#0F172A]/10 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(10,15,28,0.08)]">
-      {/* Header */}
-      <div className="mb-8 text-center space-y-2">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A0F1C] tracking-tight">
-          Configure Your <span className="text-[#00A651]">Mock Interview</span>
-        </h2>
-        <p className="text-xs sm:text-sm text-[#64748B]">
-          Choose target job, difficulty bar, per-question timer, and target question count.
-        </p>
+    <div className="font-['Lato',sans-serif] max-w-6xl mx-auto pb-24 sm:pb-6">
+      {/* Container Card */}
+      <div className="bg-white border border-[#0F172A]/10 rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(10,15,28,0.06)] space-y-6">
+        
+        {/* Header with Powered By attribution */}
+        <div className="text-center space-y-2 relative pb-2 border-b border-[#0F172A]/10">
+          <div className="inline-block px-3 py-1 bg-[#00A651]/10 border border-[#00A651]/20 rounded-full text-[11px] font-bold text-[#00863F] uppercase tracking-wider mb-1">
+            Powered by Meaknadex Academy
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#0A0F1C] tracking-tight">
+            Configure Your <span className="text-[#00A651]">Mock Interview</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-[#64748B] max-w-xl mx-auto">
+            Select target job role, difficulty, and question count. Timer is standard 60 seconds per question.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* 1. Target Job Role - 1 col mobile, 2 sm, 3 md, 4 desktop */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
+                <FiBriefcase className="w-4 h-4" /> 1. Select Target Job Role
+              </label>
+              <span className="text-[11px] text-[#64748B] font-medium">8 Career Tracks Available</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {JOB_ROLES.map((role) => {
+                const isSelected = selectedRole === role.id;
+                return (
+                  <button
+                    type="button"
+                    key={role.id}
+                    onClick={() => setSelectedRole(role.id)}
+                    className={`p-3.5 rounded-2xl text-left border transition-all flex flex-col justify-between relative ${
+                      isSelected
+                        ? 'bg-[#00A651]/10 border-[#00A651] text-[#0A0F1C] shadow-[0_4px_16px_rgba(0,166,81,0.15)] ring-2 ring-[#00A651]'
+                        : 'bg-[#F8F9FA] border-[#0F172A]/10 text-[#64748B] hover:border-[#00A651]/40'
+                    }`}
+                  >
+                    {isSelected && (
+                      <FiCheckCircle className="absolute top-3 right-3 w-4 h-4 text-[#00A651]" />
+                    )}
+                    <div>
+                      <div className="font-bold text-sm text-[#0A0F1C] pr-4">{role.label}</div>
+                      <div className="text-[11px] text-[#64748B] mt-1 line-clamp-1">
+                        {role.categories.join(' • ')}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2 & 3 Row Grid: Difficulty and Question Slider */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#F8F9FA] p-5 rounded-2xl border border-[#0F172A]/10">
+            
+            {/* Difficulty Level (Easy & Medium only) */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
+                <FiSliders className="w-4 h-4" /> 2. Difficulty Level
+              </label>
+              <div className="grid grid-cols-2 gap-2 bg-white p-1 rounded-xl border border-[#0F172A]/10">
+                {(['easy', 'medium'] as DifficultyLevel[]).map((level) => (
+                  <button
+                    type="button"
+                    key={level}
+                    onClick={() => setDifficulty(level)}
+                    className={`py-2.5 rounded-lg text-xs font-bold capitalize transition-all ${
+                      difficulty === level
+                        ? 'bg-[#00A651] text-white shadow-sm'
+                        : 'text-[#64748B] hover:text-[#0A0F1C]'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Question Count Slider (Min 5, Max 25) */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
+                  <FiHelpCircle className="w-4 h-4" /> 3. Number of Questions
+                </label>
+                <span className="text-xs font-bold text-[#00863F] bg-[#00A651]/15 px-3 py-0.5 rounded-full border border-[#00A651]/20">
+                  {questionCount} Questions (60s / question)
+                </span>
+              </div>
+              <input
+                type="range"
+                min={5}
+                max={25}
+                step={5}
+                value={questionCount}
+                onChange={(e) => setQuestionCount(Number(e.target.value))}
+                className="w-full accent-[#00A651] bg-white h-2 rounded-lg cursor-pointer border border-[#0F172A]/10"
+              />
+              <div className="flex justify-between text-[11px] text-[#64748B] font-medium">
+                <span>Minimum: 5</span>
+                <span>Maximum: 25</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Submit Button */}
+          <button
+            type="submit"
+            className="hidden sm:flex w-full py-4 rounded-2xl bg-[#00A651] hover:bg-[#00863F] text-white font-bold text-sm items-center justify-center gap-2 shadow-[0_8px_25px_rgba(0,166,81,0.25)] transition-all active:scale-[0.99]"
+          >
+            <span>Start Practice Interview</span>
+            <FiArrowRight className="w-5 h-5" />
+          </button>
+        </form>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 1. Target Job Role */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
-            <FiBriefcase className="w-4 h-4" /> 1. Select Target Job Role
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {JOB_ROLES.map((role) => (
-              <button
-                type="button"
-                key={role.id}
-                onClick={() => setSelectedRole(role.id)}
-                className={`p-4 rounded-2xl text-left border transition-all ${
-                  selectedRole === role.id
-                    ? 'bg-[#00A651]/10 border-[#00A651] text-[#0A0F1C] shadow-[0_4px_20px_rgba(0,166,81,0.15)] ring-1 ring-[#00A651]'
-                    : 'bg-[#F5F4F0] border-[#0F172A]/10 text-[#64748B] hover:border-[#0F172A]/20'
-                }`}
-              >
-                <div className="font-bold text-sm text-[#0A0F1C]">{role.label}</div>
-                <div className="text-[11px] text-[#64748B] mt-1 truncate">
-                  {role.categories.join(' → ')}
-                </div>
-              </button>
-            ))}
+      {/* Mobile Sticky Bar so users don't have to scroll down to find the button */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#0F172A]/10 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-50">
+        <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+          <div className="text-left">
+            <span className="text-xs font-bold text-[#0A0F1C] block capitalize">{selectedRole}</span>
+            <span className="text-[10px] text-[#64748B]">{questionCount} Qs • {difficulty}</span>
           </div>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="px-6 py-3 rounded-xl bg-[#00A651] active:bg-[#00863F] text-white font-bold text-xs flex items-center gap-2 shadow-md"
+          >
+            <span>Start Now</span>
+            <FiArrowRight className="w-4 h-4" />
+          </button>
         </div>
-
-        {/* 2. Difficulty Level Selector Bar */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
-            <FiSliders className="w-4 h-4" /> 2. Difficulty Level Bar
-          </label>
-          <div className="grid grid-cols-3 gap-2 bg-[#F5F4F0] p-1.5 rounded-2xl border border-[#0F172A]/10">
-            {(['easy', 'medium', 'hard'] as DifficultyLevel[]).map((level) => (
-              <button
-                type="button"
-                key={level}
-                onClick={() => setDifficulty(level)}
-                className={`py-2.5 rounded-xl text-xs font-bold capitalize transition-all ${
-                  difficulty === level
-                    ? 'bg-gradient-to-r from-[#8DC63F] to-[#00A651] text-white shadow-md'
-                    : 'text-[#64748B] hover:text-[#0A0F1C]'
-                }`}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 3. Per Question Timer */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
-            <FiClock className="w-4 h-4" /> 3. Per Question Timer
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { label: '60s', value: 60 },
-              { label: '2 mins', value: 120 },
-              { label: '3 mins', value: 180 },
-              { label: 'Untimed', value: 0 },
-            ].map((opt) => (
-              <button
-                type="button"
-                key={opt.value}
-                onClick={() => setTimer(opt.value as TimerOption)}
-                className={`py-2.5 rounded-xl text-xs font-bold border transition-all ${
-                  timer === opt.value
-                    ? 'bg-[#00A651]/10 border-[#00A651] text-[#00863F]'
-                    : 'bg-[#F5F4F0] border-[#0F172A]/10 text-[#64748B] hover:border-[#0F172A]/20'
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 4. Question Count Slider */}
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <label className="flex items-center gap-2 text-xs font-bold text-[#00A651] uppercase tracking-wider">
-              <FiHelpCircle className="w-4 h-4" /> 4. Number of Questions
-            </label>
-            <span className="text-xs font-bold text-[#00863F] bg-[#00A651]/15 px-3 py-1 rounded-full border border-[#00A651]/20">
-              {questionCount} Questions
-            </span>
-          </div>
-          <input
-            type="range"
-            min={20}
-            max={60}
-            step={5}
-            value={questionCount}
-            onChange={(e) => setQuestionCount(Number(e.target.value))}
-            className="w-full accent-[#00A651] bg-[#F5F4F0] h-2 rounded-lg cursor-pointer border border-[#0F172A]/10"
-          />
-          <div className="flex justify-between text-[11px] text-[#64748B] font-medium">
-            <span>Minimum: 20</span>
-            <span>Maximum: 60</span>
-          </div>
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#8DC63F] via-[#00A651] to-[#00863F] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_32px_rgba(0,166,81,0.25)] hover:shadow-[0_12px_40px_rgba(0,166,81,0.35)] transition-all active:scale-[0.99]"
-        >
-          <span>Start Interview Practice</span>
-          <FiArrowRight className="w-5 h-5" />
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

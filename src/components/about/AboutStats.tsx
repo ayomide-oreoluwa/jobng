@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import CountUp from "../shared/CountUp";
 import { authHeaders } from "@/lib/auth-client";
 
-// Hardcoded fallback count when the user is not logged in or on fetch error
 const HARDCODED_FALLBACK_COUNT = 5000;
 
 const fetchJobsCount = async (): Promise<number> => {
@@ -13,12 +12,11 @@ const fetchJobsCount = async (): Promise<number> => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        ...authHeaders(), // Sends Bearer token if logged in
+        ...authHeaders(),
       },
       cache: "no-store",
     });
 
-    // If 401 Unauthorized or any non-OK status, return hardcoded fallback gracefully
     if (res.status === 401 || !res.ok) {
       return HARDCODED_FALLBACK_COUNT;
     }
@@ -28,7 +26,6 @@ const fetchJobsCount = async (): Promise<number> => {
       ? data.count
       : HARDCODED_FALLBACK_COUNT;
   } catch {
-    // Network or server error -> fallback gracefully
     return HARDCODED_FALLBACK_COUNT;
   }
 };
@@ -54,9 +51,9 @@ export default function AboutStats() {
     <div className="flex flex-col items-center justify-center p-2 text-center">
       <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-1 min-h-[44px] flex items-center justify-center">
         {targetCount === null ? (
-          <span className="inline-block w-20 h-8 rounded-lg bg-slate-200/80 animate-pulse" />
+          <span className="inline-block w-20 h-8 rounded-lg bg-emerald-100/60 animate-pulse" />
         ) : (
-          <CountUp target={targetCount} suffix="+" className="inline" />
+          <CountUp target={targetCount} suffix="+" className="inline text-[#00A651]" />
         )}
       </div>
       <div className="text-slate-500 text-xs sm:text-sm font-extrabold uppercase tracking-widest">
