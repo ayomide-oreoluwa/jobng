@@ -42,54 +42,104 @@ export default function JobCard({ job, variant = "list" }: JobCardProps) {
   const company = job.company_name ?? "Unknown Company";
   const workType = resolveWorkType(job.category);
   const plainDescription = stripHtml(job.description ?? "");
+
   const avatar = (
-    <div className="jj-job-card__avatar">{companyInitial(company)}</div>
+    <div className="jj-job-card__avatar w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-emerald-100 text-[#00A651] font-bold text-lg flex items-center justify-center shrink-0">
+      {companyInitial(company)}
+    </div>
   );
 
   if (variant === "grid") {
     return (
-      <div className="job-card jj-job-card jj-job-card--grid">
-        <div className="jj-job-card__top">
-          {avatar}
-          <div className="jj-job-card__info">
-            <Link href={`/jobs/${job.job_id}`} className="jj-job-card__title">
-              {title}
-            </Link>
-            <p className="jj-job-card__company">{company}</p>
+      <div className="job-card jj-job-card jj-job-card--grid bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 flex flex-col justify-between hover:shadow-md transition-shadow h-full">
+        <div>
+          <div className="jj-job-card__top flex items-start gap-3 mb-3">
+            {avatar}
+            <div className="jj-job-card__info min-w-0 flex-1">
+              <Link
+                href={`/jobs/${job.job_id}`}
+                className="jj-job-card__title font-bold text-gray-900 hover:text-[#00A651] text-base line-clamp-2 transition-colors"
+              >
+                {title}
+              </Link>
+              <p className="jj-job-card__company text-xs sm:text-sm text-gray-500 truncate mt-0.5">
+                {company}
+              </p>
+            </div>
           </div>
+
+          <div className="jj-job-card__meta flex flex-wrap items-center gap-2 text-xs text-gray-500 mb-3">
+            <span className="jj-pill inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-[#00A651] font-medium">
+              <FiBriefcase size={12} /> {workType}
+            </span>
+            <span className="jj-job-card__date inline-flex items-center gap-1 text-gray-400">
+              <FiCalendar size={12} /> {formatDate(job.created_at)}
+            </span>
+          </div>
+
+          {plainDescription && (
+            <p className="jj-job-card__excerpt text-xs sm:text-sm text-gray-600 line-clamp-3 mb-4 leading-relaxed">
+              {plainDescription}
+            </p>
+          )}
         </div>
-        <div className="jj-job-card__meta">
-          <span className="jj-pill"><FiBriefcase size={10} /> {workType}</span>
-          <span className="jj-job-card__date"><FiCalendar size={11} /> {formatDate(job.created_at)}</span>
-        </div>
-        {plainDescription && (
-          <p className="jj-job-card__excerpt">{plainDescription}</p>
-        )}
-        <Link href={`/jobs/${job.job_id}`} className="jj-job-card__cta">
-          View Job <FiArrowUpRight size={13} />
+
+        <Link
+          href={`/jobs/${job.job_id}`}
+          className="jj-job-card__cta inline-flex items-center justify-between w-full pt-3 border-t border-gray-100 text-sm font-semibold text-[#00A651] hover:text-[#00863F] transition-colors mt-auto"
+        >
+          <span>View Job</span>
+          <FiArrowUpRight size={16} />
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="job-card jj-job-card jj-job-card--list">
-      {avatar}
-      <div className="jj-job-card__body">
-        <Link href={`/jobs/${job.job_id}`} className="jj-job-card__title jj-job-card__title--lg">
+    <div className="job-card jj-job-card jj-job-card--list bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4 hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-3 w-full sm:w-auto">
+        {avatar}
+        <div className="sm:hidden flex-1 min-w-0">
+          <Link
+            href={`/jobs/${job.job_id}`}
+            className="jj-job-card__title font-bold text-gray-900 hover:text-[#00A651] text-base line-clamp-2"
+          >
+            {title}
+          </Link>
+          <p className="jj-job-card__company text-xs text-gray-500 truncate">{company}</p>
+        </div>
+      </div>
+
+      <div className="jj-job-card__body flex-1 min-w-0 w-full">
+        <Link
+          href={`/jobs/${job.job_id}`}
+          className="jj-job-card__title jj-job-card__title--lg hidden sm:block font-bold text-gray-900 hover:text-[#00A651] text-lg transition-colors"
+        >
           {title}
         </Link>
-        <p className="jj-job-card__company">{company}</p>
-        <div className="jj-job-card__meta">
-          <span className="jj-pill"><FiBriefcase size={10} /> {workType}</span>
-          <span className="jj-job-card__date"><FiCalendar size={11} /> {formatDate(job.created_at)}</span>
+        <p className="jj-job-card__company hidden sm:block text-sm text-gray-500 mt-0.5">{company}</p>
+
+        <div className="jj-job-card__meta flex flex-wrap items-center gap-2 text-xs text-gray-500 my-2">
+          <span className="jj-pill inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-[#00A651] font-medium">
+            <FiBriefcase size={12} /> {workType}
+          </span>
+          <span className="jj-job-card__date inline-flex items-center gap-1 text-gray-400">
+            <FiCalendar size={12} /> {formatDate(job.created_at)}
+          </span>
         </div>
+
         {plainDescription && (
-          <p className="jj-job-card__excerpt jj-job-card__excerpt--list">{plainDescription}</p>
+          <p className="jj-job-card__excerpt jj-job-card__excerpt--list text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed">
+            {plainDescription}
+          </p>
         )}
       </div>
-      <div className="jj-job-card__actions">
-        <Link href={`/jobs/${job.job_id}`} className="jj-btn jj-btn--ghost" style={{ padding: "7px 16px", fontSize: "0.8125rem" }}>
+
+      <div className="jj-job-card__actions flex items-center sm:flex-col justify-between sm:justify-start w-full sm:w-auto gap-2 border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-100 shrink-0">
+        <Link
+          href={`/jobs/${job.job_id}`}
+          className="jj-btn jj-btn--ghost min-h-[38px] px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-lg border border-gray-200 text-center flex-1 sm:flex-initial transition-colors"
+        >
           View
         </Link>
         {job.job_url && (
@@ -97,9 +147,9 @@ export default function JobCard({ job, variant = "list" }: JobCardProps) {
             href={job.job_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="jj-job-card__apply"
+            className="jj-job-card__apply min-h-[38px] inline-flex items-center justify-center gap-1 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-[#00A651] hover:bg-[#00863F] rounded-lg flex-1 sm:flex-initial transition-colors"
           >
-            Apply <FiExternalLink size={11} />
+            Apply <FiExternalLink size={12} />
           </a>
         )}
       </div>

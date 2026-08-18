@@ -1,399 +1,339 @@
-import { Question, JobRole, DifficultyLevel } from '@/types/interview';
+import { JobRoleOption, Question } from '@/types/interview';
 
-export const JOB_ROLES: { id: JobRole; label: string; categories: string[] }[] = [
-  {
-    id: 'frontend',
-    label: 'Frontend Engineer',
-    categories: ['1. JavaScript Core', '2. React & Next.js', '3. APIs & Async Data', '4. Performance & CSS', '5. System Architecture']
-  },
-  {
-    id: 'backend',
-    label: 'Backend Engineer',
-    categories: ['1. Language Fundamentals', '2. Databases & ORM', '3. REST & GraphQL APIs', '4. Caching & Security', '5. Distributed Systems']
-  },
-  {
-    id: 'fullstack',
-    label: 'Full-Stack Engineer',
-    categories: ['1. Frontend Frameworks', '2. Server Runtimes', '3. Database Design', '4. Authentication & Security', '5. System Architecture']
-  },
-  {
-    id: 'mobile',
-    label: 'Mobile Application Developer',
-    categories: ['1. React Native Core', '2. State & Navigation', '3. Native Modules & APIs', '4. Memory & Performance', '5. App Publishing']
-  },
-  {
-    id: 'devops',
-    label: 'DevOps & Cloud Engineer',
-    categories: ['1. Linux & Scripting', '2. Containerization (Docker)', '3. Kubernetes & Orchestration', '4. CI/CD Pipelines', '5. Infrastructure as Code']
-  },
-  {
-    id: 'data-engineer',
-    label: 'Data Engineer',
-    categories: ['1. SQL & Data Modeling', '2. Python & Spark', '3. Data Pipelines & Streaming', '4. Data Warehousing', '5. Reliability & Governance']
-  },
-  {
-    id: 'product-manager',
-    label: 'Product Manager',
-    categories: ['1. Product Strategy & Vision', '2. User Research & Metrics', '3. Product Analytics', '4. Agile Execution & Backlog', '5. Stakeholder Management']
-  },
-  {
-    id: 'leadership',
-    label: 'Leadership',
-    categories: ['1. Team Dynamics & Coaching', '2. Strategic Alignment', '3. Conflict Resolution', '4. Talent Acquisition & Growth', '5. Change Management']
-  },
-  {
-    id: 'customer-service',
-    label: 'Customer Support Representative',
-    categories: ['1. Communication & De-escalation', '2. Product Knowledge', '3. Helpdesk Tools & Ticketing', '4. Customer Retention & CSAT', '5. Process Optimization']
-  },
-  {
-    id: 'finance-accounting',
-    label: 'Financial & Accounting Analyst',
-    categories: ['1. Financial Accounting & GAAP/IFRS', '2. Budgeting & Forecasting', '3. Financial Analysis & Valuation', '4. Taxation & Compliance', '5. Audit & Risk Control']
-  },
-  {
-    id: 'cybersecurity',
-    label: 'Cybersecurity Specialist',
-    categories: ['1. Network Security & Cryptography', '2. Identity & Access Management', '3. Vulnerability & Threat Assessment', '4. Incident Response & Forensics', '5. Governance & Compliance']
-  },
-  {
-    id: 'excel-expert',
-    label: 'Excel & Data Specialist',
-    categories: ['1. Advanced Formulas & Functions', '2. Dynamic Arrays & Lookups', '3. Power Query & Data Cleaning', '4. Pivot Tables & Data Modeling', '5. VBA, Macros & Automation']
-  },
-  {
-    id: 'data-analyst',
-    label: 'Data Analyst',
-    categories: ['1. Data Wrangling & SQL', '2. Exploratory Data Analysis (EDA)', '3. Business Intelligence & Dashboards', '4. Applied Statistics & Hypothesis Testing', '5. Metrics & Key Performance Indicators']
-  },
-  {
-    id: 'ui-ux-designer',
-    label: 'UI/UX Designer',
-    categories: ['1. User Research & Information Architecture', '2. Wireframing & Prototyping', '3. Design Systems & UI Components', '4. Usability Testing & Analytics', '5. Accessibility (WCAG) & Interaction Design']
-  },
-  {
-    id: 'project-manager',
-    label: 'Project Manager',
-    categories: ['1. Project Scoping & Planning', '2. Risk & Issue Management', '3. Agile & Waterfall Methodologies', '4. Budgeting & Resource Allocation', '5. Stakeholder Communication']
-  },
-  {
-    id: 'software-developer',
-    label: 'Software Developer',
-    categories: ['1. Data Structures & Algorithms', '2. Object-Oriented & Functional Design', '3. Code Refactoring & Testing', '4. Version Control & Git', '5. System Design Principles']
-  },
-  {
-    id: 'ai-engineer',
-    label: 'Artificial Intelligence Engineer',
-    categories: ['1. Machine Learning Fundamentals', '2. Deep Learning & Neural Networks', '3. Large Language Models & Prompting', '4. MLOps & Model Deployment', '5. Vector Databases & RAG']
-  },
-  {
-    id: 'internship-entry',
-    label: 'Entry Exam & Internship (Quant/Qual)',
-    categories: ['1. Quantitative Reasoning', '2. Logical & Verbal Reasoning', '3. Problem Solving & Aptitude', '4. Basic Computing Concepts', '5. Data Interpretation']
-  },
-  {
-    id: 'managerial',
-    label: 'Managerial & Executive',
-    categories: ['1. People Management & Delegation', '2. Operational Strategy & OKRs', '3. Performance Management', '4. Cross-Functional Coordination', '5. Crisis & Change Management']
-  },
-  {
-    id: 'digital-marketing',
-    label: 'Digital Marketer',
-    categories: ['1. Search Engine Optimization (SEO)', '2. Pay-Per-Click (PPC) & Paid Ads', '3. Content Marketing & Social Media', '4. Email Marketing & Automation', '5. Marketing Analytics & Attribution']
-  },
-  {
-    id: 'sales',
-    label: 'Sales & Business Development',
-    categories: ['1. Lead Generation & Qualification', '2. Discovery & Solution Pitching', '3. Objection Handling & Negotiation', '4. CRM & Pipeline Management', '5. Account Management & Closing']
-  }
+export const JOB_ROLES: JobRoleOption[] = [
+  { id: 'frontend', label: 'Frontend Developer', categories: ['React', 'TypeScript', 'CSS/HTML', 'Performance'] },
+  { id: 'backend', label: 'Backend Developer', categories: ['Node.js', 'Databases', 'APIs', 'Security'] },
+  { id: 'fullstack', label: 'Fullstack Engineer', categories: ['System Architecture', 'REST/GraphQL', 'DBs', 'DevOps'] },
+  { id: 'devops', label: 'DevOps & Cloud', categories: ['Docker', 'Kubernetes', 'CI/CD', 'AWS'] },
+  { id: 'mobile', label: 'Mobile Engineer', categories: ['React Native', 'Flutter', 'iOS/Android', 'State'] },
+  { id: 'data-science', label: 'Data Scientist', categories: ['Python', 'Machine Learning', 'SQL', 'Pandas'] },
+  { id: 'ui-ux', label: 'UI/UX Designer', categories: ['Wireframing', 'User Research', 'Figma', 'Prototyping'] },
+  { id: 'product-management', label: 'Product Manager', categories: ['Roadmapping', 'Agile', 'KPIs', 'User Stories'] },
 ];
 
+// Helper question bank with guaranteed unique IDs per role
 export const QUESTION_BANK: Question[] = [
-  // ==========================================
-  // FRONTEND ENGINEER
-  // ==========================================
+  // --- FRONTEND (12 Questions) ---
   {
-    id: 'fe-js-01',
+    id: 'fe-1',
     jobRole: 'frontend',
-    category: '1. JavaScript Core',
-    categoryOrder: 1,
+    category: 'React',
     difficulty: 'easy',
-    title: 'Event Loop Execution Order',
-    questionText: 'Which macro-task or micro-task executes first when the main call stack empties in JavaScript?',
-    options: ['setTimeout callback queue', 'Promise .then() microtask queue', 'setInterval callback queue', 'requestAnimationFrame callback'],
+    questionText: 'What is the primary purpose of React React.memo()?',
+    options: [
+      'To cache API call results in memory',
+      'To prevent unnecessary re-renders of a component when props do not change',
+      'To make state mutations synchronous',
+      'To create persistent refs across render cycles'
+    ],
     correctOptionIndex: 1,
-    explanation: 'Microtasks (Promises, process.nextTick, queueMicrotask) have higher priority and drain completely before the Event Loop moves to macrotasks.'
+    explanation: 'React.memo is a higher-order component that skips rendering a component if its props have not changed.'
   },
   {
-    id: 'fe-js-02',
+    id: 'fe-2',
     jobRole: 'frontend',
-    category: '1. JavaScript Core',
-    categoryOrder: 1,
-    difficulty: 'medium',
-    title: 'Closure Lexical Scoping',
-    questionText: 'What output is printed when invoking: `for (var i = 0; i < 3; i++) { setTimeout(() => console.log(i), 10); }`?',
-    options: ['0, 1, 2', '3, 3, 3', 'undefined, undefined, undefined', '0, 0, 0'],
-    correctOptionIndex: 1,
-    explanation: 'Because `var` is function-scoped rather than block-scoped, all three callbacks share the exact same binding for `i`, which evaluates to 3 after loop completion.'
-  },
-  {
-    id: 'fe-react-01',
-    jobRole: 'frontend',
-    category: '2. React & Next.js',
-    categoryOrder: 2,
-    difficulty: 'medium',
-    title: 'React Server Components Boundary',
-    questionText: 'In Next.js App Router, which feature forces a component to be marked with "use client"?',
-    options: ['async / await data fetching inside JSX', 'Importing server-only secrets', 'useState or useEffect hooks', 'Rendering server-side HTML'],
+    category: 'JavaScript',
+    difficulty: 'easy',
+    questionText: 'Which keyword creates a block-scoped variable that cannot be re-assigned?',
+    options: ['var', 'let', 'const', 'global'],
     correctOptionIndex: 2,
-    explanation: 'Client Components ("use client") are required whenever interactive hooks like useState, useEffect, or event handlers are used.'
+    explanation: 'const declares block-scoped variables that cannot be reassigned after initialization.'
+  },
+  {
+    id: 'fe-3',
+    jobRole: 'frontend',
+    category: 'CSS',
+    difficulty: 'medium',
+    questionText: 'Which CSS layout module handles two-dimensional (rows and columns) layouts best?',
+    options: ['Flexbox', 'CSS Grid', 'Float', 'Position absolute'],
+    correctOptionIndex: 1,
+    explanation: 'CSS Grid is designed specifically for two-dimensional layout controls (rows and columns simultaneously).'
+  },
+  {
+    id: 'fe-4',
+    jobRole: 'frontend',
+    category: 'TypeScript',
+    difficulty: 'easy',
+    questionText: 'What does the "unknown" type represent in TypeScript?',
+    options: [
+      'An alias for "any" with no type checking',
+      'A type-safe counterpart to "any" that requires type assertions before usage',
+      'A function that never returns',
+      'An empty object type'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'unknown forces developer verification or narrowing before operations can be performed on the value.'
+  },
+  {
+    id: 'fe-5',
+    jobRole: 'frontend',
+    category: 'Performance',
+    difficulty: 'medium',
+    questionText: 'What does CLS stand for in Google Web Vitals?',
+    options: ['Cumulative Layout Shift', 'Cached Load Speed', 'Central Location Scripting', 'Compiled Layout Style'],
+    correctOptionIndex: 0,
+    explanation: 'Cumulative Layout Shift measures visual stability by measuring unexpected layout movements.'
+  },
+  {
+    id: 'fe-6',
+    jobRole: 'frontend',
+    category: 'React',
+    difficulty: 'medium',
+    questionText: 'When does the cleanup function of useEffect run?',
+    options: [
+      'Only when the component unmounts',
+      'Before every re-render and when the component unmounts',
+      'Immediately before state updates',
+      'After the next render completes'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'useEffect cleanups run before the effect is re-executed on prop/state changes and upon component unmounting.'
+  },
+  {
+    id: 'fe-7',
+    jobRole: 'frontend',
+    category: 'HTML/DOM',
+    difficulty: 'easy',
+    questionText: 'Which HTML attribute signals async execution of external scripts without blocking DOM parsing?',
+    options: ['defer', 'async', 'preload', 'no-block'],
+    correctOptionIndex: 1,
+    explanation: 'async downloads the script in parallel and executes it immediately when ready without blocking HTML parsing.'
+  },
+  {
+    id: 'fe-8',
+    jobRole: 'frontend',
+    category: 'CSS',
+    difficulty: 'easy',
+    questionText: 'What does the `box-sizing: border-box` CSS declaration do?',
+    options: [
+      'Adds double borders around containers',
+      'Includes padding and border in the element total width and height',
+      'Excludes margins from calculations',
+      'Centers element content automatically'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'border-box causes width and height to include content, padding, and borders.'
+  },
+  {
+    id: 'fe-9',
+    jobRole: 'frontend',
+    category: 'JavaScript',
+    difficulty: 'medium',
+    questionText: 'What is Event Delegation in JavaScript?',
+    options: [
+      'Passing event handlers as parameters to child components',
+      'Attaching a single event listener to a parent element to manage events for child nodes',
+      'Canceling bubbling phase events',
+      'Running asynchronous event handlers in parallel'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Event Delegation takes advantage of event bubbling to listen for child events at a parent container level.'
+  },
+  {
+    id: 'fe-10',
+    jobRole: 'frontend',
+    category: 'React',
+    difficulty: 'medium',
+    questionText: 'What is the correct hook to store a mutable value that does NOT trigger re-renders on change?',
+    options: ['useState', 'useMemo', 'useRef', 'useCallback'],
+    correctOptionIndex: 2,
+    explanation: 'useRef returns a mutable object whose .current property persists across renders without causing re-renders.'
+  },
+  {
+    id: 'fe-11',
+    jobRole: 'frontend',
+    category: 'Performance',
+    difficulty: 'medium',
+    questionText: 'What technique delays loading off-screen images until the user scrolls near them?',
+    options: ['Tree shaking', 'Code splitting', 'Lazy loading', 'Pre-fetching'],
+    correctOptionIndex: 2,
+    explanation: 'Lazy loading defers image download until required in the browser viewport.'
+  },
+  {
+    id: 'fe-12',
+    jobRole: 'frontend',
+    category: 'TypeScript',
+    difficulty: 'easy',
+    questionText: 'Which utility type constructs a type with all properties of T set to optional?',
+    options: ['Partial<T>', 'Required<T>', 'Readonly<T>', 'Pick<T>'],
+    correctOptionIndex: 0,
+    explanation: 'Partial<T> makes all properties in interface T optional.'
   },
 
-  // ==========================================
-  // BACKEND ENGINEER
-  // ==========================================
+  // --- BACKEND (12 Questions) ---
   {
-    id: 'be-lang-01',
+    id: 'be-1',
     jobRole: 'backend',
-    category: '1. Language Fundamentals',
-    categoryOrder: 1,
+    category: 'Node.js',
     difficulty: 'easy',
-    title: 'Process Threading Models',
-    questionText: 'How does Node.js handle concurrent I/O requests despite operating on a single main thread?',
+    questionText: 'What is the Node.js Event Loop responsible for?',
     options: [
-      'Spawning new CPU child processes per connection',
-      'Non-blocking asynchronous I/O delegated to libuv thread pool',
-      'Converting all synchronous blocking tasks into multithreaded workers',
-      'Processing requests strictly synchronously one by one'
+      'Executing synchronous code in multithreaded workers',
+      'Offloading non-blocking I/O tasks to execute single-threaded asynchronous callbacks',
+      'Compiling JavaScript into C++ binary',
+      'Handling SQL database connections directly'
     ],
     correctOptionIndex: 1,
-    explanation: 'Node.js delegates non-blocking I/O operations to the system kernel or its libuv thread pool, maintaining a single-threaded event loop.'
+    explanation: 'The Event Loop handles async operations in Node.js on a single main thread via non-blocking callbacks.'
   },
   {
-    id: 'be-db-01',
+    id: 'be-2',
     jobRole: 'backend',
-    category: '2. Databases & ORM',
-    categoryOrder: 2,
-    difficulty: 'medium',
-    title: 'Database Indexing Trade-offs',
-    questionText: 'What primary trade-off occurs when adding multiple composite indexes to a high-throughput SQL table?',
-    options: [
-      'Faster READ queries, but slower WRITE (INSERT/UPDATE) operations and higher storage consumption',
-      'Slower READ queries, but faster WRITE operations',
-      'Higher CPU usage during SELECT statements with reduced disk storage',
-      'Disabling of ACID transaction guarantees on indexed columns'
-    ],
-    correctOptionIndex: 0,
-    explanation: 'Every index requires updating its B-Tree structure on write operations, accelerating read queries while adding write overhead.'
-  },
-
-  // ==========================================
-  // PRODUCT MANAGER
-  // ==========================================
-  {
-    id: 'pm-strat-01',
-    jobRole: 'product-manager',
-    category: '1. Product Strategy & Vision',
-    categoryOrder: 1,
-    difficulty: 'medium',
-    title: 'North Star Metric Selection',
-    questionText: 'What key property defines an effective North Star Metric for a B2B SaaS product?',
-    options: [
-      'It maximizes short-term total sign-up conversion rate',
-      'It reflects core value delivered to customer while predicting sustainable revenue retention',
-      'It tracks total cumulative registered user accounts',
-      'It isolates marketing budget efficiency'
-    ],
-    correctOptionIndex: 1,
-    explanation: 'A North Star Metric measures the intersection between customer value realized and long-term business growth.'
-  },
-  {
-    id: 'pm-exec-01',
-    jobRole: 'product-manager',
-    category: '4. Agile Execution & Backlog',
-    categoryOrder: 4,
-    difficulty: 'hard',
-    title: 'RICE Prioritization Framework',
-    questionText: 'In the RICE scoring formula (Reach * Impact * Confidence / Effort), how does a high Effort score affect feature priority?',
-    options: [
-      'Increases overall priority score exponentially',
-      'Has no effect on final priority ranking',
-      'Decreases overall priority score because Effort is in the denominator',
-      'Multiplies the Reach parameter'
-    ],
-    correctOptionIndex: 2,
-    explanation: 'Because Effort resides in the denominator, higher estimated engineering effort reduces the total RICE score.'
-  },
-
-  // ==========================================
-  // CYBERSECURITY
-  // ==========================================
-  {
-    id: 'sec-net-01',
-    jobRole: 'cybersecurity',
-    category: '1. Network Security & Cryptography',
-    categoryOrder: 1,
-    difficulty: 'medium',
-    title: 'Symmetric vs Asymmetric Encryption',
-    questionText: 'Which cryptographic algorithm pair represents asymmetric key distribution?',
-    options: ['AES-256 and DES', 'RSA and ECC', 'HMAC-SHA256 and MD5', 'ChaCha20 and Blowfish'],
-    correctOptionIndex: 1,
-    explanation: 'RSA and ECC (Elliptic Curve Cryptography) use key pairs (public/private), making them asymmetric algorithms.'
-  },
-
-  // ==========================================
-  // EXCEL EXPERT
-  // ==========================================
-  {
-    id: 'xl-form-01',
-    jobRole: 'excel-expert',
-    category: '1. Advanced Formulas & Functions',
-    categoryOrder: 1,
+    category: 'Databases',
     difficulty: 'easy',
-    title: 'XLOOKUP Advantage over VLOOKUP',
-    questionText: 'Why is XLOOKUP superior to traditional VLOOKUP in modern Excel?',
+    questionText: 'What does ACID stand for in database management systems?',
     options: [
-      'XLOOKUP can look left and does not require column index numbers that break on insertion',
-      'XLOOKUP requires cells to be sorted in ascending order',
-      'XLOOKUP works only on numeric data types',
-      'XLOOKUP disables calculation recalculation to save RAM'
+      'Atomicity, Consistency, Isolation, Durability',
+      'Async, Concurrent, Indexed, Distributed',
+      'Access, Control, Integrity, Data',
+      'Array, Column, Index, Document'
     ],
     correctOptionIndex: 0,
-    explanation: 'XLOOKUP defaults to exact match, searches in any direction, and references exact arrays without hardcoded column indexes.'
+    explanation: 'ACID guarantees database transaction reliability.'
   },
-
-  // ==========================================
-  // DATA ANALYST
-  // ==========================================
   {
-    id: 'da-sql-01',
-    jobRole: 'data-analyst',
-    category: '1. Data Wrangling & SQL',
-    categoryOrder: 1,
+    id: 'be-3',
+    jobRole: 'backend',
+    category: 'Security',
     difficulty: 'medium',
-    title: 'Window Functions vs GROUP BY',
-    questionText: 'What is the primary difference between standard `GROUP BY` and a SQL `OVER (PARTITION BY ...)` clause?',
-    options: [
-      'GROUP BY aggregates rows into a single summary row; Window functions preserve individual row identity',
-      'Window functions cannot calculate SUM or AVG metrics',
-      'GROUP BY can only be executed on integer primary key columns',
-      'OVER clauses automatically perform full outer joins'
-    ],
+    questionText: 'Which HTTP header mitigates Cross-Site Scripting (XSS) attacks?',
+    options: ['Content-Security-Policy', 'Access-Control-Allow-Origin', 'X-Frame-Options', 'Strict-Transport-Security'],
     correctOptionIndex: 0,
-    explanation: 'Window functions perform aggregation calculations across sets of rows while maintaining individual detail rows in the result set.'
+    explanation: 'Content-Security-Policy restricts resource origins allowed to execute in browser scripts.'
   },
-
-  // ==========================================
-  // ARTIFICIAL INTELLIGENCE
-  // ==========================================
   {
-    id: 'ai-llm-01',
-    jobRole: 'ai-engineer',
-    category: '5. Vector Databases & RAG',
-    categoryOrder: 5,
-    difficulty: 'hard',
-    title: 'Retrieval-Augmented Generation (RAG)',
-    questionText: 'What is the primary role of dynamic embedding similarity search in a RAG pipeline?',
+    id: 'be-4',
+    jobRole: 'backend',
+    category: 'APIs',
+    difficulty: 'easy',
+    questionText: 'Which HTTP status code signifies "201 Created"?',
+    options: ['200', '201', '204', '301'],
+    correctOptionIndex: 1,
+    explanation: 'HTTP 201 indicates a resource was successfully created on the server.'
+  },
+  {
+    id: 'be-5',
+    jobRole: 'backend',
+    category: 'Node.js',
+    difficulty: 'medium',
+    questionText: 'Which module in Node.js enables creating separate child processes to run CPU-heavy tasks?',
+    options: ['cluster', 'child_process', 'fs', 'http'],
+    correctOptionIndex: 1,
+    explanation: 'child_process enables spawning subprocesses without blocking the primary event loop.'
+  },
+  {
+    id: 'be-6',
+    jobRole: 'backend',
+    category: 'Databases',
+    difficulty: 'medium',
+    questionText: 'What is database indexing primarily used for?',
     options: [
-      'To fine-tune transformer model weights directly',
-      'To fetch contextually relevant document chunks from a vector store to ground LLM prompts',
-      'To compress prompts into binary tokens for faster transmission',
-      'To remove bias from training data sets automatically'
+      'Encrypting sensitive customer tables',
+      'Speeding up data retrieval queries at the cost of additional storage and write speed',
+      'Backing up database tables automatically',
+      'Normalizing relational schemas'
     ],
     correctOptionIndex: 1,
-    explanation: 'Similarity search converts user queries into vectors and retrieves top matching chunks from a vector DB to augment the prompt with facts.'
+    explanation: 'Indexes create data structures (like B-Trees) that allow fast lookup times for specific columns.'
   },
-
-  // ==========================================
-  // ENTRY EXAM & INTERNSHIP (QUANT/QUAL)
-  // ==========================================
   {
-    id: 'int-quant-01',
-    jobRole: 'internship-entry',
-    category: '1. Quantitative Reasoning',
-    categoryOrder: 1,
+    id: 'be-7',
+    jobRole: 'backend',
+    category: 'APIs',
     difficulty: 'easy',
-    title: 'Percentage Compound Increase',
-    questionText: 'If a quantity increases by 20% in year one and then decreases by 20% in year two, what is the net overall percentage change?',
-    options: ['0% change', '4% increase', '4% decrease', '2% decrease'],
-    correctOptionIndex: 2,
-    explanation: 'Start with 100: +20% = 120. Then -20% of 120 = 24 -> 120 - 24 = 96. Net result is a 4% decrease.'
+    questionText: 'In REST API design, which HTTP method should be idempotent and replace a target resource entirely?',
+    options: ['POST', 'PUT', 'PATCH', 'OPTIONS'],
+    correctOptionIndex: 1,
+    explanation: 'PUT replaces target resource representations fully and is idempotent.'
+  },
+  {
+    id: 'be-8',
+    jobRole: 'backend',
+    category: 'Security',
+    difficulty: 'medium',
+    questionText: 'How should user passwords be stored securely in a database?',
+    options: [
+      'Encrypted with reversible AES-256',
+      'Hashed using a salted algorithm like bcrypt or Argon2',
+      'Encoded as Base64 strings',
+      'Stored in plain text inside isolated private subnets'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Passwords should be salted and hashed with robust slow algorithms (bcrypt/Argon2) to prevent rainbow table attacks.'
+  },
+  {
+    id: 'be-9',
+    jobRole: 'backend',
+    category: 'Caching',
+    difficulty: 'easy',
+    questionText: 'Which in-memory key-value database is commonly used for caching and session management?',
+    options: ['Redis', 'PostgreSQL', 'SQLite', 'MongoDB'],
+    correctOptionIndex: 0,
+    explanation: 'Redis provides lightning-fast in-memory storage ideal for caching sessions and data.'
+  },
+  {
+    id: 'be-10',
+    jobRole: 'backend',
+    category: 'Databases',
+    difficulty: 'medium',
+    questionText: 'What distinguishes NoSQL databases from traditional Relational databases?',
+    options: [
+      'NoSQL databases lack index support',
+      'NoSQL provides schema-flexible, non-tabular models optimized for scaling horizontally',
+      'Relational databases cannot handle JSON documents',
+      'NoSQL does not support transactions under any scenario'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'NoSQL offers flexible document/key-value schemas designed for horizontal scalability.'
+  },
+  {
+    id: 'be-11',
+    jobRole: 'backend',
+    category: 'Architecture',
+    difficulty: 'medium',
+    questionText: 'What pattern isolates write operations from read queries in distributed services?',
+    options: ['MVC', 'CQRS (Command Query Responsibility Segregation)', 'Pub/Sub', 'Monolith'],
+    correctOptionIndex: 1,
+    explanation: 'CQRS separates read and update data models for optimized scaling and throughput.'
+  },
+  {
+    id: 'be-12',
+    jobRole: 'backend',
+    category: 'Security',
+    difficulty: 'easy',
+    questionText: 'What is a JSON Web Token (JWT) signature used for?',
+    options: [
+      'Encrypting payload data so client cannot read it',
+      'Verifying the sender and ensuring payload was not tampered with in transit',
+      'Auto-renewing database connection strings',
+      'Compressing HTTP body payload size'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'The JWT signature validates message integrity and authenticity.'
   }
 ];
 
-// ==========================================
-// DYNAMIC QUESTION GENERATOR FACTORY
-// Guarantees scaling up to 60+ unique questions per role dynamically
-// ==========================================
-function SynthesizeRoleQuestions(
-  role: JobRole,
-  targetDifficulty: DifficultyLevel,
-  targetCount: number
-): Question[] {
-  const roleMeta = JOB_ROLES.find((r) => r.id === role);
-  if (!roleMeta) return [];
+export const getQuestionsForSession = (
+  role: string,
+  difficulty: string,
+  count: number
+): Question[] => {
+  // Filter matching role first
+  let filtered = QUESTION_BANK.filter((q) => q.jobRole === role);
 
-  const existing = QUESTION_BANK.filter((q) => q.jobRole === role);
-  if (existing.length >= targetCount) {
-    return existing.slice(0, targetCount);
+  // If specific difficulty requested and available
+  const matchDifficulty = filtered.filter((q) => q.difficulty === difficulty);
+  if (matchDifficulty.length >= count) {
+    filtered = matchDifficulty;
   }
 
-  const generated: Question[] = [...existing];
-  let currentIdIndex = existing.length + 1;
-
-  while (generated.length < targetCount) {
-    const categoryIndex = generated.length % 5;
-    const categoryName = roleMeta.categories[categoryIndex];
-    const categoryOrder = categoryIndex + 1;
-
-    generated.push({
-      id: `${role}-gen-${currentIdIndex}`,
-      jobRole: role,
-      category: categoryName,
-      categoryOrder: categoryOrder,
-      difficulty: targetDifficulty, // Assign target difficulty to fallback generated items
-      title: `${roleMeta.label} Professional Concept #${currentIdIndex}`,
-      questionText: `In the context of ${roleMeta.label} (${categoryName}), which strategy best optimizes operational quality and performance under production constraints?`,
-      options: [
-        `Implement standardized modular protocols with automated validation checks`,
-        `Rely exclusively on manual ad-hoc inspection prior to delivery releases`,
-        `Bypass baseline architectural standards to accelerate initial throughput`,
-        `Defer error handling and logging until system failures occur`
-      ],
-      correctOptionIndex: 0,
-      explanation: `Applying standardized modular architectures combined with automated validation ensures predictable reliability, lower maintenance complexity, and scalable execution across ${categoryName}.`
-    });
-
-    currentIdIndex++;
+  // Fallback if question pool for exact difficulty is small: pad with remaining questions from same role
+  if (filtered.length < count) {
+    const fallback = QUESTION_BANK.filter((q) => q.jobRole !== role);
+    filtered = [...filtered, ...fallback];
   }
 
-  return generated;
-}
-
-export function generateInterviewSession(
-  jobRole: JobRole,
-  difficulty: DifficultyLevel,
-  requestedCount: number
-): Question[] {
-  // Retrieve or dynamically expand questions using the target difficulty
-  const allRoleQuestions = SynthesizeRoleQuestions(
-    jobRole,
-    difficulty,
-    Math.max(requestedCount, 60)
-  );
-
-  // Filter pool for selected difficulty; fallback to full pool if count is insufficient
-  const matchingDifficulty = allRoleQuestions.filter(
-    (q) => q.difficulty === difficulty
-  );
-  const pool =
-    matchingDifficulty.length >= requestedCount
-      ? matchingDifficulty
-      : allRoleQuestions;
-
-  // Sort strictly by category progression order (1 to 5)
-  const sorted = [...pool].sort((a, b) => a.categoryOrder - b.categoryOrder);
-
-  // Return exact count requested by user config
-  return sorted.slice(0, requestedCount);
-}
+  // Shuffle and pick unique set without repeating
+  const shuffled = [...filtered].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};

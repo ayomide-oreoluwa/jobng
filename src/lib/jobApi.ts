@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_BASE_URL } from "./config";
 
 export interface Apijustjob {

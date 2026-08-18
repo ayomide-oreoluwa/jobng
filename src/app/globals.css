@@ -428,7 +428,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .jj-jobs-hero {
-  background: var(--ink);
   padding: 3rem 0 2.5rem;
   position: relative;
   overflow: hidden;
@@ -437,9 +436,6 @@ h1, h2, h3, h4, h5, h6 {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(0, 166, 81, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 0% 100%, rgba(141, 198, 63, 0.06) 0%, transparent 50%);
   pointer-events: none;
 }
 .jj-jobs-hero__title {
