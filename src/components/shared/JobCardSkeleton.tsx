@@ -16,57 +16,38 @@ function Bar({ w, h = 12, style }: { w: number | string; h?: number; style?: Rea
 export default function JobCardSkeleton({ variant = "grid" }: JobCardSkeletonProps) {
   if (variant === "list") {
     return (
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 16,
-          border: "1px solid #e5e7eb",
-          padding: "18px 20px",
-          display: "flex",
-          alignItems: "flex-start",
-          gap: 16,
-        }}
-      >
-        <div style={{ ...shimmer, width: 56, height: 56, borderRadius: 12, flexShrink: 0 }} />
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-          <Bar w="60%" h={15} />
+      <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4">
+        <div style={{ ...shimmer, width: 52, height: 52, borderRadius: 12, flexShrink: 0 }} />
+        <div className="flex-1 w-full min-w-0 flex flex-col gap-2.5">
+          <Bar w="60%" h={16} />
           <Bar w="35%" h={12} />
-          <div style={{ display: "flex", gap: 12, marginTop: 2 }}>
+          <div className="flex gap-3 mt-1">
             <Bar w={70} h={11} />
             <Bar w={90} h={11} />
           </div>
           <Bar w="90%" h={11} style={{ marginTop: 4 }} />
         </div>
-        <div style={{ ...shimmer, width: 60, height: 28, borderRadius: 8, flexShrink: 0 }} />
+        <div className="w-full sm:w-auto flex sm:flex-col gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
+          <div style={{ ...shimmer, width: "100%", minWidth: 70, height: 36, borderRadius: 8 }} />
+        </div>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: 16,
-        border: "1px solid #e5e7eb",
-        padding: 20,
-        display: "flex",
-        flexDirection: "column",
-        gap: 14,
-        height: "100%",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+    <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 flex flex-col gap-3.5 h-full">
+      <div className="flex items-start gap-3">
         <div style={{ ...shimmer, width: 48, height: 48, borderRadius: 10, flexShrink: 0 }} />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8, paddingTop: 4 }}>
-          <Bar w="80%" h={13} />
+        <div className="flex-1 min-w-0 flex flex-col gap-2 pt-1">
+          <Bar w="80%" h={14} />
           <Bar w="50%" h={11} />
         </div>
       </div>
-      <div style={{ display: "flex", gap: 10 }}>
+      <div className="flex gap-2">
         <Bar w={70} h={11} />
         <Bar w={90} h={11} />
       </div>
-      <div style={{ ...shimmer, width: "100%", height: 34, borderRadius: 8, marginTop: "auto" }} />
+      <div style={{ ...shimmer, width: "100%", height: 36, borderRadius: 8, marginTop: "auto" }} />
     </div>
   );
 }
