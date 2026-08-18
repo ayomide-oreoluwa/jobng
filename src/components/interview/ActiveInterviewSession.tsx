@@ -218,7 +218,7 @@ export const ActiveInterviewSession: React.FC<ActiveInterviewSessionProps> = ({
       {/* Powered by Attribution */}
       <div className="text-center pt-2">
         <span className="text-[11px] text-[#64748B] font-medium">
-          Powered by <strong className="text-[#00A651]">Meakandex Academy</strong>
+          Powered by <strong className="text-[#00A651]">Maekandex Academy</strong>
         </span>
       </div>
     </div>

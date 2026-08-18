@@ -21,7 +21,7 @@ import { authHeaders } from "@/lib/auth-client";
 import { Apijustjob } from "@/lib/jobApi";
 
 const CATEGORY_OPTIONS = ["Remote", "On-site", "Hybrid", "Full-time", "Part-time"];
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 15;
 
 function JobsContent() {
   const router = useRouter();
