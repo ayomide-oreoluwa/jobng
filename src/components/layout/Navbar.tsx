@@ -82,7 +82,8 @@ export default function Navbar() {
     logout();
     setProfileOpen(false);
     setMobileOpen(false);
-    router.push("/");
+    // Hard refresh and redirect to home page
+    window.location.href = "/";
   };
 
   const Avatar = ({ size = 36 }: { size?: number }) =>

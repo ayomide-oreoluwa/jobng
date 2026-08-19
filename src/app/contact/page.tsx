@@ -45,13 +45,8 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-24 select-none">
       {/* Hero Section */}
-      <section className="bg-slate-950 text-white pt-28 sm:pt-36 pb-24 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-[#8DC63F] via-[#00A651] to-[#00863F] text-white pt-28 sm:pt-36 pb-24 relative overflow-hidden">
         {/* Soft Ambient Mesh Background */}
-        <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_100%_0%,rgba(0,166,81,0.15)_0%,transparent_60%),radial-gradient(ellipse_40%_60%_at_0%_100%,rgba(141,198,63,0.12)_0%,transparent_50%)] pointer-events-none"
-          aria-hidden
-        />
-
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10 text-center">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] max-w-3xl mx-auto text-white">
             Get In Touch
