@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_BASE_URL } from "./config";
 
 export interface Apijustjob {
@@ -11,12 +10,21 @@ export interface Apijustjob {
   category: string | null;
   description: string | null;
   is_active?: boolean;
-  status?: string; 
+  status?: string;
 }
 
 export interface PagedJobsResponse {
   items: Apijustjob[];
   count: number;
+}
+
+export interface AuthSuccessData {
+  access?: string;
+  token?: string;
+  access_token?: string;
+  message?: string;
+  detail?: string;
+  data?: Record<string, unknown>;
 }
 
 export interface ApiResult<T = Record<string, unknown>> {
@@ -33,43 +41,102 @@ export interface UpdateApiResult {
 }
 
 export function extractError(
-  data: Record<string, unknown>,
+  data: Record<string, unknown> | null | undefined | unknown,
   fallback = "Something went wrong. Please try again."
 ): string {
-  if (!data) return fallback;
-  if (typeof data.detail === "string") return data.detail;
-  if (typeof data.error === "string") return data.error;
-  if (typeof data.message === "string") return data.message;
-  
-  const first = Object.values(data)[0];
-  if (Array.isArray(first) && typeof first[0] === "string") return first[0];
-  if (typeof first === "string") return first;
-  
+  if (!data || typeof data !== "object") return fallback;
+
+  const record = data as Record<string, unknown>;
+
+  // 1. Direct string properties (Express, NestJS, Custom APIs)
+  if (typeof record.detail === "string") return record.detail;
+  if (typeof record.error === "string") return record.error;
+  if (typeof record.message === "string") return record.message;
+
+  // 2. FastAPI / Pydantic validation array (`detail: [{ msg: "..." }]`)
+  if (Array.isArray(record.detail) && record.detail.length > 0) {
+    const first = record.detail[0];
+    if (typeof first === "string") return first;
+    if (typeof first === "object" && first !== null && "msg" in first && typeof first.msg === "string") {
+      return first.msg;
+    }
+  }
+
+  // 3. Field validation object maps (e.g., Django REST: { phone: ["Invalid number"] })
+  for (const value of Object.values(record)) {
+    if (typeof value === "string" && value.trim()) {
+      return value;
+    }
+    if (Array.isArray(value) && value.length > 0) {
+      if (typeof value[0] === "string") return value[0];
+      if (
+        typeof value[0] === "object" &&
+        value[0] !== null &&
+        "message" in value[0] &&
+        typeof value[0].message === "string"
+      ) {
+        return value[0].message;
+      }
+    }
+  }
+
   return fallback;
 }
 
-export function extractToken(data: Record<string, unknown>): string | null {
-  const token =
-    data.access ??
-    data.token ??
-    data.access_token ??
-    (typeof data.data === "object" &&
-      data.data &&
-      ((data.data as Record<string, unknown>).access ??
-        (data.data as Record<string, unknown>).token));
-  return typeof token === "string" ? token : null;
+export function extractToken(data: unknown): string | null {
+  if (!data || typeof data !== "object") return null;
+
+  const record = data as Record<string, unknown>;
+
+  // Priority token key names across standard API responses
+  const tokenKeys = [
+    "access",
+    "access_token",
+    "accessToken",
+    "token",
+    "jwt",
+    "authToken",
+    "key",
+  ];
+
+  // 1. Top-level property extraction
+  for (const key of tokenKeys) {
+    const value = record[key];
+    if (typeof value === "string" && value.trim()) {
+      return sanitizeToken(value);
+    }
+  }
+
+  // 2. Nested API wrapper inspection (e.g. response.data or response.auth)
+  const wrapperKeys = ["data", "auth", "result", "tokens", "payload"];
+  for (const wrapperKey of wrapperKeys) {
+    const nested = record[wrapperKey];
+    if (nested && typeof nested === "object") {
+      const extracted = extractToken(nested);
+      if (extracted) return extracted;
+    }
+  }
+
+  return null;
 }
 
-async function parseJson(res: Response): Promise<Record<string, unknown>> {
+/**
+ * Removes "Bearer " prefix and surrounding whitespace if present.
+ */
+function sanitizeToken(token: string): string {
+  return token.trim().replace(/^Bearer\s+/i, "").trim();
+}
+
+async function parseJson<T = Record<string, unknown>>(res: Response): Promise<T> {
   const text = await res.text();
   try {
     const data = JSON.parse(text);
     if (typeof data === "string") {
-      return { message: data };
+      return { message: data } as unknown as T;
     }
-    return data as Record<string, unknown>;
+    return data as T;
   } catch {
-    return { message: text || res.statusText || "An unexpected error occurred" };
+    return { message: text || res.statusText || "An unexpected error occurred" } as unknown as T;
   }
 }
 
@@ -77,43 +144,31 @@ export async function registerUser(body: {
   number: string;
   pin: string;
   confirm_pin: string;
-}): Promise<ApiResult> {
+}): Promise<ApiResult<AuthSuccessData>> {
   const res = await fetch(`${API_BASE_URL}/api/justjob/create/user/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return { ok: res.ok, status: res.status, data: await parseJson(res) };
+  return { ok: res.ok, status: res.status, data: await parseJson<AuthSuccessData>(res) };
 }
 
 export async function loginUser(body: {
   number: string;
   pin: string;
-}): Promise<ApiResult> {
+}): Promise<ApiResult<AuthSuccessData>> {
   const res = await fetch(`${API_BASE_URL}/api/justjob/login/user/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return { ok: res.ok, status: res.status, data: await parseJson(res) };
+  return { ok: res.ok, status: res.status, data: await parseJson<AuthSuccessData>(res) };
 }
 
 export async function forgotPassword(body: {
   phone_number: string;
 }): Promise<ApiResult> {
   const res = await fetch(`${API_BASE_URL}/api/justjob/forgot/password/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return { ok: res.ok, status: res.status, data: await parseJson(res) };
-}
-
-export async function verifyOtp(body: {
-  phone_number: string;
-  otp: string;
-}): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/verify/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -136,6 +191,18 @@ export async function changePassword(
   return { ok: res.ok, status: res.status, data: await parseJson(res) };
 }
 
+export async function resetPassword(body: {
+  phone_number: string;
+  pin: string;
+}): Promise<ApiResult> {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/reset/password/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return { ok: res.ok, status: res.status, data: await parseJson(res) };
+}
+
 export async function updatePassword({
   number,
   pin,
@@ -152,23 +219,15 @@ export async function updatePassword({
   });
 
   const data = await parseJson(res);
+  const message = res.ok
+    ? (data.message as string) || (data.detail as string) || "PIN updated successfully."
+    : extractError(data);
+
   return {
     ok: res.ok,
     status: res.status,
-    message: extractError(data),
+    message,
   };
-}
-
-export async function resetPassword(body: {
-  phone_number: string;
-  pin: string;
-}): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/reset/password/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  return { ok: res.ok, status: res.status, data: await parseJson(res) };
 }
 
 export async function getJobs(
@@ -190,19 +249,30 @@ export async function getJobs(
       { headers, cache: "no-store" }
     );
 
-    const data = (await parseJson(res)) as any;
-    const datalength =
-      data?.count ??
-      data?.total ??
-      (Array.isArray(data?.items) ? data.items.length : Array.isArray(data) ? data.length : 0);
+    const rawData = await parseJson<Record<string, unknown>>(res);
 
-    return { ok: res.ok, status: res.status, data, datalength };
+    const items = Array.isArray(rawData.items)
+      ? (rawData.items as Apijustjob[])
+      : Array.isArray(rawData)
+      ? (rawData as Apijustjob[])
+      : [];
+
+    const count =
+      typeof rawData.count === "number"
+        ? rawData.count
+        : typeof rawData.total === "number"
+        ? rawData.total
+        : items.length;
+
+    const data: PagedJobsResponse = { items, count };
+
+    return { ok: res.ok, status: res.status, data, datalength: count };
   } catch (error) {
     console.error("getJobs error:", error);
     return {
       ok: false,
       status: 500,
-      data: { message: "Failed to reach backend job API" } as any,
+      data: { items: [], count: 0 },
       datalength: 0,
     };
   }
@@ -211,9 +281,9 @@ export async function getJobs(
 export async function getSingleJob(
   justjobId: string,
   token?: string
-): Promise<ApiResult<Apijustjob>> {
+): Promise<ApiResult<Apijustjob | null>> {
   if (!justjobId) {
-    return { ok: false, status: 400, data: null as unknown as Apijustjob };
+    return { ok: false, status: 400, data: null };
   }
 
   const qs = new URLSearchParams();
@@ -234,11 +304,11 @@ export async function getSingleJob(
       return {
         ok: false,
         status: res.status,
-        data: rawData as unknown as Apijustjob,
+        data: null,
       };
     }
 
-    let unwrappedJob = rawData;
+    let unwrappedJob: Record<string, unknown> = rawData;
     if (rawData && typeof rawData === "object") {
       if ("data" in rawData && rawData.data && typeof rawData.data === "object") {
         unwrappedJob = rawData.data as Record<string, unknown>;
@@ -259,7 +329,7 @@ export async function getSingleJob(
     return {
       ok: false,
       status: 500,
-      data: null as unknown as Apijustjob,
+      data: null,
     };
   }
 }

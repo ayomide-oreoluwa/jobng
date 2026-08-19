@@ -47,7 +47,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="bg-slate-950 text-white pt-28 sm:pt-36 pb-24 relative overflow-hidden">
         <div 
-          className="absolute inset-0 bg-gradient-to-br from-[#8DC63F] via-[#00A651] to-[#00863F] pointer-events-none" 
+          className="absolute inset-0 bg-linear-to-br from-[#8DC63F] via-[#00A651] to-[#00863F] pointer-events-none" 
           aria-hidden
         />
 
@@ -85,7 +85,7 @@ export default function AboutPage() {
       <section className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 mt-20 sm:mt-28">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
-            <div className="w-12 h-1.5 bg-gradient-to-r from-[#8DC63F] via-[#00A651] to-[#00863F] rounded-full mb-6" />
+            <div className="w-12 h-1.5 bg-linear-to-r from-[#8DC63F] via-[#00A651] to-[#00863F] rounded-full mb-6" />
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
               Empowering careers through technology
             </h2>
@@ -102,7 +102,7 @@ export default function AboutPage() {
             <div className="mt-8">
               <Link
                 href="/jobs"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00A651] via-[#009247] to-[#00863F] hover:from-[#009247] hover:to-[#007034] text-white font-extrabold text-base transition-all duration-200 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:shadow-emerald-600/30 hover:-translate-y-0.5 active:translate-y-0"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-linear-to-r from-[#00A651] via-[#009247] to-[#00863F] hover:from-[#009247] hover:to-[#007034] text-white font-extrabold text-base transition-all duration-200 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:shadow-emerald-600/30 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <span>Browse Open Jobs</span>
                 <FiArrowRight className="text-lg" />
@@ -121,7 +121,7 @@ export default function AboutPage() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-slate-950/60 via-transparent to-transparent" />
             </div>
 
             {/* Floating Info Pill */}

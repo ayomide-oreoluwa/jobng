@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
+import { normalizeNigerianPhone } from "@/lib/phone";
 import { changePassword, extractError } from "@/lib/jobApi";
 
 export interface ChangePasswordBody {
+  number: string;
+  countryCode?: string;
   old_pin: string;
   pin: string;
   confirm_pin: string;
@@ -10,42 +13,44 @@ export interface ChangePasswordBody {
 
 export async function POST(request: Request) {
   try {
+    const body = (await request.json()) as ChangePasswordBody;
+
+    const number = normalizeNigerianPhone(body.number, body.countryCode);
+    const old_pin = body.old_pin?.trim();
+    const pin = body.pin?.trim();
+    const confirm_pin = body.confirm_pin?.trim();
+
     const authHeader = request.headers.get("authorization") ?? undefined;
     const token = authHeader?.replace(/^Bearer\s+/i, "");
 
     if (!token) {
       return NextResponse.json(
-        { error: "You must be signed in to change your PIN." },
+        { error: "Unauthorized. Please log in again." },
         { status: 401 }
       );
     }
 
-    const body = (await request.json()) as ChangePasswordBody;
-
-    const old_pin = body.old_pin?.trim();
-    const pin = body.pin?.trim();
-    const confirm_pin = body.confirm_pin?.trim();
-
-    if (!old_pin || !pin) {
+    if (!number || !old_pin || !pin || !confirm_pin) {
       return NextResponse.json(
-        { error: "Missing required fields: old_pin or pin." },
+        { error: "Missing required fields: phone, old_pin, pin, or confirm_pin." },
         { status: 400 }
       );
     }
 
-    // Match the exact 4-digit rule used everywhere else (login, signup)
-    if (!/^\d{4}$/.test(old_pin)) {
+    if (pin !== confirm_pin) {
       return NextResponse.json(
-        { error: "Enter your current 4-digit PIN." },
+        { error: "The provided PINs do not match." },
         { status: 400 }
       );
     }
-    if (!/^\d{4}$/.test(pin)) {
+
+    if (pin.length < 4) {
       return NextResponse.json(
-        { error: "New PIN must be exactly 4 digits." },
+        { error: "PIN must be at least 4 digits." },
         { status: 400 }
       );
     }
+
     if (pin === old_pin) {
       return NextResponse.json(
         { error: "New PIN must be different from your current PIN." },

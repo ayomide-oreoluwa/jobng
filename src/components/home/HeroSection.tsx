@@ -49,11 +49,11 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-4 pt-32 pb-20 bg-gradient-to-br from-[#8DC63F] via-[#00A651] to-[#00863F]">
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-4 pt-32 pb-20 bg-linear-to-br from-[#8DC63F] via-[#00A651] to-[#00863F]">
       {/* Background Glow Layer / Grid Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-10%,#CDEBB0_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-10%,#CDEBB0_0%,transparent_60%)" />
       <div 
-        className="absolute inset-0 bg-[linear-gradient(rgba(10,15,28,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(10,15,28,0.05)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_50%,black_20%,transparent_100%)] pointer-events-none" 
+        className="absolute inset-0 bg-[linear-gradient(rgba(10,15,28,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(10,15,28,0.05)_1px,transparent_1px) bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_50%,black_20%,transparent_100%) pointer-events-none" 
         aria-hidden 
       />
       
@@ -96,7 +96,7 @@ export default function HeroSection() {
         {/* Header Banner */}
         <motion.h1 variants={fadeUp(0.1)} initial="hidden" animate="show" className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A0F1C] leading-[1.1] mb-5">
           Your next Job<br />
-          <span className="text-white drop-shadow-[0_2px_20px_rgba(120,53,15,0.25)]">starts here.</span>
+          <span className="text-white drop-shadow-[0_2px_20px_rgba(120,53,15,0.25)">starts here.</span>
         </motion.h1>
 
         <motion.p variants={fadeUp(0.2)} initial="hidden" animate="show" className="text-[17px] leading-relaxed text-white max-w-[480px] mx-auto mb-10">
@@ -107,7 +107,7 @@ export default function HeroSection() {
         <motion.form 
           variants={fadeUp(0.3)} initial="hidden" animate="show" 
           onSubmit={handleSearch} 
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-[580px] mx-auto p-2 sm:pl-4 bg-white rounded-2xl shadow-[0_24px_70px_rgba(120,53,15,0.28)] mb-6"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-[580px] mx-auto p-2 sm:pl-4 bg-white rounded-2xl shadow-[0_24px_70px_rgba(120,53,15,0.28) mb-6"
         >
           <div className="flex items-center gap-2.5 flex-1 py-2 sm:py-0 px-2 sm:px-0">
             <FiSearch size={18} className="text-emerald-600 shrink-0" />
@@ -124,7 +124,7 @@ export default function HeroSection() {
             whileHover={{ scale: 1.02 }} 
             whileTap={{ scale: 0.98 }} 
             type="submit" 
-            className="flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-br from-[#00A651] to-[#00863F] hover:from-[#00863F] hover:to-[#055A2B] text-white rounded-xl py-3 px-6 whitespace-nowrap shadow-md transition-all"
+            className="flex items-center justify-center gap-2 font-bold text-sm bg-linear-to-br from-[#00A651] to-[#00863F] hover:from-[#00863F] hover:to-[#055A2B] text-white rounded-xl py-3 px-6 whitespace-nowrap shadow-md transition-all"
           >
             Find Jobs <FiArrowRight size={16} />
           </motion.button>

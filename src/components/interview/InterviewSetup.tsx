@@ -26,7 +26,7 @@ export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }
   return (
     <div className="font-['Lato',sans-serif] max-w-6xl mx-auto pb-24 sm:pb-6">
       {/* Container Card */}
-      <div className="bg-white border border-[#0F172A]/10 rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(10,15,28,0.06)] space-y-6">
+      <div className="bg-white border border-[#0F172A]/10 rounded-3xl p-5 sm:p-8 shadow-[0_8px_30px_rgba(10,15,28,0.06) space-y-6">
         
         {/* Header with Powered By attribution */}
         <div className="text-center space-y-2 relative pb-2 border-b border-[#0F172A]/10">
@@ -62,7 +62,7 @@ export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }
                     onClick={() => setSelectedRole(role.id)}
                     className={`p-3.5 rounded-2xl text-left border transition-all flex flex-col justify-between relative ${
                       isSelected
-                        ? 'bg-[#00A651]/10 border-[#00A651] text-[#0A0F1C] shadow-[0_4px_16px_rgba(0,166,81,0.15)] ring-2 ring-[#00A651]'
+                        ? 'bg-[#00A651]/10 border-[#00A651] text-[#0A0F1C] shadow-[0_4px_16px_rgba(0,166,81,0.15) ring-2 ring-[#00A651]'
                         : 'bg-[#F8F9FA] border-[#0F172A]/10 text-[#64748B] hover:border-[#00A651]/40'
                     }`}
                   >
@@ -136,7 +136,7 @@ export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }
           {/* Desktop Submit Button */}
           <button
             type="submit"
-            className="hidden sm:flex w-full py-4 rounded-2xl bg-[#00A651] hover:bg-[#00863F] text-white font-bold text-sm items-center justify-center gap-2 shadow-[0_8px_25px_rgba(0,166,81,0.25)] transition-all active:scale-[0.99]"
+            className="hidden sm:flex w-full py-4 rounded-2xl bg-[#00A651] hover:bg-[#00863F] text-white font-bold text-sm items-center justify-center gap-2 shadow-[0_8px_25px_rgba(0,166,81,0.25) transition-all active:scale-[0.99]"
           >
             <span>Start Practice Interview</span>
             <FiArrowRight className="w-5 h-5" />
@@ -145,7 +145,7 @@ export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }
       </div>
 
       {/* Mobile Sticky Bar so users don't have to scroll down to find the button */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#0F172A]/10 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-50">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#0F172A]/10 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08) z-50">
         <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
           <div className="text-left">
             <span className="text-xs font-bold text-[#0A0F1C] block capitalize">{selectedRole}</span>
