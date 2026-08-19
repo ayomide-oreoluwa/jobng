@@ -11,7 +11,7 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: "Prep Interview ",
   description:
-    "Practice job-specific interview questions powered by Meaknadex Academy.",
+    "Practice job-specific interview questions powered by Maekandex Academy.",
   openGraph: {
     title: "Prep Interview",
     description: "Master job-specific interview questions on jobNG.",

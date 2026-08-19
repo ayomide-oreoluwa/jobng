@@ -31,7 +31,7 @@ export const InterviewSetup: React.FC<InterviewSetupProps> = ({ onStartSession }
         {/* Header with Powered By attribution */}
         <div className="text-center space-y-2 relative pb-2 border-b border-[#0F172A]/10">
           <div className="inline-block px-3 py-1 bg-[#00A651]/10 border border-[#00A651]/20 rounded-full text-[11px] font-bold text-[#00863F] uppercase tracking-wider mb-1">
-            Powered by Meaknadex Academy
+            Powered by Maekandex Academy
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-[#0A0F1C] tracking-tight">
             Configure Your <span className="text-[#00A651]">Mock Interview</span>

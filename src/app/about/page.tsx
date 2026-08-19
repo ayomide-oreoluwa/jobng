@@ -5,13 +5,13 @@ import { FiUsers, FiBriefcase, FiAward, FiSmartphone, FiArrowRight } from "react
 import AboutStats from "@/components/about/AboutStats";
 
 export const metadata: Metadata = {
-  title: "About Us | JustJobNG",
-  description: "Learn about JustJobNG, Nigeria's premier job discovery platform.",
+  title: "About Us",
+  description: "Learn about JobNG, Nigeria's premier job discovery platform.",
 };
 
 const stats = [
   { label: "Active Job Seekers", value: "120K+" },
-  { label: "States Covered", value: "36 States + FCT" },
+  { label: "Nations Covered", value: "Worldwide" },
 ];
 
 const values = [
@@ -92,7 +92,7 @@ export default function AboutPage() {
             
             <div className="space-y-4 text-slate-600 text-base sm:text-lg leading-relaxed">
               <p>
-                Founded in 2023, <strong className="text-slate-900 font-semibold">JustJobNG</strong> was built out of frustration with existing job portals that were overly complex, riddled with unverified listings, or inaccessible to millions without high-speed internet.
+                Founded in 2023, <strong className="text-[#00A651] font-bold">JobNG</strong> was built out of frustration with existing job portals that were overly complex, riddled with unverified listings, or inaccessible to millions without high-speed internet.
               </p>
               <p>
                 We believe finding employment should be simple, transparent, and fair. That&apos;s why we created a unified platform that works just as smoothly on a laptop in Lagos as it does on a basic feature phone in Kano via our <strong className="text-[#00A651] font-bold">*7098# USSD service</strong>.
@@ -115,7 +115,7 @@ export default function AboutPage() {
             <div className="relative h-[380px] sm:h-[480px] rounded-3xl overflow-hidden border border-emerald-100 shadow-2xl group">
               <Image
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format"
-                alt="JustJobNG Team Collaboration"
+                alt="JobNG Team Collaboration"
                 fill
                 priority
                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
@@ -141,9 +141,6 @@ export default function AboutPage() {
       {/* Values Section */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 mt-28">
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[#00A651] text-xs font-extrabold uppercase tracking-widest mb-3">
-            Core Principles
-          </div>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Our Core Values
           </h2>
