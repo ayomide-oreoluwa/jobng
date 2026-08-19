@@ -47,22 +47,22 @@ function FAQItem({ q, a }: FAQItemProps) {
   const contentId = useId();
 
   return (
-    <div className="jj-card mb-3.5 overflow-hidden border border-[var(--border)] rounded-[var(--radius-sm)] bg-[var(--surface-elevated)] transition-all duration-200 hover:border-[var(--gold)]/40">
+    <div className="jj-card mb-3.5 overflow-hidden border border-(--border) rounded-(--radius-sm) bg-(--surface-elevated) transition-all duration-200 hover:border-(--gold)/40">
       <button
         type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls={contentId}
-        className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 bg-transparent border-none cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+        className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 bg-transparent border-none cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-(--gold)"
       >
-        <span className="text-base sm:text-lg font-extrabold text-[var(--ink)] leading-snug">
+        <span className="text-base sm:text-lg font-extrabold text-(--ink) leading-snug">
           {q}
         </span>
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
             open
-              ? "bg-[var(--gold)] text-white rotate-180 shadow-sm"
-              : "bg-[var(--surface)] text-[var(--text-muted)]"
+              ? "bg-(--gold) text-white rotate-180 shadow-sm"
+              : "bg-(--surface) text-(--text-muted)"
           }`}
         >
           <FiChevronDown size={18} />
@@ -72,9 +72,9 @@ function FAQItem({ q, a }: FAQItemProps) {
       {open && (
         <div
           id={contentId}
-          className="px-5 sm:px-6 pb-6 pt-1 bg-[var(--gold-muted)]/30 border-t border-[rgba(0,166,81,0.15)] animate-fade-in-up"
+          className="px-5 sm:px-6 pb-6 pt-1 bg-(--gold-muted)/30 border-t border-[rgba(0,166,81,0.15) animate-fade-in-up"
         >
-          <p className="text-[var(--ink)] text-sm sm:text-[15px] leading-relaxed pt-3 opacity-90">
+          <p className="text-(--ink) text-sm sm:text-[15px] leading-relaxed pt-3 opacity-90">
             {a}
           </p>
         </div>
@@ -102,13 +102,13 @@ export default function FAQPage() {
     .filter((section) => section.items.length > 0);
 
   return (
-    <div className="min-h-screen bg-[var(--surface)] pb-20 animate-fade-in-up">
+    <div className="min-h-screen bg-(--surface) pb-20 animate-fade-in-up">
       {/* Hero */}
-      <section className="bg-[var(--ink)] pt-[calc(var(--nav-height,80px)+2.5rem)] pb-16 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_100%_0%,rgba(0,166,81,0.12)_0%,transparent_60%),radial-gradient(ellipse_40%_60%_at_0%_100%,rgba(141,198,63,0.08)_0%,transparent_50%)] pointer-events-none" />
+      <section className="bg-(--ink) pt-[calc(var(--nav-height,80px)+2.5rem) pb-16 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_100%_0%,rgba(0,166,81,0.12)_0%,transparent_60%),radial-gradient(ellipse_40%_60%_at_0%_100%,rgba(141,198,63,0.08)_0%,transparent_50%) pointer-events-none" />
         
         <div className="container-xl relative text-center max-w-[720px] mx-auto">
-          <h1 className="text-[clamp(2rem,5vw,3.25rem)] font-extrabold text-white mb-3 -tracking-[0.02em] leading-[1.15]">
+          <h1 className="text-[clamp(2rem,5vw,3.25rem) font-extrabold text-white mb-3 -tracking-[0.02em] leading-[1.15]">
             Frequently Asked Questions
           </h1>
           <p className="text-white/75 text-base sm:text-lg max-w-[560px] mx-auto mb-8 font-normal leading-relaxed">
@@ -119,21 +119,21 @@ export default function FAQPage() {
           <div className="max-w-[520px] mx-auto relative group">
             <FiSearch
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-faint)] group-focus-within:text-[var(--gold)] transition-colors"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-(--text-faint) group-focus-within:text-(--gold) transition-colors"
             />
             <input
               type="text"
               placeholder="Search for questions or topics..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full py-4 pr-11 pl-12 rounded-[var(--radius-sm)] border border-transparent bg-white text-[var(--ink)] placeholder-[var(--text-faint)] text-base shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] transition-all"
+              className="w-full py-4 pr-11 pl-12 rounded-(--radius-sm) border border-transparent bg-white text-(--ink) placeholder-(--text-faint) text-base shadow-lg focus:outline-none focus:ring-2 focus:ring-(--gold) transition-all"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Clear search"
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-faint)] hover:text-[var(--ink)] p-1 rounded-full transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-(--text-faint) hover:text-(--ink) p-1 rounded-full transition-colors"
               >
                 <FiX size={18} />
               </button>
@@ -152,10 +152,10 @@ export default function FAQPage() {
                 key={cat}
                 type="button"
                 onClick={() => setActiveTab(cat)}
-                className={`px-5 py-2.5 text-sm font-bold rounded-[var(--radius-sm)] cursor-pointer transition-all duration-200 ${
+                className={`px-5 py-2.5 text-sm font-bold rounded-(--radius-sm) cursor-pointer transition-all duration-200 ${
                   isActive
-                    ? "bg-[var(--gold)] text-white shadow-[var(--shadow-gold)] scale-[1.02]"
-                    : "bg-[var(--surface-elevated)] text-[var(--ink)] border border-[var(--border)] hover:bg-[var(--surface)] hover:border-[var(--gold)]/30"
+                    ? "bg-(--gold) text-white shadow-(--shadow-gold) scale-[1.02]"
+                    : "bg-(--surface-elevated) text-(--ink) border border-(--border) hover:bg-(--surface) hover:border-(--gold)/30"
                 }`}
               >
                 {cat}
@@ -168,22 +168,22 @@ export default function FAQPage() {
       {/* Accordions */}
       <section className="container-xl max-w-[800px] mx-auto px-4">
         {filteredData.length === 0 ? (
-          <div className="text-center py-16 bg-[var(--surface-elevated)] rounded-[var(--radius-md)] border border-[var(--border)] my-4 p-8">
-            <div className="w-14 h-14 rounded-full bg-[var(--surface)] text-[var(--text-muted)] flex items-center justify-center mx-auto mb-4">
+          <div className="text-center py-16 bg-(--surface-elevated) rounded-(--radius-md) border border-(--border) my-4 p-8">
+            <div className="w-14 h-14 rounded-full bg-(--surface) text-(--text-muted) flex items-center justify-center mx-auto mb-4">
               <FiSearch size={28} />
             </div>
-            <h3 className="text-xl font-extrabold text-[var(--ink)] mb-1.5">
+            <h3 className="text-xl font-extrabold text-(--ink) mb-1.5">
               No results found
             </h3>
-            <p className="text-sm text-[var(--text-muted)] max-w-[360px] mx-auto">
+            <p className="text-sm text-(--text-muted) max-w-[360px] mx-auto">
               We couldn&apos;t find any questions matching &quot;{search}&quot;. Try adjusting your keywords or category filters.
             </p>
           </div>
         ) : (
           filteredData.map((section) => (
             <div key={section.category} className="mb-10">
-              <h2 className="text-lg sm:text-xl font-extrabold text-[var(--ink)] mb-4 flex items-center gap-2.5">
-                <span className="w-1.5 h-5 bg-[var(--gold)] rounded-full inline-block" />
+              <h2 className="text-lg sm:text-xl font-extrabold text-(--ink) mb-4 flex items-center gap-2.5">
+                <span className="w-1.5 h-5 bg-(--gold) rounded-full inline-block" />
                 {section.category}
               </h2>
               <div>
@@ -198,8 +198,8 @@ export default function FAQPage() {
 
       {/* CTA */}
       <section className="container-xl max-w-[800px] mx-auto px-4 mt-12">
-        <div className="bg-[var(--ink)] py-12 px-6 sm:px-10 text-center rounded-[var(--radius-md)] relative overflow-hidden shadow-xl border border-white/5">
-          <div className="absolute -top-12 -right-12 w-40 h-40 bg-[var(--gold)]/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="bg-(--ink) py-12 px-6 sm:px-10 text-center rounded-(--radius-md) relative overflow-hidden shadow-xl border border-white/5">
+          <div className="absolute -top-12 -right-12 w-40 h-40 bg-(--gold)/10 rounded-full blur-2xl pointer-events-none" />
           
           <div className="w-12 h-12 rounded-2xl bg-white/10 text-emerald-300 flex items-center justify-center mx-auto mb-4 border border-white/10">
             <FiMessageSquare size={22} />
@@ -213,7 +213,7 @@ export default function FAQPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center gap-2 font-bold text-sm bg-gradient-to-r from-[var(--gold-light)] via-[var(--gold)] to-[var(--gold-hover)] text-[var(--ink)] shadow-[var(--shadow-gold)] rounded-[var(--radius-sm)] py-3.5 px-8 transition-all duration-200 hover:shadow-[0_12px_30px_rgba(0,166,81,0.3)] hover:-translate-y-0.5 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 font-bold text-sm bg-linear-to-r from-(--gold-light) via-(--gold) to-(--gold-hover) text-(--ink) shadow-(--shadow-gold) rounded-(--radius-sm) py-3.5 px-8 transition-all duration-200 hover:shadow-[0_12px_30px_rgba(0,166,81,0.3) hover:-translate-y-0.5 active:scale-[0.98]"
           >
             Contact Support
           </Link>

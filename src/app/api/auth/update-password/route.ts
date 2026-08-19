@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyOtp, extractError } from "@/lib/jobApi";
+import { updatePassword } from "@/lib/jobApi";
 import { normalizeNigerianPhone } from "@/lib/phone";
 
 export async function POST(req: Request) {
@@ -7,44 +7,49 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       phone?: string;
       countryCode?: string;
-      otp?: string;
+      pin?: string;
+      confirm_pin?: string;
     };
 
     const number = normalizeNigerianPhone(body.phone ?? "", body.countryCode ?? "+234");
+    const pin = (body.pin ?? "").trim();
+    const confirm_pin = (body.confirm_pin ?? "").trim();
 
     if (!/^234\d{10}$/.test(number)) {
       return NextResponse.json(
-        { ok: false, error: "Enter a valid Nigerian phone number." },
+        { ok: false, error: "Invalid phone number." },
         { status: 400 }
       );
     }
 
-    const otp = (body.otp ?? "").trim();
-    if (!/^\d{6}$/.test(otp)) {
+    if (!/^\d{4}$/.test(pin)) {
       return NextResponse.json(
-        { ok: false, error: "Enter the 6-digit code sent to your phone." },
+        { ok: false, error: "PIN must be exactly 4 digits." },
         { status: 400 }
       );
     }
 
-    // Call verifyOtp using normalized phone_number & otp expected by jobApi
-    const result = await verifyOtp({
-      phone_number: number,
-      otp,
+    if (pin !== confirm_pin) {
+      return NextResponse.json(
+        { ok: false, error: "PINs do not match." },
+        { status: 400 }
+      );
+    }
+
+    const result = await updatePassword({
+      number,
+      pin,
+      confirm_pin,
     });
 
     if (!result.ok) {
       return NextResponse.json(
-        { ok: false, error: extractError(result.data) },
+        { ok: false, error: result.message },
         { status: result.status }
       );
     }
 
-    return NextResponse.json({
-      ok: true,
-      message: "Code verified successfully.",
-      data: result.data,
-    });
+    return NextResponse.json({ ok: true, message: "Password updated successfully." });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Network error. Please try again." },

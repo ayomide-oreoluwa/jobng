@@ -28,8 +28,8 @@ export const InterviewResults: React.FC<InterviewResultsProps> = ({
       {/* Main Results Card */}
       <div className={`border rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-md transition-all ${
         isPassed 
-          ? 'bg-gradient-to-b from-emerald-50/50 to-white border-emerald-200' 
-          : 'bg-gradient-to-b from-rose-50/50 to-white border-rose-200'
+          ? 'bg-linear-to-b from-emerald-50/50 to-white border-emerald-200' 
+          : 'bg-linear-to-b from-rose-50/50 to-white border-rose-200'
       }`}>
         
         {/* Badge Icon */}

@@ -7,7 +7,7 @@ import { FaWandMagicSparkles } from "react-icons/fa6";
 
 export default function CTASection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#021f0f] via-[#052914] to-[#004220] py-20 lg:py-28 text-white select-none">
+    <section className="relative overflow-hidden bg-linear-to-br from-[#021f0f] via-[#052914] to-[#004220] py-20 lg:py-28 text-white select-none">
       
       {/* 1. Ambient Animated Background Glows */}
       <motion.div
@@ -41,7 +41,7 @@ export default function CTASection() {
       />
 
       {/* 3. Top Subtle Accent Light Streak */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-linear-to-r from-transparent via-white/30 to-transparent" />
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
@@ -68,7 +68,7 @@ export default function CTASection() {
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-[1.15] mb-4 tracking-tight">
               The Smarter Way to Find Your{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8DC63F] via-[#A2E259] to-[#CDEBB0]">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#8DC63F] via-[#A2E259] to-[#CDEBB0]">
                 Next Job
               </span>
             </h2>

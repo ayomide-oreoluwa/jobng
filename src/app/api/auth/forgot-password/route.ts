@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: extractError(result.data) }, { status: result.status });
     }
 
-    return NextResponse.json({ ok: true, message: 'If this number is registered, you will receive a PIN reset SMS.' });
+    return NextResponse.json({ ok: true, message: "An OTP code has been sent to your phone." });
   } catch {
     return NextResponse.json({ ok: false, error: "Network error. Please try again." }, { status: 500 });
   }
