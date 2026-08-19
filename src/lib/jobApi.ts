@@ -113,7 +113,7 @@ export async function verifyOtp(body: {
   phone_number: string;
   otp: string;
 }): Promise<ApiResult> {
-  const res = await fetch(`${API_BASE_URL}/api/justjob/verify/otp/`, {
+  const res = await fetch(`${API_BASE_URL}/api/justjob/verify/password/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -177,7 +177,7 @@ export async function getJobs(
 ): Promise<ApiResult<PagedJobsResponse>> {
   const qs = new URLSearchParams();
   if (params.search) qs.set("search", params.search);
-  if (params.category) qs.set("category", params.category);
+  if (params.category) qs.set("category", params.category.toLowerCase());
   if (params.page) qs.set("page", String(params.page));
   if (params.page_size) qs.set("page_size", String(params.page_size));
 

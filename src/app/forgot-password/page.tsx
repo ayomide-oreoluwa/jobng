@@ -11,7 +11,6 @@ import {
   FiArrowRight,
   FiArrowLeft,
   FiLock,
-  FiShield,
   FiAlertCircle,
   FiRefreshCw,
   FiEdit3,
@@ -57,7 +56,6 @@ function PhoneInput({
 
   return (
     <div className="jj-login-field relative" ref={dropdownRef}>
-      {/* Country Code Selector */}
       <button
         type="button"
         disabled={disabled}
@@ -70,7 +68,9 @@ function PhoneInput({
         <span>{selected.code}</span>
         <FiChevronDown
           size={12}
-          className={`transition-transform duration-200 ${open ? "jj-login-field__chev--open" : ""}`}
+          className={`transition-transform duration-200 ${
+            open ? "jj-login-field__chev--open" : ""
+          }`}
         />
       </button>
 
@@ -96,7 +96,6 @@ function PhoneInput({
         </div>
       )}
 
-      {/* Phone Input */}
       <div className="jj-login-field__input-wrap">
         <FiPhone size={16} className="jj-login-field__icon" />
         <input
@@ -136,7 +135,9 @@ function PinInput({
           inputMode="numeric"
           pattern="[0-9]*"
           value={value}
-          onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, PIN_LENGTH))}
+          onChange={(e) =>
+            onChange(e.target.value.replace(/\D/g, "").slice(0, PIN_LENGTH))
+          }
           placeholder={placeholder}
           maxLength={PIN_LENGTH}
           autoComplete="new-password"
@@ -152,12 +153,13 @@ function PinInput({
         </button>
       </div>
 
-      {/* PIN Progress Indicator Dots */}
       <div className="jj-login-pin-dots">
         {Array.from({ length: PIN_LENGTH }).map((_, idx) => (
           <div
             key={idx}
-            className={`jj-login-pin-dot ${idx < value.length ? "jj-login-pin-dot--filled" : ""}`}
+            className={`jj-login-pin-dot ${
+              idx < value.length ? "jj-login-pin-dot--filled" : ""
+            }`}
           />
         ))}
       </div>
@@ -183,7 +185,9 @@ function OtpInputField({
         inputMode="numeric"
         pattern="[0-9]*"
         value={value}
-        onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH))}
+        onChange={(e) =>
+          onChange(e.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH))
+        }
         placeholder="Enter 6-digit code"
         maxLength={OTP_LENGTH}
         className="jj-login-field__input tracking-[0.3em] font-mono font-bold text-center text-lg py-3"
@@ -275,6 +279,7 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ phone, countryCode }),
       });
       const data = await res.json();
+
       if (!res.ok || !data.ok) {
         setError(data.error || "Failed to resend verification code.");
       }
@@ -303,7 +308,7 @@ export default function ForgotPasswordPage() {
       const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, pin, countryCode }),
+        body: JSON.stringify({ phone, countryCode, pin }),
       });
       const data = await res.json();
 
@@ -320,7 +325,6 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  /* ── SUCCESS STATE ────────────────────────────────────────────────── */
   if (step === 4) {
     return (
       <main className="jj-login-page flex items-center justify-center p-4">
@@ -331,7 +335,8 @@ export default function ForgotPasswordPage() {
 
           <h2 className="jj-login-success-title">PIN Reset Successfully!</h2>
           <p className="jj-login-success-sub">
-            Your 4-digit security PIN has been updated. You can now access your account using your new credentials.
+            Your 4-digit security PIN has been updated. You can now access your account
+            using your new credentials.
           </p>
 
           <Link href="/login" className="jj-btn jj-btn--gold w-full py-3.5">
@@ -343,7 +348,6 @@ export default function ForgotPasswordPage() {
     );
   }
 
-  /* ── MAIN SPLIT FORM LAYOUT ───────────────────────────────────────── */
   return (
     <main className="jj-login-page">
       <div className="jj-login-split">
@@ -358,12 +362,15 @@ export default function ForgotPasswordPage() {
             </h1>
 
             <p className="jj-login-panel__sub">
-              Enter your registered phone number to verify your identity and restore access to your account instantly.
+              Enter your registered phone number to verify your identity and restore access
+              to your account instantly.
             </p>
 
             <div className="jj-login-panel__ussd">
               <span className="jj-login-panel__ussd-code">*7098#</span>
-              <span className="jj-login-panel__ussd-label">Works on any phone line or network</span>
+              <span className="jj-login-panel__ussd-label">
+                Works on any phone line or network
+              </span>
             </div>
           </div>
         </div>
@@ -371,7 +378,6 @@ export default function ForgotPasswordPage() {
         {/* Right Form Panel */}
         <div className="jj-login-panel jj-login-panel--form">
           <div className="jj-login-form-wrap">
-            {/* Back Link */}
             <Link
               href="/login"
               className="inline-flex items-center gap-2 text-xs font-bold text-[var(--text-muted)] hover:text-[var(--ink)] uppercase tracking-wider mb-6 transition-colors"
@@ -380,7 +386,6 @@ export default function ForgotPasswordPage() {
               <span>Back to Login</span>
             </Link>
 
-            {/* Step Progress */}
             <div className="flex items-center gap-2 mb-6">
               {[1, 2, 3].map((s) => (
                 <div
@@ -399,7 +404,6 @@ export default function ForgotPasswordPage() {
               </span>
             </div>
 
-            {/* Header */}
             <div className="jj-login-form-head">
               <h2>
                 {step === 1
@@ -417,7 +421,6 @@ export default function ForgotPasswordPage() {
               </p>
             </div>
 
-            {/* Error Message Banner */}
             {error && (
               <div className="jj-login-error flex items-start gap-2.5">
                 <FiAlertCircle size={16} className="shrink-0 mt-0.5" />
@@ -425,7 +428,7 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            {/* STEP 1: Phone Request */}
+            {/* STEP 1: Request Verification */}
             {step === 1 && (
               <form onSubmit={handleResetRequest} className="jj-login-form">
                 <div className="jj-login-form-group">
@@ -459,17 +462,20 @@ export default function ForgotPasswordPage() {
               </form>
             )}
 
-            {/* STEP 2: OTP Verification */}
+            {/* STEP 2: Verify OTP */}
             {step === 2 && (
               <form onSubmit={handleVerifyOtp} className="jj-login-form">
-                {/* Editable Phone Summary Box */}
                 <div className="flex items-center justify-between p-3 bg-[var(--surface)] border border-[var(--border-strong)] rounded-[var(--radius-sm)] text-xs">
                   <span className="font-mono text-[var(--ink)] font-semibold">
                     {countryCode} {phone}
                   </span>
                   <button
                     type="button"
-                    onClick={() => setStep(1)}
+                    onClick={() => {
+                      setStep(1);
+                      setOtp("");
+                      setError("");
+                    }}
                     className="text-[var(--gold-hover)] hover:underline flex items-center gap-1 font-bold"
                   >
                     <FiEdit3 size={12} /> Edit
@@ -506,7 +512,10 @@ export default function ForgotPasswordPage() {
                     disabled={resending}
                     className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--ink)] transition-colors disabled:opacity-50"
                   >
-                    <FiRefreshCw size={13} className={resending ? "animate-spin" : ""} />
+                    <FiRefreshCw
+                      size={13}
+                      className={resending ? "animate-spin" : ""}
+                    />
                     <span>{resending ? "Resending code…" : "Didn't receive code? Resend"}</span>
                   </button>
                 </div>
@@ -538,7 +547,11 @@ export default function ForgotPasswordPage() {
 
                 <button
                   type="submit"
-                  disabled={pin.length !== PIN_LENGTH || confirmPin.length !== PIN_LENGTH || loading}
+                  disabled={
+                    pin.length !== PIN_LENGTH ||
+                    confirmPin.length !== PIN_LENGTH ||
+                    loading
+                  }
                   className="jj-btn jj-btn--gold jj-login-submit mt-2"
                 >
                   {loading ? (
