@@ -150,13 +150,9 @@ function JobsContent() {
   return (
     <div className="jj-jobs-page min-h-screen bg-slate-50/60">
       {/* Hero Header */}
-      <div className="jj-jobs-hero relative overflow-hidden bg-linear-to-br from-[#00A651] via-[#00863F] to-[#005e2b] pt-10 pb-14 sm:pt-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative overflow-hidden bg-linear-to-br from-[#8DC63F] via-[#00A651] to-[#00863F] pt-10 pb-14 sm:pt-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops)) from-white/10 via-transparent to-transparent pointer-events-none" />
         <div className="container-xl max-w-7xl mx-auto relative z-10">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur-md mb-3 border border-white/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-            Live Job Index
-          </span>
           <h1 className="jj-jobs-hero__title text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             Explore Opportunities
           </h1>

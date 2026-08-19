@@ -40,6 +40,19 @@ export interface UpdateApiResult {
   message: string;
 }
 
+export interface TotalJobsData {
+  total_jobs: number;
+  "Area service": string;
+}
+
+export interface GetTotalJobsResponse {
+  ok: boolean;
+  status: number;
+  data?: TotalJobsData;
+  message?: string;
+}
+
+
 export function extractError(
   data: Record<string, unknown> | null | undefined | unknown,
   fallback = "Something went wrong. Please try again."
@@ -228,6 +241,53 @@ export async function updatePassword({
     status: res.status,
     message,
   };
+}
+
+export async function getTotalJobs(): Promise<GetTotalJobsResponse> {
+  try {
+    const result = await fetch(`${API_BASE_URL}/api/justjob/total_jobs`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await parseJson<Record<string, unknown>>(result);
+
+    if (!result.ok) {
+      return {
+        ok: false,
+        status: result.status,
+        message: extractError(data) || "Failed to fetch total jobs data.",
+      };
+    }
+
+    const rawTotalJobs = data.total_jobs;
+    const totalJobsNumber =
+      typeof rawTotalJobs === "number"
+        ? rawTotalJobs
+        : typeof rawTotalJobs === "string"
+        ? parseInt(rawTotalJobs, 10) || 0
+        : 0;
+
+    const rawAreaService = data["Area service"];
+    const areaServiceString =
+      typeof rawAreaService === "string" ? rawAreaService : "";
+
+    return {
+      ok: true,
+      status: result.status,
+      data: {
+        total_jobs: totalJobsNumber,
+        "Area service": areaServiceString,
+      },
+    };
+  } catch (error) {
+    console.error("Total Jobs Error:", error);
+    return {
+      ok: false,
+      status: 500,
+      message: error instanceof Error ? error.message : "An unexpected network error occurred.",
+    };
+  }
 }
 
 export async function getJobs(

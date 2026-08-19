@@ -272,12 +272,11 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white z-[50] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white/95 z-[50] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between p-5 border-b border-slate-100">
-          <Logo variant="dark" size="sm" />
+        <div className="flex items-center justify-end p-5 border-b border-slate-100">
           <button
             type="button"
             onClick={() => setMobileOpen(false)}

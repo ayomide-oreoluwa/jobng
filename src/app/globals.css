@@ -27,9 +27,9 @@
 
 /* ── jobNG Design System Variables ─────────────────── */
 :root {
-  --ink: #060A14;
-  --ink-soft: #0F172A;
-  --ink-muted: #1E293B;
+  --ink: #fefefe;
+  --ink-soft: #d6d8dd;
+  --ink-muted: #c1d6f7;
   --surface: #F8F7F4;
   --surface-elevated: #FFFFFF;
   

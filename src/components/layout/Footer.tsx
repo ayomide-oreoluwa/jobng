@@ -100,9 +100,7 @@ export default function Footer() {
           
           {/* Brand Info Column */}
           <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-5 flex flex-col items-start pr-0 lg:pr-8">
-            <div className="p-1.5 rounded-xl bg-white/10 backdrop-blur-md inline-block border border-white/20 shadow-xs">
               <Logo variant="dark" size="md" />
-            </div>
             
             <p className="mt-5 text-[15px] leading-relaxed text-ink/85 max-w-md font-normal">
               Nigeria&apos;s leading job discovery platform. Stay connected, explore verified job listings, and kickstart your career anywhere.

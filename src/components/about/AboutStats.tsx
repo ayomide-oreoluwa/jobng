@@ -8,7 +8,7 @@ const HARDCODED_FALLBACK_COUNT = 5000;
 
 const fetchJobsCount = async (): Promise<number> => {
   try {
-    const res = await fetch("/api/jobs", {
+    const res = await fetch("/api/total-jobs", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -21,9 +21,13 @@ const fetchJobsCount = async (): Promise<number> => {
       return HARDCODED_FALLBACK_COUNT;
     }
 
-    const data = await res.json();
-    return typeof data.count === "number" && data.count > 0
-      ? data.count
+    const payload = await res.json();
+    
+    // Extract total_jobs from { ok: true, data: { total_jobs: 474 } }
+    const count = payload?.data?.total_jobs ?? payload?.total_jobs;
+
+    return typeof count === "number" && count > 0
+      ? count
       : HARDCODED_FALLBACK_COUNT;
   } catch {
     return HARDCODED_FALLBACK_COUNT;
