@@ -43,16 +43,16 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-24 select-none">
+    <div className="min-h-screen bg-slate-50 pb-24 select-none">
       {/* Hero Section */}
-      <section className="bg-slate-950 text-white pt-28 sm:pt-36 pb-24 relative overflow-hidden">
+      <section className=" text-white pt-28 sm:pt-36 pb-24 relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-linear-to-br from-[#8DC63F] via-[#00A651] to-[#00863F] pointer-events-none" 
           aria-hidden
         />
 
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10 text-center">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] max-w-4xl mx-auto text-white">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] max-w-4xl mx-auto text-slate-50">
             Nigeria&apos;s No. 1 job aggregator platform built for every Nigerian
           </h1>
 
@@ -86,7 +86,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <div className="w-12 h-1.5 bg-linear-to-r from-[#8DC63F] via-[#00A651] to-[#00863F] rounded-full mb-6" />
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+            <h2 className="!text-gray-900 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
               Empowering careers through technology
             </h2>
             
