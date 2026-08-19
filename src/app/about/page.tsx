@@ -86,7 +86,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <div className="w-12 h-1.5 bg-linear-to-r from-[#8DC63F] via-[#00A651] to-[#00863F] rounded-full mb-6" />
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+            <h2 className="!text-gray-900 text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
               Empowering careers through technology
             </h2>
             
