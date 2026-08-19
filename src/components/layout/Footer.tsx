@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { 
   FiInstagram, 
   FiLinkedin, 
@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 import Logo from "@/components/brand/Logo";
 
-const footerLinks = {
+const FOOTER_LINKS = {
   explore: [
     { label: "Browse Jobs", href: "/jobs" },
     { label: "Forgot PIN", href: "/forgot-password" },
@@ -23,16 +23,16 @@ const footerLinks = {
     { label: "FAQ", href: "/faq" },
     { label: "Privacy Policy", href: "/privacy-policy" },
   ],
-};
+} as const;
 
-const socials = [
+const SOCIAL_LINKS = [
   { icon: FiInstagram, href: "https://www.instagram.com/maekandex_communication_/", label: "Instagram" },
   { icon: FiLinkedin, href: "https://ng.linkedin.com/company/maekandexcommunication", label: "LinkedIn" },
-  { icon: FiFacebook, href: "#", label: "Facebook" },
-];
+  { icon: FiFacebook, href: "https://facebook.com", label: "Facebook" },
+] as const;
 
-// Motion Variants
-const containerVariants = {
+// Framer Motion Variants
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -40,12 +40,12 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } 
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
   },
 };
 
@@ -60,7 +60,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-[radial-gradient(ellipse_100%_100%_at_50%_0%,#CDEBB0_0%,#8DC63F_35%,#00A651_70%,#006831_100%)] text-ink overflow-hidden select-none">
       
-      {/* 1. Subtle Premium Top Wave Separator */}
+      {/* Subtle Wave Top Separator */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none pointer-events-none -translate-y-[98%]">
         <svg
           className="relative block w-full h-12 sm:h-16 md:h-20"
@@ -79,7 +79,7 @@ export default function Footer() {
         </svg>
       </div>
 
-      {/* 2. Top Accent Glow Line */}
+      {/* Top Accent Glow Line */}
       <motion.div 
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
@@ -98,9 +98,9 @@ export default function Footer() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
           
-          {/* Brand Info Column (Spans 5 cols on Large Screens) */}
+          {/* Brand Info Column */}
           <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-5 flex flex-col items-start pr-0 lg:pr-8">
-            <div className="p-1 rounded-xl bg-white/10 backdrop-blur-md inline-block border border-white/20 shadow-xs">
+            <div className="p-1.5 rounded-xl bg-white/10 backdrop-blur-md inline-block border border-white/20 shadow-xs">
               <Logo variant="dark" size="md" />
             </div>
             
@@ -109,8 +109,8 @@ export default function Footer() {
             </p>
 
             {/* USSD Quick Action Badge */}
-            <div className="mt-6 flex items-center gap-3 p-2.5 px-4 rounded-2xl bg-white/15 border border-white/25 backdrop-blur-md shadow-xs">
-              <div className="w-8 h-8 rounded-full bg-[#055A2B] text-white flex items-center justify-center shrink-0">
+            <div className="mt-6 flex items-center gap-3 p-2.5 px-4 rounded-2xl bg-white/15 border border-white/25 backdrop-blur-md shadow-xs transition-transform duration-200 hover:scale-[1.02]">
+              <div className="w-8 h-8 rounded-full bg-[#055A2B] text-white flex items-center justify-center shrink-0 shadow-xs">
                 <FiPhoneCall size={14} />
               </div>
               <div className="text-xs">
@@ -120,18 +120,18 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* Explore Links Column (Spans 3 cols) */}
+          {/* Explore Links Column */}
           <motion.div variants={itemVariants} className="lg:col-span-3">
             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ink/90 mb-5 flex items-center gap-2">
               Explore
-              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block"></span>
+              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block" />
             </h3>
             <ul className="flex flex-col gap-2.5 p-0 m-0 list-none">
-              {footerLinks.explore.map((link) => (
+              {FOOTER_LINKS.explore.map((link) => (
                 <li key={link.href}>
                   <Link 
                     href={link.href} 
-                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
+                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-xs"
                   >
                     <span>{link.label}</span>
                     <FiArrowUpRight size={14} className="opacity-0 -translate-x-1 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0" />
@@ -141,18 +141,18 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* Company Links Column (Spans 4 cols) */}
+          {/* Company Links Column */}
           <motion.div variants={itemVariants} className="lg:col-span-4">
             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-ink/90 mb-5 flex items-center gap-2">
               Company
-              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block"></span>
+              <span className="w-8 h-[2px] bg-[#055A2B]/40 rounded-full inline-block" />
             </h3>
             <ul className="flex flex-col gap-2.5 p-0 m-0 list-none">
-              {footerLinks.company.map((link) => (
+              {FOOTER_LINKS.company.map((link) => (
                 <li key={link.href}>
                   <Link 
                     href={link.href} 
-                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-sm"
+                    className="group inline-flex items-center gap-1.5 text-[15px] text-ink/80 font-medium no-underline py-1 transition-all duration-200 hover:text-white hover:translate-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/50 rounded-xs"
                   >
                     <span>{link.label}</span>
                     <FiArrowUpRight size={14} className="opacity-0 -translate-x-1 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0" />
@@ -180,7 +180,7 @@ export default function Footer() {
           
           {/* Social Links */}
           <div className="flex items-center gap-2.5">
-            {socials.map(({ icon: Icon, href, label }) => (
+            {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
               <a 
                 key={label} 
                 href={href} 

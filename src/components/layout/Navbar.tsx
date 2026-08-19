@@ -97,7 +97,7 @@ export default function Navbar() {
       />
     ) : (
       <div
-        className="rounded-full bg-gradient-to-tr from-[#044420] to-[#067337] text-white flex items-center justify-center font-bold tracking-wider uppercase shrink-0 shadow-xs border border-white/20"
+        className="rounded-full bg-linear-to-tr from-[#044420] to-[#067337] text-white flex items-center justify-center font-bold tracking-wider uppercase shrink-0 shadow-xs border border-white/20"
         style={{ width: size, height: size, fontSize: Math.max(12, size * 0.36) }}
       >
         {phone ? getInitials(phone) : <FiUser size={size * 0.45} />}
@@ -106,7 +106,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 sm:h-20 flex items-center bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] transition-all duration-200">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 sm:h-20 flex items-center bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04) transition-all duration-200">
         <div className="container-xl flex items-center justify-between gap-6 w-full px-4 sm:px-6">
           <div className="flex items-center shrink-0">
             {isAuthenticated ? (
@@ -175,8 +175,8 @@ export default function Navbar() {
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 top-[calc(100%+10px)] w-72 bg-white rounded-2xl border border-slate-200/80 shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="p-4 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100 flex items-center gap-3.5">
+                  <div className="absolute right-0 top-[calc(100%+10px) w-72 bg-white rounded-2xl border border-slate-200/80 shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="p-4 bg-linear-to-br from-slate-50 to-white border-b border-slate-100 flex items-center gap-3.5">
                       <Avatar size={42} />
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-ink truncate tracking-tight">

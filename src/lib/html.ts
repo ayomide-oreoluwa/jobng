@@ -28,7 +28,7 @@ function decodeEntities(input: string): string {
       const code = parseInt(isHex ? body.slice(2) : body.slice(1), isHex ? 16 : 10);
       return Number.isFinite(code) ? String.fromCodePoint(code) : match;
     }
-    return NAMED_ENTITIES[body.toLowerCase()] ?? match;
+    return NAMED_ENTITIES[body.toLowerCase() ?? match];
   });
 }
 

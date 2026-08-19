@@ -52,7 +52,7 @@ function LogoMark({
       {/* Ambient Glow behind the logo mark */}
       {animated && (
         <div 
-          className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#8DC63F] to-[#00A651] opacity-25 blur-md group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"
+          className="absolute inset-0 rounded-xl bg-linear-to-tr from-[#8DC63F] to-[#00A651] opacity-25 blur-md group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"
           aria-hidden
         />
       )}

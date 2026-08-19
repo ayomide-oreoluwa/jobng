@@ -118,24 +118,24 @@ export default function JobDetailPage() {
   /* --- Premium Auth Required View --- */
   if (needsAuth) {
     return (
-      <div className="min-h-screen bg-[var(--surface)] pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div className="max-w-[440px] w-full bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-md)] p-8 md:p-10 text-center relative overflow-hidden backdrop-blur-md">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8DC63F] via-[#00A651] to-[#00863F]" />
+      <div className="min-h-screen bg-(--surface) pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="max-w-[440px] w-full bg-(--surface-elevated) border border-(--border) rounded-(--radius-md) shadow-(--shadow-md) p-8 md:p-10 text-center relative overflow-hidden backdrop-blur-md">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#8DC63F] via-[#00A651] to-[#00863F]" />
           
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6 shadow-inner">
             <FiLogIn size={26} className="text-[#00A651] dark:text-emerald-400" />
           </div>
 
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--ink)] mb-3">
+          <h1 className="text-2xl font-extrabold tracking-tight text-(--ink) mb-3">
             Sign in Required
           </h1>
-          <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-8">
-            Please log in to access full details for this role. To subscribe via USSD, dial <strong className="text-[var(--ink)] font-bold">*7098#</strong>.
+          <p className="text-sm text-(--text-muted) leading-relaxed mb-8">
+            Please log in to access full details for this role. To subscribe via USSD, dial <strong className="text-(--ink) font-bold">*7098#</strong>.
           </p>
 
           <Link 
             href={`/login?callbackUrl=${encodeURIComponent(`/jobs/${id}`)}`} 
-            className="inline-flex items-center justify-center gap-2 w-full font-bold text-sm bg-gradient-to-r from-[#00A651] via-[#009247] to-[#00863F] text-white shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 rounded-[var(--radius-sm)] py-3.5 transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 w-full font-bold text-sm bg-linear-to-r from-[#00A651] via-[#009247] to-[#00863F] text-white shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 rounded-(--radius-sm) py-3.5 transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5"
           >
             Sign In to Continue
           </Link>
@@ -147,19 +147,19 @@ export default function JobDetailPage() {
   /* --- Premium Not Found View --- */
   if (notFound || !job) {
     return (
-      <div className="min-h-screen bg-[var(--surface)] pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
+      <div className="min-h-screen bg-(--surface) pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
         <div className="max-w-md w-full flex flex-col items-center">
-          <div className="w-20 h-20 rounded-3xl bg-[var(--surface-elevated)] border border-[var(--border)] flex items-center justify-center mb-5 text-[var(--text-muted)] shadow-[var(--shadow-sm)]">
+          <div className="w-20 h-20 rounded-3xl bg-(--surface-elevated) border border-(--border) flex items-center justify-center mb-5 text-(--text-muted) shadow-(--shadow-sm)">
             <FiSearch size={32} />
           </div>
-          <h1 className="text-2xl font-extrabold text-[var(--ink)] tracking-tight mb-2">Job Listing Unavailable</h1>
-          <p className="text-[var(--text-muted)] text-sm mb-8 leading-relaxed">
+          <h1 className="text-2xl font-extrabold text-(--ink) tracking-tight mb-2">Job Listing Unavailable</h1>
+          <p className="text-(--text-muted) text-sm mb-8 leading-relaxed">
             This position may have been filled, unlisted, or expired.
           </p>
           <button 
             type="button" 
             onClick={() => router.push("/jobs")} 
-            className="inline-flex items-center justify-center gap-2.5 font-bold text-sm bg-[var(--surface-elevated)] text-[var(--ink)] border border-[var(--border-strong)] rounded-[var(--radius-sm)] px-6 py-3 transition-all duration-200 hover:bg-[var(--surface)] hover:border-[#00A651]/40 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2.5 font-bold text-sm bg-(--surface-elevated) text-(--ink) border border-(--border-strong) rounded-(--radius-sm) px-6 py-3 transition-all duration-200 hover:bg-(--surface) hover:border-[#00A651]/40 active:scale-[0.98]"
           >
             <FiArrowLeft size={16} /> Explore Other Roles
           </button>
@@ -173,9 +173,9 @@ export default function JobDetailPage() {
   const website = formatWebsiteUrl(job.company_website);
 
   return (
-    <div className="min-h-screen bg-[var(--surface)] animate-fade-in-up">
+    <div className="min-h-screen bg-(--surface) animate-fade-in-up">
       {/* Premium Hero Header */}
-      <header className="bg-[var(--ink)] relative overflow-hidden pt-10 pb-14 md:pt-14 md:pb-20 border-b border-[var(--border)]/20 shadow-lg bg-gradient-to-br from-[#8DC63F] via-[#00A651] to-[#00863F]">
+      <header className="bg-(--ink) relative overflow-hidden pt-10 pb-14 md:pt-14 md:pb-20 border-b border-(--border)/20 shadow-lg bg-linear-to-br from-[#8DC63F] via-[#00A651] to-[#00863F]">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Navigation & Action Bar */}
@@ -241,28 +241,28 @@ export default function JobDetailPage() {
           {/* Main Description Column */}
           <div className="lg:col-span-2 space-y-6">
             {job.description ? (
-              <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-9 transition-all duration-200">
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border)]">
-                  <div className="w-1.5 h-6 bg-gradient-to-b from-[#8DC63F] to-[#00A651] rounded-full" />
-                  <h2 className="text-lg font-extrabold text-[var(--ink)] tracking-tight">Job Overview & Requirements</h2>
+              <div className="bg-(--surface-elevated) border border-(--border) rounded-(--radius-md) shadow-(--shadow-sm) p-6 sm:p-9 transition-all duration-200">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-(--border)">
+                  <div className="w-1.5 h-6 bg-linear-to-b from-[#8DC63F] to-[#00A651] rounded-full" />
+                  <h2 className="text-lg font-extrabold text-(--ink) tracking-tight">Job Overview & Requirements</h2>
                 </div>
                 
                 <div
-                  className="prose max-w-none text-sm leading-relaxed text-[var(--text-muted)]
+                  className="prose max-w-none text-sm leading-relaxed text-(--text-muted)
                     prose-p:mb-4 prose-p:last:mb-0
-                    prose-headings:text-[var(--ink)] prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:mt-7 prose-headings:mb-3
+                    prose-headings:text-(--ink) prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:mt-7 prose-headings:mb-3
                     prose-h3:text-base
-                    prose-strong:text-[var(--ink)] prose-strong:font-bold
+                    prose-strong:text-(--ink) prose-strong:font-bold
                     prose-ul:list-disc prose-ul:pl-5 prose-ul:my-4 prose-ul:space-y-1.5
                     prose-ol:list-decimal prose-ol:pl-5 prose-ol:my-4 prose-ol:space-y-1.5
                     prose-li:mb-1.5
                     prose-a:text-[#00A651] dark:prose-a:text-emerald-400 prose-a:underline prose-a:underline-offset-4 prose-a:font-semibold hover:prose-a:text-[#00863F]
-                    prose-blockquote:border-l-4 prose-blockquote:border-[#00A651] prose-blockquote:bg-[var(--surface)] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-md prose-blockquote:italic"
+                    prose-blockquote:border-l-4 prose-blockquote:border-[#00A651] prose-blockquote:bg-(--surface) prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-md prose-blockquote:italic"
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) }}
                 />
               </div>
             ) : (
-              <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] p-8 text-center text-[var(--text-muted)] text-sm">
+              <div className="bg-(--surface-elevated) border border-(--border) rounded-(--radius-md) p-8 text-center text-(--text-muted) text-sm">
                 No description provided for this position.
               </div>
             )}
@@ -270,13 +270,13 @@ export default function JobDetailPage() {
 
           {/* Sticky Sidebar Column */}
           <aside className="lg:sticky lg:top-28 space-y-5">
-            <div className="bg-[var(--surface-elevated)] border border-[var(--border)] rounded-[var(--radius-md)] shadow-[var(--shadow-sm)] p-6 sm:p-7 transition-all duration-300 hover:shadow-[var(--shadow-md)] relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8DC63F] via-[#00A651] to-[#00863F]" />
+            <div className="bg-(--surface-elevated) border border-(--border) rounded-(--radius-md) shadow-(--shadow-sm) p-6 sm:p-7 transition-all duration-300 hover:shadow-(--shadow-md) relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#8DC63F] via-[#00A651] to-[#00863F]" />
 
-              <p className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--text-faint)] mb-1">
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-(--text-faint) mb-1">
                 Employer Details
               </p>
-              <h3 className="text-xl font-extrabold text-[var(--ink)] tracking-tight mb-2">
+              <h3 className="text-xl font-extrabold text-(--ink) tracking-tight mb-2">
                 {companyName}
               </h3>
 
@@ -299,13 +299,13 @@ export default function JobDetailPage() {
                     href={job.job_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full text-center font-bold text-sm bg-gradient-to-r from-[#00A651] via-[#009247] to-[#00863F] text-white shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 rounded-[var(--radius-sm)] py-3.5 px-5 transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5"
+                    className="flex items-center justify-center gap-2 w-full text-center font-bold text-sm bg-linear-to-r from-[#00A651] via-[#009247] to-[#00863F] text-white shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/35 rounded-(--radius-sm) py-3.5 px-5 transition-all duration-200 active:scale-[0.98] hover:-translate-y-0.5"
                   >
                     Apply for Position <FiExternalLink size={15} />
                   </a>
                 ) : (
-                  <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-sm)] p-4 text-center">
-                    <p className="text-xs font-medium text-[var(--text-muted)] leading-relaxed">
+                  <div className="bg-(--surface) border border-(--border) rounded-(--radius-sm) p-4 text-center">
+                    <p className="text-xs font-medium text-(--text-muted) leading-relaxed">
                       Direct online application link is unavailable. Please check the company website to apply.
                     </p>
                   </div>
@@ -313,17 +313,17 @@ export default function JobDetailPage() {
               </div>
 
               {/* Sidebar Quick Meta List */}
-              <div className="mt-6 pt-5 border-t border-[var(--border)] space-y-3">
+              <div className="mt-6 pt-5 border-t border-(--border) space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[var(--text-muted)] flex items-center gap-1.5">
+                  <span className="text-(--text-muted) flex items-center gap-1.5">
                     <FiClock size={13} /> Date Posted
                   </span>
-                  <span className="font-semibold text-[var(--ink)]">
+                  <span className="font-semibold text-(--ink)">
                     {formatDate(job.created_at, true)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-[var(--text-muted)] flex items-center gap-1.5">
+                  <span className="text-(--text-muted) flex items-center gap-1.5">
                     <FiShield size={13} /> Verification
                   </span>
                   <span className="font-semibold text-[#00A651] dark:text-emerald-400">
